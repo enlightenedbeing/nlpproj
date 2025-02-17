@@ -1,0 +1,1197 @@
+Confidence Score in Measures And Keywords:
+------------------------------------------
+
+greetings --> single level measure --> weightage is 4
+
+transfer call --> multi level measure --> weightage is 5
+
+	transfer type --> 
+
+	Need more head count --> 
+
+	more projects --> more people required 
+
+	Inbound center 
+
+
+	Weightage is configurable
+	formula is also configurable
+
+	how agent performance is calculated based on NLP rules ??
+
+	agent --> calls measures
+
+		measures can have static weightage or dynamic based on number of measures.
+
+		if 10 measures 1/10  default weightage = 100/total measures ( per measure)
+
+		total sum should always be 100% 
+
+		measures also very from call to call  not all calls will have all measures
+
+		call1 have 5 measures call2 have 7 measures 
+
+		at call level also it has to be normalized --> How ??
+
+		lob wise also  shift manager wise --> is it not all dashboard features ??
+
+		it cant alone be at measure level it cant alone be at call level it cant alone be at lob level it cant alone be at NLP planner level
+
+		planner --> how many calls it has run for how many measures are selected how many lobs are involved if run for 5 measures but based on call lob  only 3 meaures are applicalble for a particular call 
+
+		By event_log_id get total measures per call --> find dynamic weightage = 100/total measures per call in specific Event/nlp_run
+
+		if static weightage is given 4(1) + 5(1) + 8(1) + 10(1) /27 --> sum of weightage / total weightage score *100
+
+		Ax + By + Cz + ..../ (A + B + C + ...)
+
+
+-----------------------------------------------------------
+
+		K88 --> 5 keywords --> best of 5 is chosen --> Ck1(1)Ck2(1)Ck3(0)Ck4(0.5)Ck5(0.75)
+
+		Ck = ngram keyword_length score
+
+		does more mean best fit here ?? 
+
+		k88_1 --> ngram=3keyword_length=8score= 100 --> (38100)
+		k88_2 --> ngram = 2 keyword_length=10 score = 100 --> (210100)
+
+		k88_resultant_vetor = vector sum of all keywords score = determinant of vector
+
+		k89_1 --> ngram=4keyword_length=9score=100 --> (49100)
+		k89_2 --> ................................................
+
+		k89_resultant_vetor = vector sum of all keywords score = determinant of vector
+
+
+		k88 and k89 --> it is understood that label should be same because diffrent labels doesnt make any sense logically. How is that ? 
+
+		suppose k88 returns label A and k89 returns label B
+
+		k88 evaluates to true with respective criteria --> label A should be returned
+		k89 evaluates to true with respective criteria --> label B should be returned
+
+		For keyword formula K88 AND K89  both are expected
+
+		is it average for both keyword scores ?? score should represent accurate data.
+
+		K88_score --> 100 K89_score --> 100 
+
+		YES1 AND YES2 --> YES1 ? --> YES2 ?? --> which has more score 100. both
+		then ??
+		 its pointless to have differnt labels in AND condition
+
+		 K88 label is preferred as its same and doesnt matter if differnt label ??
+
+		 K88 and K89 collectively define measure --> 
+
+		 (100310) AND (10048) AND (10025)
+		 (100310) OR (10048) OR (10025)
+
+		 Output label can only be one --> if more than one labels are correct need to find more correct label 
+
+		 how to do that ??
+
+		 K88 true  K89 true k90 true --> only in selecting one there is chance of getting it wrong but what if we dont choose let it show all labels ?? but then again it will not be conclusive how can multiple labels be true ? vaugeness ambiguity in rule can come. 
+		 YES YES YES 
+
+		 have to understand conceptual meaning behind this
+
+		 when we define rule we define an abstraction here. its like a cluster with certain properties.
+
+		 rules has keyword groups keyword groups has keywords  zero or more keywords can come keyword groups/clusters collectively define rule with specific relationship
+		 relationships are defined by user if that relationship is found in text rule is satisfied labels are also defined by user so if rule is satisfied and its label is configured  it will return that label. Logic is nuetral. platform is neutral here. 
+
+		 keyword group has similar keywords with similar traits 
+		 keyword has ngram keyword length.
+		 keyword group has properties like speaker_tag location inclusion_type Label 
+
+		 speakertag either matched or not matched location matched or not matched inclusion type matched or not matched label is collective outcome of that --> score is fuzzy score as 
+
+		 speaker_tag we can check inclusion_type we can check but location cant be checked right away as it has relative portion. 
+
+		 speaker_tag matched --> +1 not matched -1 NA --> 0
+		 inclusion type --> +1-1
+		 keyword --> matched --> 1(ngram)+1(keyword_length) + score
+
+
+simple measure vs complex measure :
+
+which one is simple --> upto two keywords it could be called as simple
+
+
+Complex measure 
+Where more than two keywords are associated and/or one or more measures are associated.
+
+Complex measures can be defined in multiple ways.
+	if 
+different ways to define same nested or complex measure
+
+
+
+-------------------------------------------------------------
+
+can define as keywords
+
+can defined as separate measures
+
+
+-------------------------------------
+
+3 or more keyword clusters 
+
+
+IF i am aware of all variations --> i can define weightage correctly for all variation on generic scale 
+
+Expected Outcome weightage
+
+if predicted_value == expected_outcome 
+		weighted_score =  4/4
+
+define groups --> group should have other fields evaluation_score predicted_value actual_value
+
+call --> per group --> applicable measures --> 3 --> sum of scores/total score of applicable measurse
+
+group as tier1
+
+
+def getEvaluationScore(event_log_idcallmeta_idmeasure_group_id):
+	nlp_analysis_data = getNlpAnalysisByEventCallMetaAndMeasureGroup()
+	evaluation_score= 0
+	sub_rule_match_list = []
+	for analysis in nlp_analysis_data:
+		weighted_score_list = weighted_score.split('/')
+		evaluation_score = int(weighted_score_list[0])
+		sub_rule_match_list.append(evaluation_score !=0)
+	if all(sub_rule_match_list):
+		evaluation_score+=nlp_analysis_data[0].weighted_score
+		total_score
+
+	pct_evaluation_score = evaluation_score/total_score
+	return pct_evaluation_score
+
+
+Planner 
+2 lobs
+post service and pre service
+
+1 day --> 10 calls --> 7 post services 3 pre service calls
+
+measures --> 
+3 measures for post service --> 2 groups --> 2 measures group1  1 measure group2
+ 6 mesures for preservice --> groups --> group4 --> 3 measures  group2 --> 2 measurs --> and group3 --> measure 1
+
+
+7 calls --> 3 entries 
+3 calls --> 6 entries 
+
+21 + 18
+--------------
+
+
+gropu1 --> 4
+	2 measures --> both measures should predict proper value -
+	group predicted value --> trueits weightage is assigned
+group 2 --> 6
+	1 measure --> its prediction becomes prediction of group
+
+evaluatation_score --> 4(0) + 6(1) / 4 + 6 -->6/10 --> 60%
+
+
+
+Measure_Formula 
+<conditiontrue_partfalse_part>
+
+M33 
+l1 : <M1='YES' AND M4='NO''YES''NO'>
+
+l2 : <M1='A' AND M4='B'<M2='C''D''E'>'NO'>
+
+l2 : <M1='A' AND M4='B'<M2='C''D''E'><M3='F''G''H'>>
+
+M33
+l3 : <M1='A' AND M4='B'<M2='C''D''E'><M3='F'<M6='G''H''I'>'J'>>
+ 
+
+(K130 OR (K131 AND K132)) OR ((((K133 AND K134 ) OR K135) OR (K136  AND K137)) OR ((K138 OR (K139 AND K140)) OR K141))
+
+
+5 - 6 keywords
+
+tier 1 (4) customer 1--> tier2 (from tier 1) 
+						4 measures --> branding(4) puncutall(4) tone (4)--> tier (3)
+
+measures belong to same group should have same weightage
+
+-----------------
+
+NLP Analysis 
+copy score if tier1 and matches expected_outcome
+
+changes in existing measures to tag with tiers 123 
+new measures with formula as tier2 tier1 should be created for groups
+
+
+tier 3 measure
+
+tier2 measure
+
+tier1 measure
+
+86879098
+
+<((M86='YES' AND M87='YES') AND M90='YES') AND M98='YES''YES''NO'>
+
+<M122='YES''YES''NO'>
+
+
+1. Need to create data --> Measures for tier1tier2
+2. Debug and validate implementation.
+
+-----------------------------------------
+
+one call
+
+	it has 11 tier measures --> weighted score
+
+	4/4 5/5  0/7
+
+	(4 + 5)/ (4+5+7)
+	
+	for measure in measureLIst:
+
+	tier1 --> 4 + 5+0 +.../total_weightage
+
+
+def getEvaluationScore(event_log_idcallmeta_id):
+	list = fetchNlpAnalysisByEventAndCallMeta(event_log_idcallmeta_id)
+	weighted_sum=0
+	total_weightage = 0
+	for nlp_analysis in list:
+		if weighted_score is not None:
+			weighted_sum+=weighted_Score
+			total_weightage+=measure.weightage
+
+	evaluation_score = (weighted_sum/total_weightage)*100
+	return evaluation_score
+
+
+^M/d.*
+
+regex = M\d*
+
+
+
+-----------------------------------------------------------------------
+
+K1 --> group of keywords --> 5 --> 3/5 --> Label1
+K2 --> group of keywords --> 7 --> 4/7 --> Label2
+K3 --> group of keywords --> 4 --> 4/4 --> Label1
+
+If rule is binary:
+
+	Two labels --> YES OR NO only.
+	YES/NO comes from MeasureFormula(keyword formula)
+
+	MeasureFormula/KeywordFormula is Logical And Binary --> it doenst have any middle value
+
+For multi label rule:
+	
+	Multiple Labels --> 
+
+TransferCase
+	K1C1 --> Label1 (e.g Handled Not Transferred")
+	K2C2 --> Label2 (e.g "Handled And Then Transferred")
+	K3C3--> Label3 (e.g "True Misroutes")
+
+	K1;K2;K3 --> 3 independent keywords with its score keyword length ngram
+
+	K1 ---> TRUE 100 NGRAM = 3  LENGTH = 12 LABEL = "Handled Not Transferred" 
+	K2 ---> TRUE 80 NGRAM = 2  LENGTH = 9 LABEL = "Handled Then Transferred"
+	K3 ---> FALSE 0 NGRAM = 4  LENGTH = 15 LABEL = "True Misroutes"
+
+	Output : --> TRUE 100 NGRAM = 3 LENGTH = 12 LABEL = "Handled Not Transferred"
+	based on longer keywords ngram score
+
+
+	K1 AND K2 AND K3  
+
+
+
+
+	33% --> 
+
+
+extention  have an extention 
+
+
+threoshold --> 90 --> 
+
+
+have an extenttion --> 100 3 18
+extention --> 100 1 10
+
+K1 AND K2 OR K3 AND K4 --> 3/4 --> NO --> 50% 
+
+GroundTruthManagement --> 
+
+----------------------
+
+measure accuracy as confidence score --> Simple one
+
+Optimize NLP Manager Service to run faster for nested measure formula measures
+
+earth ear
+
+-------------------------------------------
+
+Confidence Score Calculation at measure level
+
+
+
+Call Audit Evaluation Score Integration. 
+
+Changed Measures to have tier and weightage.
+
+NPS --> 50000 1.5 lakh employer ne kevu pade
+25000 --> Health Insurance
+80C --> Life Insurance
+	ELSS --> Mutual Funds
+	PF --> 150000
+80cce --> 50000 1.5 lakh nu employer through
+80G --> national party
+house loan --> 
+
+HRA --> maximum aave etlu try karvu. 
+
+number of keywords associated : number of keywords found
+
+3/7 5/7 
+
+Rule has outcomes --> number of outcomes --> proportional to confidence
+
+2 outcomes --> 50% for each label
+3 outcomes --> 33% for each label
+
+
+1/3()
+
+labels 
+
+labels contribute to keyword groups 
+keywords sharing same label --> should be checked -->
+
+5 keywords --> 3 --> label 1
+				2 --> label 2
+
+1. 3 labels in total 
+	1.1. 
+	1/3(2/3) + 1/3(1/2) + 1/3 --> 0.22 + 0.16 + 0.33 = 71%
+	Label1		Label2   Label3/Default
+	1.2
+	1/3(1/3) + 1/3(1/2) + 1/3(2/3 +) --> 0.22 + 0.16 + 0.33 = 71%
+	Label1		Label2   Label3/Default
+
+
+(1/3)(1/3)(10/17)()
+
+2. 2 labels
+
+1/2(3/4) + 1/2 --> 87.5%
+
+--------------------------------
+
+this could work but later it could be concern when they want to control it with threshold as next feature requirement --> it comes to a point where not much can be controlled based on keywords. 
+
+(K1 AND K2) OR (K3 AND (K4 AND K5))
+2/5(1) or 3/5(1/5 (1) + )
+
+K1 AND K2 AND K3 AND K4
+
+3/4
+
+K1;K2 --> 
+
+labels --> keyword to represent same labels --> 
+
+K1  K2 should also have weightage --> precedence  order
+
+01/21 
+
+K1 AND K2 
+
+N +1 labels = number of regions in set theory
+
+1/3(1) + 
+
+--------------------------------
+
+Optimized NLPManager Service to avoid recalculation of measures
+CrmValidatio
+
+hdfc
+
+number of labels 
+
+configuration creates bias --> 
+
+configuration should be balanced ??
+
+20 keywords --> create a vector with all conditions 
+
+k1 --> v1
+k2 --> v2 
+k3 --> v3
+k4 --> v4 
+k5 --> v5
+
+k1 AND k2 --> 
+
+{"average_accuracy": [100.0 "bg-success"] "measure_accuracy_dict": {"(122 'M122' 'T2 Customer')": [100.0 "bg-success"] "(123 'M123' 'T1 Customer')": [100.0 "bg-success"] "(91 'M91' 'Callback_POST')": [100.0 "bg-success"] "(85 'M85' 'Offer_Phone_post')": [100.0 "bg-success"] "(88 'M88' 'OFFERED_SURVEY_POST')": [100.0 "bg-success"] "(89 'M89' 'Member_Accuracy_post')": [100.0 "bg-success"] "(90 'M90' 'Authenticate_Prov_Post')": [100.0 "bg-success"] "(83 'M83' 'Review_not_Pending_Post')": [100.0 "bg-success"] "(86 'M86' 'Reason_for_calling_Post')": [100.0 "bg-success"] "(94 'M94' 'Ask_for_ext_number_post')": [100.0 "bg-success"] "(98 'M98' 'Opening _With_Branding_POST')": [100.0 "bg-success"] "(100 'M100' 'Reference Number Check_post')": [100.0 "bg-success"] "(87 'M87' 'promptly_opening_the_call_post')": [100.0 "bg-success"] "(124 'M124' 'T2 Authenticate Member Details')": [100.0 "bg-success"] "(130 'M130' 'T2 Gathered Necessary Information')": [100.0 "bg-success"] "(131 'M131' 'T1 Gathered Necessary Information')": [100.0 "bg-success"] "(125 'M125' 'T1 Accurate Information Was Provided')": [100.0 "bg-success"] "(128 'M128' 'T2 Explained Commitments And Next Steps')": [100.0 "bg-success"] "(129 'M129' 'T1 Explained Commitments And Next Steps')": [100.0 "bg-success"] "(126 'M126' 'T2 Incorrect Action Taken By Documented Process')": [100.0 "bg-success"] "(127 'M127' \"T1 Appropriate Actions Were Taken And Offerred To Reduce Customer's Efforts When Needed\")": [100.0 "bg-success"]} "last_accuracy_computed_time": "21/04/2023 15:17:51"}
+
+
+NA --> 
+
+MeasureType --> NON NLP
+
+new measures --> 11 categories --> 1-2 measures each categories
+
+25-1-23 --> 
+
+
+TODO:
+
+1. Prepare data --> few calls acorss few dates --> data_date 30 calls spread to -- last 5 days --> Done
+2. 5-6 calls selected properly  share it with Bay A already audited call --> Not Done
+3. Extra Measures --> Sandhya  Vinayak --> Done
+4. NA --> Done
+5. Emotion Analysis Code Trigger on App for custom measures. --> Not Done
+6. one measure skipped  bug fixing  --> Done
+
+------------------------------------------------------------------
+
+
+Qa_user
+Qa@12345
+
+Qa_Admin
+mgr@1234
+
+DDL from table --> SQL 
+
+CREATE TABLE `qa_audited_calls` (`id` bigint NOT NULL AUTO_INCREMENT`name` varchar(255) NOT NULL`description` longtext NOT NULL`created_by` varchar(255) NOT NULL`created_on` datetime(6) NOT NULL`last_modified_by` varchar(255) NOT NULL`last_modified_on` datetime(6) NOT NULL`is_deleted` tinyint(1) NOT NULL`callmeta_id` bigint NOT NULLPRIMARY KEY (`id`)KEY `qa_audited_calls_callmeta_id_2b6d0283_fk_d_callmeta_id` (`callmeta_id`)CONSTRAINT `qa_audited_calls_callmeta_id_2b6d0283_fk_d_callmeta_id` FOREIGN KEY (`callmeta_id`) REFERENCES `d_callmeta` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+
+ACTIVELY LISTENED TO AND ENGAGED WITH THE CALLER 
+Call Documentation
+COMPLETE INFORMATION GIVEN
+Empathy
+Spoke in a Clear Manner
+Tone Respect and Professionalism
+
+CUSTOMER("Do they have a discount""Do they have a benefit discount""Does the member have a benefit discount""checking on the members benefit discount")	AGENT("For the benefit discount""For the members benefit discount""Theres no benefit discount""member has a benefit discount""For benefit discount")
+
+Do they have a discount|Do they have a benefit discount|Does the member have a benefit discount|checking on the members benefit discount
+
+For the benefit discount|For the members benefit discount|Theres no benefit discount|member has a benefit discount|For benefit discount
+
+CUSTOMER("Is there a limitation and exclusion""Does the policy have a limitation""Does it have a limitation and exclusion""Whats the policies limitation and exclusion")	AGENT("For the limitation and exlclusion""Theres no limitation and exclusion""Tpolicy does not have policy and exclusion""don't see any limitation and exclusion")
+
+Is there a limitation and exclusion|Does the policy have a limitation|Does it have a limitation and exclusion|Whats the policies limitation and exclusion
+
+For the limitation and exlclusion|Theres no limitation and exclusion|Tpolicy does not have policy and exclusion|don't see any limitation and exclusion
+
+
+CUSTOMER(I called several times|I called earlier|I called yesterday|I called last week|I called last month|I called multiple times|Its my second time calling|Its my third time calling|Its my fourth time calling|Ive called before|I was told by the last agent|I was told bu the last representativ)	AGENT(Im sorry you had to call us back|Im sorry no one called you back|I apologize you had to call again|I apologize no one called you back|Apologies for that|Apologies about that|Sorry about that|Sorry for that|Im sorry for the inconvenience|Apologies for the inconvenience|I apologize for the inconvenience)
+
+CUSTOMER(How much longer do I have to wait|How many more days|How many more weeks|Whats taking so long|Why is it taking so long)	AGENT(Apologize for the delay|Sorry for the delay|Apologies for the delay|Apologize its taking longer|Sorry its taking longer|Apologies its taking longer|Apologize for the long wait|Sorry for the long wait|Apologies for the long wait|Apologies for that|Apologies for that|Apologies about that|Apologies let me check|Sorry about that|Sorry for that|Sorry let me check|I understand let me see |I understand let me check|I understand let me help you|I apologize| let me |I apologize| I will|I apologize about that|I apologize| one moment|Im sorry| let me |Im sorry| I will|Im sorry about that|Im sorry for the inconvenience|Apologies for the inconvenience)
+
+CUSTOMER(Keep putting me on hold|Kept putting me on hold|Put me on hold again|Put me on hold several|Put me on hold multiple|Placed me on hold again|Placed me on hold several|Placed me on hold multiple|Put me on hold so many|Placed me on hold so many|On Hold more than|Keep getting transferred|Kept getting transferred|Transferred me again|Transferred me several|Transferred me multiple|Transferred again|Transferred several|Transferred multiple|Transferred so many|Transferred more than|Keep transferring|Kept transferring)	AGENT(Apologies for that|Apologies about that|Apologies let me check|Sorry about that|Sorry for that|Sorry let me check|I understand let me see |I understand let me check|I understand let me help you|I apologize| let me |I apologize| I will|I apologize about that|Im sorry| let me |Im sorry about that|Im sorry| I will|Im sorry for the inconvenience|Apologies for the inconvenience|I apologize for the inconvenience|Im sorry for the confusion|Apologies for the confusion|I apologize for the frustration|Im sorry for the frustration|Apologies for the frustration|I apologize for the frustration)
+
+AGENT (maybe| Im not sure| I believe| in my opinion| I think so| I dont know)	AGENT(Let me look here|let me do my research|Let me pull it up|Pull it up|Look for it)
+
+
+CUSTOMER (you are rude| that was rude| you did not need to shout| that is unprofessional)
+
+
+mx --> yes/na
+my --> if mx=yes  my=yes yesnona
+
+ K245
+ K247
+ K249
+ K253
+ K251
+ K255
+
+133140146
+<M133='YES'<M140='YES''YES''NO'>'NA'>
+<M134='YES'<M141='YES''YES''NO'>'NA'>
+<M135='YES'<M142='YES''YES''NO'>'NA'>
+<M136='YES'<M143='YES''YES''NO'>'NA'>
+<M137='YES'<M144='YES''YES''NO'>'NA'>
+<M138='YES'<M145='YES''YES''NO'>'NA'>
+
+
+
+134141147
+
+(m146 = 'YES' or m146='na') and (m147 = 'yes' or m147='na') -->yesno
+yes na no --> no
+no  yes -->
+
+yes  yes --> yes
+no no --> no
+yes na --> yes
+yes no --> no
+na no --> no
+
+YES  NA NO
+yes > no > na
+
+<(M146='YES' OR M146='NA') AND (M147='YES' OR M147='NA')'YES''NO'>
+<(M148='YES' OR M148='NA') AND (M149='YES' OR M149='NA') AND (M150='YES' OR M150='NA')'YES''NO'>
+<(M146='YES' OR M146='NA') AND (M147='YES' OR M147='NA')'YES''NO'>
+<M139='YES''YES''NO'>
+
+135
+142
+
+
+136
+143
+148
+
+137
+144
+149
+
+138
+145
+150
+
+kjhkjhjh
+oiuoiuou
+
+9147551004740000691_87578160_300013_80104733
+9147552069660000691_87597546_300013_80113324
+9147551160230001381_87580362_300029_65428799
+9147551585810001381_87587213_300029_65430726
+
+139 146-151
+-------------------------------------------------------
+
+Calls to be shared with Bay A are as below
+
+'9147551004740000691_87578160_300013_80104733''9147551160230001381_87580362_300029_65428799''9147551221490001381_87581704_300029_65429069''9147551406920001381_87584347_300029_65429893''9147551585810001381_87587213_300029_65430726''9147551814090001381_87591103_300029_65431791''9147551828430001381_87591439_300029_65431855''9147551870210001381_87592497_300029_65432056''9147551923110001811_87593504_300037_77100510''9147551943040000691_87595148_300013_80112241''9147551948780001381_87594462_300029_65432428''9147552069660000691_87597546_300013_80113324''9147552092580001381_87596045_300029_65433127''9147552112130000691_87598323_300013_80113653''9147552121160001381_87597356_300029_65433246''9147552174490001811_87597830_300037_77102080''9147552278440000691_87600402_300013_80114963'
+
+(8290882911829138291982923)
+----------------------------------------------------
+
+
+Agent Name	Pbx Login Id Call Start Time	Call End Time	Tier1	Tier2	Tier3	Predicted_value	Actual_value	Matched_keywords	Comments	predicted_score	actual_score	confidence_score	Validation Status	Validated Data
+Agent Name	Pbx Login Id	Call Start Time	Call End Time	Tier1	Tier2	Tier3	Predicted_value	Actual_value	Matched_keywords	Comments	predicted_score	actual_score	confidence_score	Validation Status	Validated Data
+
+9147551004740000691_87578160_300013_80104733
+
+
+Hi XXXX
+
+-----------
+
+Action Items:
+I have to take few march data calls ingest into app and run NLP on those calls.
+
+9147551701150001381
+9147551699320001381
+9147551436540001381
+
+9147550917490001381 --> 2023-01-25T13.52.54_9147550917490001381_87576654_300029_65427769.wav
+
+9147551666710001381
+9147550976420000691
+9147551084020000691
+9147551277490000691
+9147551111810001381
+9147550781840001381
+
+
+delete from f_nlp_analysis fna 
+where fna.measure_id_id in (86879098122123)
+and fna.event_log_id_id = 535
+
+
+<M139='YES' OR M139='NA''YES''NO'>
+
+9147551111810001381_87579505_300029_65428611
+9147553993320001381_87631384_300029_65441527
+
+
+To DO :
+--------
+1. Confidence Score Generalization :
+
+	Measure --> distinct labels --> 
+
+
+who decides which label should come ?? --> keyword formula
+
+
+	1/distinct_labels ()
+
+basically while defining rule itself we can find confidence score of rule.
+
+confidence score depends on number of labels number of keywords and its association with one among others and we can also include fuzzy score into equations
+
+K1 AND K2 --> 
+
+K1 --> capable of two labels --> 50% --> 4 conditions checked together
+
+static probability --> 
+(1/2 or 1) * 1/2 * (1/2 or 1) * 1/2 --> 1/16 - 1/4 --> 0.0625 0.125 0.25
+
+
+for each k1 --> 0.06250.1250.25
+for each k2 --> 0.06250.1250.25
+
+how many keywords are linked --> 3
+
+0.25 * 0.125--> 0.03125
+
+k1 or k2 --> 0.25 + 0.125 --> 0.375
+
+
+transcription --> keywords --> 5 
+
+how keywords are constructed ?? --> variations of same keywords that might come in transcription
+
+for a keyword --> probability is --> x/n 
+
+defining more keywords --> increse confidence ?? 
+analyze transcription --> extract patterns as rules --> 
+
+transcription has segments --> segments has keywords 
+
+probability of keyword in transcription --> x/nSegments
+
+keywords are not whole communication --> hence keywords will be low in numbers --> probability will be low with respect to segments 
+
+if we compare with whole call --> accuracy should be low by that logic 
+
+more segments --> more probability to find keywords
+
+more keywords --> more probability to find keywords
+
+both are more  --> more stronger association
+
+how to define association between any two variables
+
+number of segments ~ number of keywords
+
+how many variations can exists of keyword?? --> clusterization problem
+
+from transcription --> find groups related to particular keywords
+
+maximum number of clusters = total segments of call
+
+total probability search space for call --> number of entries in transcription map
+
+19039 --> total combinations --> are all combinations required ?? --> no
+which ones are required ?? --> same nGram as keywords
+
+2048 --> where ngram = 4
+
+1343 --> where ngram = 4 speaker = agent
+
+76 --> where ngram = 4 speaker = agent within first 120 seconds
+
+(2048/19039) * (1343/2048) * (76/1343) --> 0.004
+
+/76 --> 0.066 *  
+
+0.013 --> probability of one keyword out of all
+
+k1 --> 5 /76 --> 0.066
+k2 --> 0.077 
+
+k1 AND K2 --> 0.066 * 0.077 --> 
+
+tf-idf --> for keyword --> 
+
+------------------------------
+
+clean_ngram = stop words removal + lemmantization 
+
+Find Tf-IDF score for each ngram :
+-----------------------------------
+
+while generating transcriptionMap --> i should generate tf-idf and relevant fields
+
+ngram_word --> segment --> frequency / segment_length --> 
+ngram_tf = frequency / segment_length
+ngram_idf = log(number_of_segments/getNumberOfSegmentsContainingNgramWord())
+ngram_tfidf = ngram_tf * ngram_idf = 1/6 * log (900 / 10) --> 0.325
+
+total_words_in_call = filter dataframe by ngram=1 --> count/length
+
+search for keyword without any filter like speakerTag/location
+
+keyword_frequency --> clean_keyword --> filter in dataframe --> count/len
+
+keyword_tf = keyword_frequency/total_words_in_call = 
+
+keyword_idf = 
+
+keyword --> clean_keyword --> search in dataframe --> 
+
+
+(15)/sum_of_tf_idf_of_all_matched_filters
+
+0.325--> k11
+0.246 --> k12
+0 
+0
+0
+
+
+15 + 14 + 4 + 5 / () --> 0.44 0.66 --> k1 
+(0.325 + 0.246 + 0.116 + 0.265 ) / (0.325 + 0.246 + 0.116 + 0.265 + 0.345 + 0.215)
+= 0.952/1.512
+k2 --> 0.55
+
+k1 --> 0.63 --> 1/3
+k2 --> 0.34 --> 1/3 
+
+k1 and k2 --> 1/9
+k1 or k2 --> 1/3()
+
+k1 and k2 --> (0.63/3)*(0.34/3) --> 0.0238
+k1 or k2 --> 
+(K1 AND K2) OR (K3 AND K4)
+(0.30 AND 0.60) OR (0.44 AND 0.55)
+0.270 OR 0.242 --> 0.512/3 --> 0.171
+
+
+more number of segments --> accuracy
+more number of keywords --> not necessarily increase accuracy
+
+--------------
+more conditions (Strict rules) --> AND --> probability will reduce
+less conditions (Loose rules) --> OR --> probability will increase
+ 
+k1 --> 0.325 -->
+k2 --> 0.246 --> 
+
+
+0.325
+
+33%
+
+----------------------------------------
+
+moving average  --> 
+
+
+rule --> keyword links --> 10-15-20 --> 
+
+nodelinks
+
+def generateMeasureHierarchy(measure_listtier):
+	measure_hierarchy = {}
+	for measure in measure_list:
+		if measure.tier == tier:
+			measure_hierarchy[node] = measure
+			if measure.measure_formula not None and measure.measure_formula != ''
+				children_list = parseMeasureFormaula(measure_formula)
+				measure_hierarchy[links] = self.generateMeasureHierarchy(children_list2)
+measure_hierarchy = {}
+
+1  --> {2 3} --> 2:{45}3{}
+6  --> {789} --> 7:{1011}8:{12131415}9:{16}
+17 --> {18} --> 18:{19}
+
+keyword   speaker tag     inclusion type   location
+0.00325 + 1/4(1/2 or 1) + 1/4(1 or 0) + 1/4(1 or 0)
+        + 1/4(2/3)  + (00.25)  + (00.25)
+
+ 1/4(0.013)       +0.17+
+
+1/4*(tfidf) + 0.17 + 
+
+
+speaker_taglocation depends on keyword matching --> dependent probability
+while inclusion type can exist independently --> independent probability
+
+
+
+probability of finding keyword --> either it will match or it will not 50%
+
+	--> ngram keyword speaker_taglocation --> tfidf (1/76)
+
+
+(320/4013)*(197/320)*(50/197)
+0.013*(1/2) --> 0.0065
+
+---------------
+
+conclusion :
+-------------
+
+text with segments --> large search space and very few keywords with conditions and association probability of keyword will be very less no matter what it will be in range of 10^-3 10^-4. At the end confidence score comes down to number of labels associated with rule --> confidence score <= 1/number of labels associated.
+however still above calculation of tfidf is helpful probability calculation is helpful.
+tfidf for each ngram average tfidf of all matched keywords in particular KX. this will help create custom ML/DL model in future with these fine tuned parameters.
+
+tfidf segment_sentiment
+
+1/3
+
+Search space --> with ngrams 
+
+---------------------------------
+
+for NLP on call data, search space is big with respect to keywords or group of keywords 
+
+3 sets of keywords : 
+	k1 --> 5 keywords
+	k2 --> 3 keywords
+	k3 --> 4 keywords
+
+total keywords in call --> 20000
+
+total keywords for rule --> 5 + 3 + 4 = 12 
+
+total probability of keywords in call = 12/20000 --> 0.0006 --> 0.0006*10000 --> 6%
+
+example 2 where lets say we have total 50 keywords 
+		total probability = 50/20000 = 0.0025 -->0.0025 * 10000 --> 25%
+
+example 3 where lets say we have 200 keywords 
+		total probability = 200/20000 = 0.01 --> 0.01 * 10000 --> 100
+
+1/76 
+
+------------------------------------------------
+
+
+Analysis to be done:
+
+1. Look at transcriptionMap of 5000 (one day of calls)
+	average ngram --> 13
+	ngramwise average count of rows in transcriptionMap --> 732 
+	average total ngram_words --> 21972
+
+	extract total ngram_words (len of df)
+	extract count of rows group by (ngram)
+
+	1.1 in a call,
+		find count of rows in trancription by ngram --> take average of those counts
+		1 --> 6000
+		2 --> 3000
+		3 --> 2000
+		4 --> 1500
+		5 --> 1200
+		6 --> 1000
+
+
+		1.1.1 --> (1,5000)
+
+	call1, total ngram words , average ngram per call ?? or per ngram average count 
+	call2, total ngram words , average ngram per call ?? o
+
+
+2. Look at total keywords per measures
+
+	total 2296 keywords defined in app for pcc
+	average keywords per measure 36
+	average ngram per measure 6
+	average search space with average ngram value as 6 in transcription map is 917
+
+	k1 --> 11 keywords --> average ngram --> 3-4
+	k2 --> 12 keywords --> average ngram --> 3-4
+	k3 --> 13 keywords --> average ngram --> 3-4
+
+	total keywords --> 11 + 12 + 13 = 36
+	measure 1, total keywords 36, average ngram 4
+	measure 2, total keywords 36, average ngram 3
+
+	total keywords per measures/ total search space in trancription based on average ngram
+
+	36/917 --> 0.03925 --> 3.92 % (from current statistic average chance for finding keywords is this, now we can normalize to get this score between 70-95 range for confidence score)
+
+	3.92 % is 82.5 in 70-95 range.
+
+	---------------------------------------------------
+
+	rule1 : rudeness check (80%)
+
+		k1, k2, k3 , k4 , k5
+
+		k1:w1,k2:w2,k3:w3 ...
+
+		'Do as you wish':2
+		'you are not understanding what i am saying':2
+		'go to hell': 3
+		'': 1
+
+		k1,k2,k3 found in chat
+
+		(2 + 2 + 3 )/(2+2+3+1+3) --> confidence score
+
+
+accuracy of rule
+	80%
+
+
+100 chats 
+rule1 --> 100 chats 
+predicted output --> predicted rudeness = Yes/No, confidence score = 90%
+groundtruth for rule1 --> actual rudeness = yes/no
+
+chat1 --> predicted rudeness = Yes, actual rudenss : no
+chat2 
+..
+.
+.
+---------------
+accuracy 80% --> 
+
+chat34 --> rule2 --> 60% 
+
+
+PHI Verification --> ['office '] 
+Avoid Jargon
+Appropriate Language
+
+
+k1 -->
+k2 --> 
+
+-----------------------------------
+
+TranscriptionMap:
+-----------------
+Purpose : 
+
+WE have measures/rules which has conditions like speaker tag, inclusion type, location , label
+
+
+Measure 1 --> YES/NO , YES --> YES 
+
+	0.025 - 0.046
+
+(K1 AND K2) OR K3
+
+k1 : thank you for calling | occupational health
+	 sldfkjas, lskfdjaslk , sfkasjl;f , slkfjsafl;ksaj.,fsaf laskfjsa;lfkjsaf
+	 10 mutually exclusive keywords --> probability will get added , 
+, agent, first 30 seconds,
+	thank you for calling --> 0.0005
+	occupational health --> 0.0016
+k2 : connected to know status | file status, customer, first 150 seconds
+	connected to knwo status --> 0.003
+	file status --> 0.002
+k3 : pending | suspended , agent or customer , first 300 seconds
+	pending --> 0.0023
+	suspended --> 0.0021
+
+
+total probability for measure 1 : 
+---------------------------------
+	k1 : total pk1 - 0.005+0.0016
+	k2 :
+	k3 :
+
+	pm1  = (pk1*(pk2 after k1))*pk3
+		 = 10^-3*(10^-3)*10^-3
+		 = 10^-9 --> 
+
+------------
+
+Client they want to see which measure is giving good confidence score
+
+
+
+
+1000000*10^-3/3637 
+
+--> 2000000*10^-3/3637 --> 2000/3637 
+
+---------
+
+k1 : search space reduced to 209
+	search space reduced to 25
+	1/25 --> 0.04
+	1/41 --> 
+
+------------------------------------------------------------
+
+Benchmark Statistics for Confidence Score:
+-------------------------------------------
+
+Data for Humana PCC on Prod server (10.208.24.71)
+	D:\Workspace\Prod\HumanaPCC\app_data\call_transcription_data\
+
+1. Take one day data (approx 5000 calls)
+2. Generate transcriptionMap. (already there on server)
+	size of transcription map (total search space)
+3. Average nGram in transcriptionMaps for 5000 calls
+4. Average count of rows for average ngram
+5. Average number of keywords for all humana pcc measures
+6. average ngram for keywords associated with measure for all humana pcc measures
+7. average agent segments per call
+8. average customer segments per call 
+9. overall average agent segments for 5000 calls
+10. overall average agent segments for 5000 calls
+
+All this output should be in excel file.
+
+
+transcription :
+----------------
+
+we are able to extract some infr
+
+phone number
+respodent name
+provider name
+group name
+addresss : None
+city
+state
+accepting WC
+
+case disposition (separate measure for each measure)
+	call driver
+	keywords --> yes/no
+
+	case disposition 1, 2, 3 --> 
+
+------------
+100% --> it should work without
+
+NLP --> 80%-85% --> keywords 
+	all calls data. --> nlp has dependency on text --> speech team
+
+	transcription 
+		address that we have is fine next how are you one thress two szeoo 
+
+CRM 
+
+phonenumber -->
+
+case disposition : "callback generic"
+CRM : 123, alskdfjsl, birgina, 20394
+
+
+
+Based on statistics on Humana PCC data:
+---------------------------------------
+
+Average nGram is 5
+Average rows by average nGram = 421
+
+so search space can be limited to only 421.
+
+1/421 --> is minimum probability --> 0.002375 --> 0.23% --> 2.3 * 10^-3
+
+nGram 3,4,5 --> total search space 1896 --> 
+
+1/344 --> is minimum probability --> 0.002906 --> 0.29% --> 2.9 * 10^-3
+
+
+nGram range 
+	4 --> 231 --> 1/231 --> 0.004329 -->  0.43%
+	5 --> 344 --> 1/344 --> 0.002906 -->  0.29%
+	6 --> 515 --> 1/515 --> 0.0019417 --> 0.19%
+	7 --> 920 --> 1/920 --> 0.001087 -->  0.10%
+
+probability range for finding keyword in transcription--> 0.10 - 0.43 (for keyword with ngram 4-7 and no other filters)
+
+With agent/customer filter
+	probability range for finding keyword in trancription 
+
+		4 --> 453 
+			75% agent segments
+			25% customer segments
+			453*75/100 --> 340 --> 1/340 --> 0.29%
+		5 --> 453 (avg,median,q1)
+			75% of 453 --> 340 --> 1/340 --> 0.00294 --> 0.29%
+		6 --> 427 (q3)
+			75% of 427 --> 321 --> 1/321 --> 0.003115 --> 0.31%
+		7 --> 320 
+			75% of 320 --> 240 --> 1/240 --> 0.004166 --> 0.41%
+
+			0.29 - 0.41 --> Need to scale for range --> 75% to 90%
+
+---------------
+0.29 - 0.41 is probability range for single keyword. 
+Need to find total probability for measure with all attached keywords.
+
+Number of keywords linked per measures 
+
+minimum - 3
+q1 - 15
+median - 38
+avg - 57
+q3 - 81
+maximum - 153
+
+
+Lowest Range (0.29%)
+Min : 0.29 * 3 --> min probability for measure : 0.87%
+q1 : 0.29*15 --> q1 probability for measure : 
+
+15 avg keyword per cluster and 4 average linking to measures
+
+so k1 --> 15 keywords --> l1
+
+15/4 --> 4 keyword groups == 4 locations
+
+0.01 to 0.08 probability range
+
+k1 -> 0.01
+k2 -> 0.03
+k3 -> 0.05
+
+K1 and K2 --> L1
+
+0.01*0.03
+K3 --> L2
+
+keyword matching (fuzzy score)
+
+100*0.5
+
+-----------------
+
+1. Integrate accuracy as part of confidence score calculation.
+2. 
+-----------
+
+Adding accuracy as weightage ??
+
+1 to 100 --> 0.01,0.02,0.03 to 1
+
+Measure accuracy high --> confidence should be high
+Measure accuracy low --> confidence should be low
+
+location of keyword may be relative.
+
+in case of relative keywords.
+	k1,k2,k3 becomes dependent events or else its independent events if all keywords has absolute location. 
+
+	For example:
+	(K1 AND K2) or K3
+	K2 depends on K1 
+	probability of K1 -> pk1 = locProbk1
+	P(K1 and k2) = locProbk1 * p(k2/k1)
+		here , p(k2/k1) (probability of k2 given k1 has occured) = locProbk2
+
+	So , P(K1 and K2) = locProbk1 * locProb2
+	
+	----------------------------------------------------------------------
+
+	
