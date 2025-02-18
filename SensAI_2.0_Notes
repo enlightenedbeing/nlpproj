@@ -1,0 +1,230 @@
+SensAi Bugs (Chitti) :
+----------------------
+
+1. json trancription not getting generated --> callmetaservice --> bulk_update failing
+2. Test ETL with ETL Plan, NLP Plan
+3. Duration field in callMeta not giving correct output
+4. search option in nlp planner to search from list of rules
+
+1. Merge two EventLog outputs into one. --> Pavan
+2. Employee Data Management --> Pavan 
+3. NPS Data Management --> Sabita
+4. Assigned to feature in all entities --> Sheeba
+5. ETL for Chat Data.
+6. NLP Planner for scheduler --> usage of past days to process daily calls.
+
+
+-----------------------
+
+
+
+7. Code standardization and refactoring --> Today EOD might push to git
+
+
+----------------------------------------
+2. ML/DL based rule integration timelines
+
+--------------------------------
+
+To do today:
+
+ML/DL rule Design :
+---------------------
+
+create measure with name,display_name, type, 
+
+each rule has its own set of requirements 
+
+manual rules --> simple --> just place holders
+
+rule based --> requires transcriptionMap with all fields , requires keywords, formula, measure formula etc.
+
+ML based rules ??
+	library --> library has specific limitations, conditions 
+	input should be in specific format based on library,
+	library also has many customizations --> ML guy will know
+	some options should be given , some not.
+
+	rule or text needs some preprocessing on data 
+	preprocessing , parameters , model --> output --> different model will give different output, in transcription ---> should be able to tag sentiment , should be able to tag , emotion, grammer, spelling mistakes, 
+
+	generalized feature for ML --> preprocessing + parameters , model selection , feature engineering
+
+-----------------------------------------------------------------------------------------
+
+* ML/DL Rule Integration on App:
+  ----------------------------
+1. R&D on requirements , possible variations, constraints, conditions, input, output forms.
+2. Discuss with team on possible controllable variables --> Gaurav, Avi, 
+3. Data, Preprocessing, Training, Testing, Validation --> phase automation on App Design
+4. Everything is customizable because everything comes from client and client to client it varies. --> customization options --> defaults initially. 
+5. Should we integrate with existing measures or create separate service for sure. 
+6. Data input generalization
+7. preprocessing generalization
+8. model training generalization
+9. model testing generalization
+10. model validation generalization (confusion matrix, accuracy, f1 score)
+11. model output generalization
+12. Additional rule-based output integrate
+13. final output generation from ML and rule based output.
+
+every analysis, rule type has its own eco system, rule and data are at center of it.
+
+data, rule --> separate service for each should be anticipated as separate modules. 
+
+basically dont like rework --> more extention --> feature should have completeness upto 70% from first version --> dont start working on it till get that confidence on requirements or design.
+
+basically --> not one integrated solution , but group of individual solutions based on custom demand --> requirements , not one big app but many small apps. 
+
+
+----------------------------
+
+-----------------------------------
+
+1. send mail to TSG for Humana PCC FQDNS.
+2. TempETL --> CallMeta Code , transcription Map, data_date, transcriptionMapPath not populated properly 
+
+-------------------------------
+
+
+number of calls
+And master-id wise -->
+
+
+Manual measures are showing in AQEP CRM validation part for Audio player , for which they are not able to give any actual value for it
+
+
+5 major components --> NLP, ETL, Planner, Scheduler, Measure, CRM
+	deployment --> Dockerization , CI_CD pipeline , DevOps 
+	NLP --> Sentiment Analysis, grammer, punctuation in map. 
+	meta data generalization
+	AQEP form generalization
+	Speech module integration
+
+
+-------------------------------------------------
+Sens Ai 2.0 Architecture & Requirements :
+-------------------------------------------------
+
+1. TranscriptionMap enhancement , separate service and function to create, update, delete, slice, dice functions to retrieve specific transcriptionMapDF for different types of analysis. if transcription with full length segments required, based on ngram or ngram_range, based on timestamp, based on speaker tag, based on sentiment, based on tfidf score, based on specific keyword or words in transcription. - NLP
+
+2. Separate generalized Module for AQEP with its dependent weightage, scoring etc. 
+	- NLP & App
+3. Metadata type generalization (inheritance) - App
+
+4. Analysis type generalization (inheritance) - App
+
+5. Data source connectors for MSSQL, MySQL,S3, Redis, DynamoDB - App
+
+6. Performance metrices for measures and analysis (precision, recall, f1 score) - NLP
+
+7. Speech module integration. - Speech, Little NLP, App
+
+8. CRM generalization, feature to provide mapping, generate query and store query. - App
+
+9. Planner sophistication - App
+
+10. Sentiment, Grammer & Punctuation check on text - NLP
+
+11. GenAi integration on App - NLP and App
+
+12. Data Masking and Redaction - NLP and App
+
+13. Connect ground truth management with NlpAnalysis - App, DONE
+
+14. Async tasks management with progress bar, redis/kafka queue implementation - App
+
+
+-------------------------------
+15. Able to run code from someone else directly through app. - App
+
+16. Employee Data Management - NLP & App
+
+17. NPS data management - NLP & App
+
+18. Word Cloud - NLP
+
+19. Data/Information extraction from Text (more generalized and elaborated) - NLP 
+
+20. Text summarization - NLP
+
+21. Dockerization of App, packaging, build version number
+
+22. SOC2 compliance - App
+
+23. Subscription Model - App
+
+24. One Login Authorization - App, DONE
+
+25. Support for Genisys, Nice platform - R&D, App
+
+26. ChatBots, Recommendatation Systems - NLP, App
+
+27. ML PlayGround - NLP, App (looks like separate project itself)
+
+28. Feedback loop for measure (auto learn from ground truth and comments)
+
+29. Base Model for NLP (alternative to GenAi as GenAI is online)
+		with all keywords, call transcription data generate base model with 75% accuracy
+		use transfer learning to train specific for client
+		feedback loop for auto learning
+
+30. CI CD pipeline for SensAI with Git, CodeCommit
+
+------------------------------------------------------------------
+31. Enhancement : Merge outputs from different NLP runs.
+
+
+32. CRM : API based access (instead of credentials)
+
+33. CRM : Way to store generated query (update when required) 
+
+34. Bug : json trancription not getting generated --> callmetaservice --> bulk_update failing
+
+35. Bug : Duration field in callMeta not giving correct output
+
+36. Enhancement : search option in nlp planner to search from list of rules
+
+37.  Enhancement : Assigned to feature in all entities 
+
+38. Enhancement : NLP Planner/Test Files train-test split, statistics
+
+39. Enhancement : ETL support for Chat
+
+40. Enhancement : Tenant Config syncing with ClientDataConfig
+
+41. Bug : Location Formula validation allows 'None' as keywords which should not be allowed
+
+42. Enhancement : Formula wizard or builder to avoid formula errors
+
+43. Enhancement : Rename location to location formula
+
+44. Enhancement : Change formula to names instead of codes as codes can change when switched db etc. for this name should be unique and not none or empty
+
+45. Enhancement : Import/Export functionalities for All entities (CoreService)
+
+47. Measure Page Optimization
+
+https://acropolium.com/blog/build-scalable-web-app-from-scratch/#:~:text=Scalable%20web%20application%20offers%20companies,balancers%2C%20queues%2C%20and%20indexing.
+
+Limitations of rule based NLP model:
+---------------------------------
+1. Can be built around only visible patterns.
+2. Depends highly on keywords
+3. Not always feasible to get/extract keywords, requires manual work.
+4. 
+
+Django App with Spark, kafka, S3:
+------------------------------------
+https://medium.com/@tagnev.vengat/building-a-real-time-feedback-system-with-django-kafka-spark-and-s3-74c1e3c6c2bf
+
+1. Ground truth integration with nlp-analysis.
+2. Update code base with tenant-management module. 
+
+-------------------------------
+
+
+
+
+
+
