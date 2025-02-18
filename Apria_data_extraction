@@ -1,0 +1,76 @@
+Apria : Contract files/documents
+---------------------------------
+
+3 months time (timelines expected for project)
+
+Input : 
+	1. Contracts which are from supplier side which are in PDF or MS word 
+		1.1 Documents have more or less same structure with some changes here and there.
+		1.2 Documents can be of many pages.
+		1.3 Documents also contains Hand written texts.
+		1.4 Documents also contains tables
+	2. List of Data Parameters 
+		2.1 location of parameters is not fixed can vary in documents. but these parameters are fixed and needs to extracted.
+
+Output : 
+	1. Extracted parameters from Contract documents (PDF, MS word)
+	2. Count of parameters extracted vs total parameters (percentage)
+	3. Count of pages for document
+	4. Document name
+	5. Extraction date
+	6. Reason for failing to extract parameters
+
+Challenges :
+	0. Understand and define each parameters with all its context. 
+		Check if keywords can be provided by Project team. 
+	1. Whether it is possible to extract parameters from contract documents or not.
+	2. If yes then how many parameters are feasible to be extracted.
+		mandatory vs optional
+	3. Whether PDF files/ms word files are extractable pdfs or not (if not , whats the resolution)
+	4. Extracting parameters which are hand written
+		4.1 R&D on libraries , packages which allows hand written text extraction
+		4.2 Offline/Online model
+			Deployment challenges if any (size, computation, RAM)
+			Procurement
+		4.3 Data  and ground truth required for training
+			Raw data - number of documents, number of parameters , number of data points for each parameter which are hand written
+			Ground truth - creation
+		4.4 Estimated training time
+		4.5 Model testing, testing time
+
+
+Tried approach :
+-----------------
+ICP approach already tried -->
+regex approrach --> very hard to create expression which gives good results
+code can be shared 
+
+then another approach - extract text from pdf,ms word doc
+	through scrapping -- accuracy around 90-95% as told by cristopher manalo
+
+hand written text is not captured in scrapping approach
+
+now search for parameters from text
+
+Overall, timelines for this project to be discussed and shared.
+
+----------------------------
+
+By Tomorrow EOD :
+
+Input : Extracted Text from supplier Contract PDFs, list of parameters
+Output : Extracted parameters from sample files 10 files
+
+1. read output.xlsx file
+2. read contract text row by row
+3. extract parameters as key value pairs
+	create separate excel file for each document with "column A as filename+ _ExtractedInfo" as file name.
+4. do this for if not all some parameters and 10 contracts.
+5. share results on the same mail thread to cristopher
+
+----------------------
+
+
+
+	
+

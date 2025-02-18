@@ -1,0 +1,485 @@
+Django App In Production :
+--------------------------
+
+CI/CD Pipeline Setup : 
+---------------------- 
+  https://www.browserstack.com/guide/building-ci-cd-pipeline
+
+
+
+Useful Links :
+--------------
+
+https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Deployment
+
+https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
+
+https://docs.djangoproject.com/en/3.2/howto/deployment/
+
+https://docs.djangoproject.com/en/3.2/howto/deployment/asgi/daphne/
+
+https://stackoverflow.com/questions/37098504/how-to-configure-apache-to-run-asgi-in-django-channels-is-apache-even-required
+
+https://realpython.com/django-nginx-gunicorn/
+
+1. Separate App server
+2. Separate Web Server --> Nginx, Apache, Dephane, Unicorn --> to serve static files such as CSS/html
+3. Debug = False
+4. hide secret-key --> into separate file or environment variable.
+5. Dephne alone is not yet sufficient as ASGI webserver for handling HTTPS requests, it handles HTTP requests though.
+6. Hence, Apache is required to be installed as reverse-proxy server which will first get requests and pass to dephne.
+7. Apache alone also yet doesn't have functionality of ASGI, it only supports WSGI.
+
+how to deploy django app in aws production
+
+Deploy application on AWS
+
+----------------------------
+
+Few things to learn :
+
+what it needs to deploy application in production ? --> tools, configuration, things to take care, scalability, performance, best practises
+
+Best Practices for deploying web apps in production/cloud --> Do R & D
+
+PoC for deploying production webapp in multiple docker containers. 
+	
+FOr Production Below configuration is ideal
+
+	Create 3 docker containers.
+		one container should run nginx web-server
+		second one should run Django application server
+		third one should run MySql server
+
+how dockers interact with each other?
+
+Separate Caching server is required for Django app to be faster and efficient. --> Redis server good way to go.
+
+Redis Server is NOT officially supported on Windows. --> need to enable WSL2 for redis installation on windows and work with it.
+
+https://redis.io/docs/getting-started/installation/install-redis-on-windows/
+
+
+-------------------------------------------------------
+
+	https://redis.io/docs/getting-started/installation/install-redis-on-windows/
+
+	WSL2 Installation
+	https://pureinfotech.com/install-windows-subsystem-linux-2-windows-10/
+
+	Caching with Redis
+	https://realpython.com/caching-in-django-with-redis/
+
+Dockerizing Django App with All servers, separate containers for Redis, DB, Webserver
+	
+	https://blog.logrocket.com/dockerizing-django-app/
+
+	https://blog.devgenius.io/how-to-dockerize-a-production-ready-django-application-django-nginx-uwsgi-a908d3e4d8f8
+
+	
+	Docker Courses :
+	-----------------
+	https://www.youtube.com/watch?v=3c-iBn73dDE
+
+	https://www.youtube.com/watch?v=pTFZFxd4hOI
+
+	https://www.youtube.com/watch?v=W5Ov0H7E_o4
+
+
+
+App Deployment on AWS EC2 :
+---------------------------
+https://www.programink.com/django-tutorial/django-deployment.html
+https://www.youtube.com/watch?v=7O1H9kr1CsA
+https://www.youtube.com/watch?v=czu1ThQK3Tk
+
+To transfer data between two ec2 instances:
+---------------------------------------------
+https://stackoverflow.com/questions/25404250/transferring-files-between-two-ec2-instances-in-the-same-region
+------------------------------------------------------
+
+Nginx as reverse proxy with Daphne :
+------------------------------------
+https://okbaboularaoui.medium.com/how-to-set-up-django-with-postgres-nginx-and-daphne-django-channels-on-ubuntu-20-04-b0d24dcc7da9
+
+  reverse proxy server has dependency with django channels need to check that
+  how to configure domain and 443 port for https that have to look at
+
+  https://mattsegal.dev/nginx-django-reverse-proxy-config.html
+
+  https://gist.github.com/pedrouid/4abcc16c0218a46a577cfa8186cb845d
+
+  https://community.sisense.com/t5/kneowldge/reverse-proxy-with-nginx-ssl-configuration/ta-p/5358
+
+4 Containers ??
+----------------
+
+1. For nginx as reverse proxy server --> done on BSC server, with SSL certificate
+    how to make link accessible outside
+2. Dephane web server for Async requests
+3. MySQL server
+4. Django App Server
+
+
+net localgroup docker-users GLOBALADDA\Lalkrishna.trivedi /ADD
+
+net localgroup docker-users Lalkrishna.Trivedi /ADD
+
+["daphne", "-p", "80", "-b", "0.0.0.0", "Chitti.asgi:application"]
+
+
+----------------------------------
+ChatGPT:
+--------------
+
+Certainly! Here's a general overview of the steps involved in deploying a Django app using multiple Docker containers:
+
+Create a Dockerfile for each container you plan to use. This will define the base image and specify any additional dependencies or configurations that are required.
+
+Create a docker-compose.yml file that describes the services you want to run and how they should be linked together. For example, you might define a service for your Django app that depends on the database and the webserver.
+
+Build the Docker images for each service using the docker build command.
+
+Run the services using the docker-compose up command. This will start all of the containers in the correct order and link them together as specified in the docker-compose.yml file.
+
+Here's an example docker-compose.yml file that uses separate containers for a Django app, a MySQL database, and an Nginx web server:
+
+yaml
+Copy code
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: myapp
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+      MYSQL_ROOT_PASSWORD: myrootpassword
+    volumes:
+      - db-data:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: mysql://myuser:mypassword@db/myapp
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+    volumes:
+      - static-data:/code/static
+      - media-data:/code/media
+
+volumes:
+  db-data:
+  static-data:
+  media-data:
+In this example, the db service uses the official MySQL Docker image and sets some environment variables to create a database for the app. The app service builds the Django app container and sets the DATABASE_URL environment variable to point to the database container. The web service builds the Nginx container and depends on the app container to serve the Django app. Finally, there are three named volumes defined to persist the database data and the static and media files.
+
+I hope this helps! Let me know if you have any further questions.
+
+
+
+Lalkrishna Trivedi
+how to generate docker files for each containers here ??
+To generate Dockerfiles for each container, you can follow these steps:
+
+For the MySQL container, you can start with an official MySQL image from Docker Hub (https://hub.docker.com/_/mysql) and create a new Dockerfile based on that image. Here is an example:
+bash
+Copy code
+FROM mysql:latest
+
+# Add a custom configuration file
+COPY ./my.cnf /etc/mysql/conf.d/
+
+# Set the timezone
+ENV TZ=UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# Set the root password (replace 'password' with your own password)
+ENV MYSQL_ROOT_PASSWORD=password
+For the Django App container, you can create a new Dockerfile that installs all the necessary dependencies and runs the Django server. Here is an example:
+bash
+Copy code
+FROM python:3.8-slim-buster
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the requirements file
+COPY ./requirements.txt .
+
+# Install the dependencies
+RUN pip install -r requirements.txt
+
+# Copy the app code
+COPY ./app .
+
+# Expose the port that the Django server runs on (replace '8000' with your own port number)
+EXPOSE 8000
+
+# Run the Django server
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+For the web server container, you can start with an official nginx image from Docker Hub (https://hub.docker.com/_/nginx) and create a new Dockerfile based on that image. Here is an example:
+bash
+Copy code
+FROM nginx:latest
+
+# Copy the custom configuration file
+COPY ./nginx.conf /etc/nginx/conf.d/
+
+# Expose the ports that the web server uses (replace '80' and '443' with your own port numbers)
+EXPOSE 80 443
+For the Daphne container, you can create a new Dockerfile that installs all the necessary dependencies and runs the Daphne server. Here is an example:
+bash
+Copy code
+FROM python:3.8-slim-buster
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the requirements file
+COPY ./requirements.txt .
+
+# Install the dependencies
+RUN pip install -r requirements.txt
+
+# Copy the app code
+COPY ./app .
+
+# Expose the port that the Daphne server runs on (replace '8001' with your own port number)
+EXPOSE 8001
+
+# Run the Daphne server
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8001", "app.asgi:application"]
+Once you have created these Dockerfiles, you can build the images and create the containers using the docker build and docker run commands, respectively.
+
+
+---------------------------------------------
+
+docker yaml file created for app
+
+2 containers created --> mysql, redis
+1 container for apache/nginx --> to be setup
+1 container for Django/Daphne app  --> to be setup --> ASGI mode, WSGI mode is provided by Gunicorn
+
+asgi would be faster and no wait time
+
+apache and nginx will be helping proxy server (reverse-proxy)
+  specify dns, port, protocol  --> static
+
+  combnation of both
+
+1 databse server --> one container with mysql server
+4 containers --> Interconnection, port exposure, 
+
+Best practices --> we can assign or scale more resources horizontally 
+
+there is load on database --> so many I/O operations --> DB is slow less cores,memory
+if we separate container --> we can add more cores,memory directly and control it.
+
+it will not create load on other servers sharing same resources
+
+one big container --> 
+hype --> multi user application --> if it single user and one user at a time --> one big container is enough
+
+nlp task is running , others waiting --> over simplified 
+
+--------------------------------
+Amazon RDS 
+
+migrations (takes lot of time, unproductive) 
+load data
+define paths
+change management --> maintainance ?? script to do that
+
+ec2 --> keep pushing new images
+
+another thing --> http, port, dns docker configuration aws
+
+discuss arijit, priyanka once for docker 
+
+
+BSC chat 
+  creating rules in app
+  separate instance vs same instance for call and chat, requires changes in meaures, nlp_analysis, call_meta, new separate data architecture or existing architecture
+  currently for special PoC demo it is created
+
+wrapper_fn()
+def rule1_function(par1,par2,par3):
+
+---------------------------------------------------------------
+
+-------------------------------
+
+Gravitron Vs Intel Vs AMD Performance
+https://www.percona.com/blog/comparing-graviton-performance-to-arm-and-intel-for-mysql/
+
+every wednesday --
+
+----------------------------------------------------------------------------
+
+Separate Instance of App:
+------------------------
+1. Replicate Code to Separate Directory
+2. Create DB with data.
+3. Load Data which they want. (ETL)
+4. Update ClientConfigFile and file paths to demo
+5. create groups, users, permissions.
+6. settings_prod--> different url settings, port.
+
+-----------------------------------------------------------------------------
+
+moderate knowledge 
+
+2022 - BCA, Msc(IT)
+bca - c,c++, java, os, dbms, sql,   
+msc - python, php, network, ml/ai, r, hpc, cloud comupting, ds, 
+
+datawarehouse, dataming, 
+
+measure_keyword_label --> 
+
+------------------------------------------------
+NH-77 --> 
+
+Vellur --> road --> extra 40 km, good road
+
+1. NH77--> Krishnagiri --> right --> Tiruvanamalai --> 
+
+need to add new security group or inbound rule to existing one
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJNdt69aoi/EWSNbS8IfbbeA061gAeOYRovkfYFmCnwl lalkrishna.trivedi2091@gmail.com
+
+ssh-agent bash -c 'ssh-add /home/BSCSAG-SA/BSC_Analytics/auth/sens-ai_git_key; git clone git@github.com:premnath-b/Chitti.git'
+
+----------------------------------------------------------
+Intranet Access of application
+
+application url 
+10 concurrent users
+
+clientname-sensai.sagility.com
+bscchatanalytics-sensai.sagility.com
+humanapcc-sensai.sagility.com
+
+1. Niranjan B C --> URL name is available or not
+2.
+
+clientname-sensai.sagility.com
+humanapcc-sensai.sagility.com
+demohumanapcc-sensai.sagility.com
+
+SSL error in docker 
+
+
+TSG team --> request --> load balancer
+
+url --> FQ DNS --> 
+
+Application URL, 
+Load Balancer - Vinoth, Jags
+
+Load balancer --> cost approval, it will have DNS name, SSL certificate from sagility will be given. 
+
+----------------------------------------------------------
+
+UPDATE mysql.user set authentication_string = PASSWORD('toor') where user = 'root' and host = 'localhost';
+
+----------------------------------
+
+1. Data integrity : Within the database -> CP curve --> statistics
+    
+2. Neutrality of predicted data, possibilities of biases -- how to ensure our data is neutral from gender and all other biases
+3. Proprietery database with security enabled (log entry controlled)
+4. create Portfolio --> all speech analytics
+                    --> how many versions it has undergo.
+                    HSN --> interecting with federally integrated system
+
+-----------------------------------
+
+Murali Krishna EIT team --> he sagility, ssl ,
+----------------------------------------------------------------------------
+
+Steps to deploy application in production environment:
+------------------------------------------------------
+
+0. take full back up of data.
+1. take back up of app current version --> code
+2. take update of code / push new build/image.
+
+1. install mysql or equivalent database server
+    user for application needs to be created with certain priviledges
+2. install nginx reverse proxy server
+3. install virtual environment or docker (better to dockerize application)
+4. update settings.py, client_data_config file till tenant management is ready
+    client data path
+    audio files
+    metadata
+    nlp trace 
+    trancription_map data
+5. create and run migrations
+6. Collectstatic to update UI.
+7. run tests
+8. run server as daemon , logs --> should stored in file and can be viewed remotely.
+For all these steps there should be one or several script files. 
+
+-------------------------------------------------------------------------
+
+for every bug --> type --> major, minor, critical etc to be defined
+for every change --> story should be created , 
+    
+    procedure to update 
+
+----------------------------------------------------------
+
+Suggestions from Murali N Krishna
+----------------------------------
+
+1. Project files , or code to be reside in one location/path on server
+2. Whether python/django based application can be deployed on windows based server with   IIS or not need to be checked.
+    
+    https://medium.com/@ayushi21095/steps-to-deploy-python-django-web-application-on-windows-iis-server-379b2b87fcf9#:~:text=Though%20many%20Django%20Developer%20might,infrastructure%20around%20the%20Windows%20ecosystem.
+
+3.  bindings --> we have to point to ssl certificate
+    define prefix name for website with .sagility.com wildcard (Url for website )
+4. raise ticket with GSD portal for that url (DNS entry).
+    once they whitelist or add entry then it can be accessible outside.
+5. If client gives server, back up is there responsibilities
+6. if sagility server, its our responsibility (TSG)
+7. application backup is done at server back up level, however database backup is additonally done as standard process through automation script and stored at s3 bucket.
+    data is important --> so additional back up.
+8. before giving url(website url to public) --> VAPT scan , to check any security vulnurabilities.
+9. Logging part to confirm with naveen.
+10. 
+11. Some clients will ask to use their domain if its on prem.
+
+Change management:
+------------------
+critical bug found --> work locallly, copy code to dev location, then to test, uat 
+
+Dev --> test --> UAT --> Prod
+
+testing of application is manual currently
+
+BA to document --> should have some basic knowledge
+
+version control --> azure devops
+
+--------------------------------------------------
+
+

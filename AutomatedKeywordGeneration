@@ -1,0 +1,163 @@
+Automated Keyword Generation:
+------------------------------
+Standard for NLP Analysis :
+----------------------------
+1-3 months data 3 months data is ideal to get started on NLP analysis.
+
+get transcription for 1-3 months data.
+
+Monthly statistics - average ngram, length, etc from transcriptionMap 
+	code is partially ready
+	it need to run on data which could take 3-5 days (need to measure time) - 40 hours
+	how many people should work on it ? --> 1 (any one can work on it)
+
+transcriptionMap is key to everything
+
+keyword extraction process involves ngram, length statistics that we get from above data.	
+
+1. One day volume data = total population data
+2. Train - Test split --> 80-20 (because 80% is minimum threshold)
+3. 
+
+Training data - 70% (transcription map data)
+	Filter transcriptionMap with average ngram, length, (from monthly statistics)
+	Average +- 1 ngram value --> Near to 3 sigma
+		Filter further by tfidf score (threshold needs to be found out)
+			Tag remaining keywords with rule (cluster) - 1 hour (once code is ready)
+			no need to go through entire transcription now, only need to check keywords.
+			check keywords (mostly with 3-4 ngram value context will be preserved and not lost)
+
+		keywords per call - 200 to 500 --> it should be faster
+			15-81 keywords per rule --
+			7-34 rules --> if all keywords can be used only once
+
+Create base rule model from keywords 
+	divide those keywords into subgroups, conditions based on timestamp range
+	clustering on keywords to get groups - configurable cluster number (1 hour once code is ready)
+	
+	assign labels to groups based on value , timestamps - 15 minutes (20-30 categories, max 50 categories)
+	assign single/multiple tags to keyword groups -- add on sensai - (manually 30 minutes, automated 1-2 minutes) 
+
+create rules from AQEP/QRF form
+	link keywords with rule with appropriate criteria.  
+	agent, location, inclusion/exclusion, precedence level.
+
+	(2*50 --> 100 minutes (2 minutes per rule)) - 1.5 hours
+
+load ground truth also on app. - 30 minutes
+load test data on app - 10 minutes
+run nlp planner - 1 minute
+	depending upon data - planner will run for 4-5 hours
+create performance metrices -
+	confidence score
+	true positive, false positive, true negative, false negative
+	precision, recall, f1 score.
+
+	report
+		test data --> with accuracy, keywords for rules, 
+				  --> ask for corrections on wrong predictions or additional keywords if any, 
+		re-tune rule/keywords --> run on test data --> accuracy if above 80-90 % - 
+		update on production --> test files can be used here.
+
+can run for historical data. 
+
+we are basically extracting script as pattern here.
+	use that script to create rules. 
+	based on extracted keywords, speaker tag, location --> and rule tags , we can create a script for any client.
+
+----------------------------------------------------------------------------------
+
+1 day to generate iteration 1 report -- if most components automated.
+0.5 day for subsequent iterations (excluding re-running on one day population data 
+1-2 hours to analyze reports shared by Ops team
+1-2 hours for re-tuning rules with keywords, criteria
+
+which takes 4-5 hours (current app performance on prod server))
+3-4-5 iterations --> we are almost stable with rules from our end,
+4-5 hours saved by each person in team --> R&D on new things, projects,learning 	
+4-5 * 6 --> 30 hours of productivity saved for new things
+
+----------------------------------------------------------------------------------------
+
+office hours + self learning extra --> ?? 
+
+4 hours learning --> 20 hours --> courses 35-40 hours --> monthly one certification
+6 months - people should be experts
+
+6 people - 2 should be reserved for dedicated R&D and project overall management
+		 - 4 should be handling 4-8 projects NLP team alone.
+		 	if 4 projects - 
+		 		each person gets near equal time for new things, r&D
+		 	if 8 projects 
+		 		daily wont be work - 3 days work 2 days learning 
+
+People should not have any complaints on bandwidth then. clearly there is time.
+
+------------------------------------------------------
+
+Tasklist For Automated Keyword Generation: (ETA-23 days)
+------------------------------------------
+
+1. Separate service for transcription-map management. (ETA - 3 days)
+	1.1 All functions to filter transcription map based on any column criteria should be added here.
+	1.2 option to create transcriptionMap from json, transcription linewise, or any text data should be possible. 
+	1.3 For any date range, any number of calls/chat/text function to create transcriptionMap should be there. Other configurable parameters such as ngram, speaker tag, time range, sentiment, tifidf score threshold range should be able to filter based on that. 
+
+2. 1-3 months transcription data. (function is already there) (in parallel 2 day)
+	2.1 get list of contact_ids/master id for 1-3 months data
+		Share with QA to give AQEP groundtruth for all parameters for those ids/data.
+		 (Dependency with Ops team, how soon they can give this)
+		 GroundTruth bulk upload format to be shared with Ops team. (Better if they can give in this format)
+	2.2 Update function to add preprocessed clean ngram, tfidf score for each ngram and sentiment for each ngram
+
+3. Extract statistics about average ngram, average etc using Anush code. (1-3 months transcription map data) (3-5 days)
+
+4. Divide total (1-3 months data) train/test split 80-20 (ideally it should have ground truth) (1 day)
+
+5. take 80% data (8 days)
+	5.1 Filter transcription map with average ngram (from above statistics) +- 1 value.
+	5.2 Drop duplicate keywords with same timestamp,speaker tag
+	5.3 Apply clustering on remaining unique keywords  (Explore on different clustering approaches and which will be best fit) (5 days)
+	5.4 based on groups assign tags/labels to each keyword group (0.5 day)
+	5.5 create keywords automatically on SensAi for each keyword group. (In parallel, 1 day)
+	5.6 create rules for AQEP , link keywords with conditions. (2 days)
+
+6. Take 20% test data (6 days)
+	6.1 load data on app (using ETL if possible) (STT to DB & ETL) (1 day)
+	6.2 run nlp planner with created rules.
+	6.3 performance metrices , precision, recall, f1 score (5 days)
+
+Everything should be configurable at each step. 
+
+Test file ui can be enhanced for this. 
+	take train-test split data
+		based on date range , number of calls, lob, etc. --> all filters are mostly common. past days, 
+	option to get statistics, 5 tuple summary, skewness , index.
+		if it can be put in charts --> better.
+	getKeywords from train data with ngram range
+	apply clustering with configurable number. 
+	assign tags/labels to keyword groups. (there can be mulitple tags/labels)
+	add those groups to sens-ai
+
+Performance metrices generation 
+-------------------------------
+can only be done where ground truth is available. 
+
+assumption ground truth is available
+	
+	1000 calls
+	800 - training
+	200 - testing 
+
+	200 --> true positive, true negative, false positive, false negative
+		precision
+		recall
+		f1 score 
+	for particular run (should be stored along with event log)
+	function to generate precison recall, f1 score 
+
+
+
+
+
+

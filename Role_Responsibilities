@@ -1,0 +1,897 @@
+My Role OR Responsibilities:
+-----------------------------
+
+NLP Team Lead 
+
+Should have expertise on NLP.
+Should able to direct, coordinate all NLP tasks 
+Should able to guide OR lead team in NLP tasks
+
+Application Support
+Architecting solutions in application
+Guiding team on process
+
+----------------------------
+
+How good am i at NLP ?? --> 4/10
+Data science --> courses , --> ML/DL courses 
+AWS courses --> 
+--------------------------------------------
+
+What role i should limit to ??
+team management
+guiding
+teaching
+setting up process
+looking at big picture
+presentations, pocs, --> vision 
+stay in touch with latest trends
+---------------------------------------------
+
+What application tasks/modules are at most priority OR will be expected soon ??
+1. Messaging Queue, Django Queue for async NLP,ETL tasks --> 
+2. Full ETL , NLP testing --> Live testing , sheeba, prem,
+3. Tenant Management Module --> impl --> Pavan, design --> Lalkrishna
+4. Nginx for SSL, https, FQDNS --> 
+5. Docker Compose --> multi container setup
+6. App packaging options like exe, maven, jar, 
+7. App security, encryption, IP protection
+8. CI-CD, change management, app versioning
+9. Custom NLP code ?? -->
+10. ML/ DL rule integration --> BSC 
+11. Talispoint CRM data access --> 
+
+----------------------------------------------------------------------
+
+My Priority list:
+-----------------
+1. Nginx reverse proxy setup, SSL, https, FQDNS
+Only ALB, FQDNS is remaining for BSC Analytics
+Need to test same on dev server
+2. Docker compose --> Multi Container Setup
+3. Messaging Queue, Django Queue for Async NLP, ETL tasks
+
+
+------------------------------------------------------------------------
+
+1. New ticket on GSD portal for Prod Humana PCC --> Lalkrishna
+2. Talispoint CRM Data Access Timelines --> Lalkrishna, Prem --> Done
+3. Leave Plan --> 
+
+-----------------------------------------------------
+quickly setup nginx on ubuntu for each client
+quickly setup nginx on windows for each client
+
+docker --> install nginx on d
+
+
+
+------------------
+
+Interaction with Clients to understOR requirements
+R&D on requirements from client side, as well as from product side
+3 iterations.
+High Level Design
+Fix design OR get approved. 
+Plan sprint
+list of tasks OR who will work on it, timelines, based on team strength
+Direct Team
+Get Low Level Design from Team
+Code Review, Corrections
+IF new requests --> reprioritize OR plan. 
+
+Need to evaluate team strength individually,
+fill gaps if any, KT, Hiring,
+
+Avinash's comments:
+-------------------
+
+1. Assess Team Performance metrics for everyone.
+high capability --> high throughput --> A
+low capability --> high throughput --> B
+high capability --> low throughput --> B
+low capability --> low throughput --> C
+
+2. One on one meeting with team, feedback OR warning for appraisal.
+New development either through GenAI, ML/DL models, painpoints, improvements.
+
+3. Communicate on Mail, 
+
+4. NLP resource utlization 100% 
+ 
+5. Gaurav on GenAI more utilization
+
+6. Explain task, input, output , set expectations. (No flexibility they have to manage)
+
+7. Statistical knowledge OR NLP, ML knowledge to be integrated in current solutions.
+(no new development so far)
+
+-----------------------------
+
+I am capable to do things, so I should not be doing until absolute necessary.
+
+I have to lead OR manage not DO.... !!!
+Team has to do OR scale OR has to adopt application.
+
+-------------------------------------------------------------------------------------
+JD for DevOps:
+--------------
+
+JD for App Tester:
+------------------
+
+JD for GroundTruth Collector:
+-----------------------------
+
+JD for M2 Level NLP Software Engineer:
+--------------------------------------
+Need to know NLP, Datascience, ML
+Need to know Web development using Python, Django
+
+There should not be any spoon feeding. Not part of job role, even KT sessions is too much, people just need to be told topic names OR links to be shared. People should be able to take on from that. 
+
+----------------------------------------------------------------------
+Discontinuation of Jupiter notebook.
+write as testcase OR run
+
+Object Orieneted Programming.
+
+Access to code base git. code commit for everyone.
+review code for everyone.
+
+
+Web developement using Django.
+DB
+sql -> mysql, postgres-sql, mssql
+ER-schema
+database read/write operations
+indexing
+Backend
+django
+django orm
+constants
+entities
+services
+generalization - from feature, long term requirements
+utils --> Not the main apis, but support apis
+tests --> can be used as equivalent to jupiter notebooks
+Frontend
+views
+forms
+urls
+html
+css
+js
+
+
+KT on SensAi Application overview
+KT on SensAi NLP
+KT on NlpManagerService.
+Steps
+Functions
+TranscriptionMap
+Linked Keyword KX.
+Keyword formula
+Measure formula
+KT on CRM manager service.
+Keyword Formula Matched
+Unique Field exists
+able to extract data/infomration from transcription
+get CRM data from associated mapping
+test connection.
+generate query from mapping.
+execute query to get data.
+
+match values from CRM OR NLP extracted information
+based on matching assign label.
+Based on prediction from CRM --> assign score in AQEP.
+Any UI changes in CRM validation, 
+
+Measure/NLP is getting too much complicated OR too many integrations. 
+same NLP architecture cannot hORle more variations OR changes.
+
+-------------------------------------------------------------------
+
+Application Pending Items:
+--------------------------
+
+Feature Completeness
+Feature end to end testcases with positive/negative scenarios, proper error hORling
+FQDN, SOC2, Packaging, Security
+end to end testing with etl, nlp
+speech into app
+gen ai into app
+subscription model
+employee data management
+nps data management
+word cloud
+emotion detection
+sentiment analysis
+transcription summary (abstractive, extractive)
+NLP PlayGround --> generic nlp 
+Reinforced learning
+Feedback Loop (from ground truth fetch keywords add to measure)
+Performance Metrices generation - Precision, recall , f1 score
+Confidence score integration on app
+Comprehensive document for Application with all features in detail.
+
+
+Why Training & KT ??
+----------------------
+Its necessary , essentials for times ahead 
+To prepare team for upcoming Business challenges/goals
+Bridge Skill Gap
+Install Harmony
+Unification of team by technology, process
+Reduce repetative , redundant work with application.
+Create bORwidth for new development , innovations
+Inspiration to team for out of box thinking
+Add more value to personal growth
+
+one team - one technology - one flow - one direction
+
+----------------------------------------------------------------
+
+
+I only need to do it
+--------------------
+
+1. Set up process, stORardization on project follow ups, dependency
+2. Ownership, people should know in OR out about project
+daily volume, AHT
+3. New Developement bhi karna hain sabko
+4. Need to work extra hours --> no relaxation
+5. Timelines awareness - delay computation
+6. Ground Truth sample stORardization, validation - Ops team should do it.
+What if they dont provide resource.
+7. Internal tasks are our headache, should not disrupt project timelines.
+8. Give task, set target, no relaxation, follow up - if they are performing then keep or else fire them.
+9. Weekly project status meeting with stake holders,
+10. if not received in agreeed time, shoot mail next day itself.
+
+Do not bind people in rule, --> but i feel need to bind them to ensure qualitative timely delivery. (I cannot allow any flexibility or else it will never happen)
+Create habit of team --> 
+
+target for existing developement work.
+Instance - management / servers
+Performance/crashing issues - 
+
+
+---------------------------------------------------------------------
+
+
+Change in approach - 
+ask for data, ground truth, rules from first iteration itself.
+
+depends on total population of data - everything
+train-test split ?? 80-20 ?? 70-30
+total population of day ??
+70% for training
+find keywords from 70% data ??
+is it possible by our team ??
+5000 --> 3500 --> 
+should one find keywords from 3500 manually ??
+some Automation, intelligent mechanism is required.
+GenAI to find keywords ?
+Preprocessing --> stop words/lemmantization
+Can transcriptionMap be used for finding keywords ?? 
+
+who are SMEs on keywords ?
+Ops/client team.
+
+
+
+AQEP rule creation 
+different stages :
+iteration-1
+creation
+testing - got desired accuracy ? --> yes/no  (80% minimum threshold)
+testing has dependency on ground-truth
+first testing should be from our end on how many samples ??
+any stORard ?? 
+if yes 
+test on historical data
+push for production
+if no
+go to iteration 2
+iteration-2
+changes
+testing - got desired accuracy ? --> yes/no
+if
+
+StORard for NLP Analysis :
+----------------------------
+1-3 months data 3 months data is ideal to get started on NLP analysis.
+
+get transcription for 1-3 months data.
+
+Monthly statistics - average ngram, length, etc from transcriptionMap 
+code is partially ready
+it need to run on data which could take 3-5 days (need to measure time) - 40 hours
+how many people should work on it ? --> 1 (any one can work on it)
+
+transcriptionMap is key to everything
+
+keyword extraction process involves ngram, length statistics that we get from above data.
+
+1. One day volume data = total population data
+2. Train - Test split --> 80-20 (because 80% is minimum threshold)
+3. 
+
+Training data - 70% (transcription map data)
+Filter transcriptionMap with average ngram, length, (from monthly statistics)
+Average  OR - 1 ngram value --> Near to 3 sigma
+Filter further by tfidf score (threshold needs to be found out)
+Tag remaining keywords with rule (cluster) - 1 hour (once code is ready)
+no need to go through entire transcription now, only need to check keywords.
+check keywords (mostly with 3-4 ngram value context will be preserved OR not lost)
+
+keywords per call - 200 to 500 --> it should be faster
+15-81 keywords per rule --
+7-34 rules --> if all keywords can be used only once
+
+Create base rule model from keywords 
+divide those keywords into subgroups, conditions based on timestamp range
+clustering on keywords to get groups - configurable cluster number (1 hour once code is ready)
+
+assign labels to groups based on value , timestamps - 15 minutes (20-30 categories, max 50 categories)
+assign single/multiple tags to keyword groups -- add on sensai - (manually 30 minutes, automated 1-2 minutes) 
+
+create rules from AQEP/QRF form
+link keywords with rule with appropriate criteria.  
+agent, location, inclusion/exclusion, precedence level.
+
+(2*50 --> 100 minutes (2 minutes per rule)) - 1.5 hours
+
+load ground truth also on app. - 30 minutes
+load test data on app - 10 minutes
+run nlp planner - 1 minute
+depending upon data - planner will run for 4-5 hours
+create performance metrices -
+confidence score
+true positive, false positive, true negative, false negative
+precision, recall, f1 score.
+
+report
+test data --> with accuracy, keywords for rules, 
+  --> ask for corrections on wrong predictions or additional keywords if any, 
+re-tune rule/keywords --> run on test data --> accuracy if above 80-90 % - 
+update on production --> test files can be used here.
+
+can run for historical data. 
+
+we are basically extracting script as pattern here.
+use that script to create rules. 
+based on extracted keywords, speaker tag, location --> OR rule tags , we can create a script for any client.
+
+----------------------------------------------------------------------------------
+
+1 day to generate iteration 1 report -- if most components automated.
+0.5 day for subsequent iterations (excluding re-running on one day population data 
+1-2 hours to analyze reports shared by Ops team
+1-2 hours for re-tuning rules with keywords, criteria
+
+which takes 4-5 hours (current app performance on prod server))
+3-4-5 iterations --> we are almost stable with rules from our end,
+4-5 hours saved by each person in team --> R&D on new things, projects,learning 
+4-5 * 6 --> 30 hours of productivity saved for new things
+
+----------------------------------------------------------------------------------------
+
+office hours  OR  self learning extra --> ?? 
+
+4 hours learning --> 20 hours --> courses 35-40 hours --> monthly one certification
+6 months - people should be experts
+
+6 people - 2 should be reserved for dedicated R&D OR project overall management
+ - 4 should be hORling 4-8 projects NLP team alone.
+ if 4 projects - 
+ each person gets near equal time for new things, r&D
+ if 8 projects 
+ daily wont be work - 3 days work 2 days learning 
+
+People should not have any complaints on bORwidth then. clearly there is time.
+
+
+where their thoughts are blocking them
+In free time, upscale code, skills.
+Daily 1 hour extra - for updating skills, solution, code.
+
+
+
+-----------------
+rating for each task : feedback
+task evaluation criteria --> duration, iteration, clarity, required help,accuracy, consistency, ownership, commitment, innovation, 
+
+KT on AQEP stORardization - 1
+Self appraisal closure for my team - 3,4 hours
+take teammate
+open 6 months tasklist --> give rating, discuss with avinash
+divide percentage of tasks --> weightage
+weighted score for tasks 
+weightage average for team member
+feedback
+
+--------------------------------------------------
+
+Management Optimization:
+------------------------
+
+Hi Team, 
+
+Please find summary of our past few discussion on management optimization OR stORardization. 
+
+1. Central tracker containing all projects OR respective tasks with team assignment to better assess resource utilization OR goveranance. Also to facilitate accurate project timelines based on available bORwidth.
+
+2. At overall speech analytics team level, listing of all responsibilities/tasks that commonly occur during projects. Marginally redefining roles OR responsibilities for everyone in team to streamline processing OR bring out transparency, avoid confusions/ambiguity OR set expectations. 
+
+3. Project processes stORardization:
+- StORard process for AQEP/NLP projects.
+- From first day of project that is first interaction with Ops team to understOR AQEP form with all its parameters.
+- Things to be initiated from day one.
+- Continuous 3 day sessions for 2 hours approx to understOR AQEP/NLP rules for any client, scoring mechanism, feasibility, internal review.
+- After internal review, timelines for project to be discussed OR shared with stakeholders.
+- Initiate server procurement for new client (stORard configuration based on daily/monthly data volume plus SensAI requirements)
+Raise ticket to TSG on GSD portal (which can take 2 weeks)
+- Create temporory app instance somewhere 
+- Initiate users/roles/group creation request (a mail to seek this information should be sent)
+- creation of users, roles, groups
+- Based on bORwidth, AQEP rules configuration on App to be started on temporory app instance.
+- Initiate based on daily volume (~400-500hours, ~5000) OR aht , seek ground truth from Ops team in template shared by App team for one day data.
+- Based on groundtruth, contact_ids, lob, date --> seek audio calls, metadata from Bill (Connect with Bill to check feasbility) --> 2,3 days
+- Take 80% data from daily volume for training, 20% for testing.
+run statistics, clustering to create keyword groups. --> 2,3 days
+- Take 20% of test data for testing. --> 2,3 days
+- performance metrices generations 
+- Once daily processing data is avaible start, ETL , NLP run, Scheduler 
+- Once in two weeks --> new sample report to be generated OR shared to Ops team
+- Once Measures are stable, monthly one report to be shared to Ops team for validation.
+
+4. Weekly central tracker meeting - to discuss OR reprioritize items
+
+5. Rating for each task based on criteria.
+
+--------------------------------------------------------------
+
+
+Lal - App Performance, Team KT, SensAI , NLP, 
+
+ChORan - Humana AIU, PIP (support)
+Gaurav - Humana AIU, Humana PPI, Gen AI (new dev)
+Meghana - SensAI, GenAI (new developement)
+SORhya - BSC Provider (new developement), LabCorp (maintenance)
+Vinayak - Talispoint (Testing)
+Sabita - SensAI (new dev)
+
+Employee data management
+
+NPS data management
+
+Word Cloud 
+
+Speech on App
+
+Offline LLM 
+
+Punctuation, Grammer Check - Vinayak
+
+Confidence Score Computation on App - 
+
+Ideal number of classes for classification - Gaurav
+
+Agent interruption (overlapping while speaking)
+
+Gen AI - Meghana, Gaurav
+
+Key influencers from call-data
+
+--------------------------------------------------------
+
+PIP Plan for ChORan : (5 years, Relevant exp : 3)
+-----------------------
+
+1. Sent a mail to HR - Srobona
+2. Monthly feedback on performance
+3. By policy, not allowed to take leaves.
+4. Number of task to be given in 3 months
+5. Task complexity level M1 or M2. 
+
+Criteria for performance evaluation
+
+1. Punctuality - (loose monitoring)
+2. Task - Timelines - 1.5x to 2x time
+3. Task - Help & Support required - 1.5x to 2x 
+4. Task - Quality - 50-60%
+5. Task - Coding stORards - 80% 
+6. Task - Problem solving skills - 30%-40%
+7. Task - Testing (Edge cases coverage) - 30%-40%
+8. Task - Domain knowledge - 30%-40%
+
+--------------------------------------------------------------
+
+Suggestions:
+------------
+
+1. Related to work , 3 levels of tasks - easy, medium, hard
+2. How much help can he avail during tasks.
+1. information that required to be collected from others.
+2. 
+
+----------------------------------------
+
+
+------------------------------
+
+Building Corpus of Keywords for NLP:
+------------------------------------
+
+Unseen data - 
+
+1. Transcription data
+varies from client to client
+depends on region, language
+pattern of talking/transcription changes
+
+2. AQEP/Rules
+
+Gray Area
+Context dependent - Context varies from client to client
+who defines rules - client, SMEs
+number of rules
+scoring mechanism
+complexity of rules
+sub-rules
+conditions
+on agent, customer,both
+location
+
+3. 
+
+
+-------------------------------
+
+I was thinking if we can hire one person in our team just for Ground Truth Annotator role. For each project domain specific data annotation can be made as full time job as we continually take new projects/requirements, retuning models etc. Our Models will never have low accuracy for any rules. will save iteration time, rework, OR we can
+
+BSC US Memebers Calls:
+----------------------
+1. Cost per minutes/hours. - Level M0, M1
+
+BSC Provider doesnt use US Database systems - Bill
+Must be Manilla team - 
+
+--------------------------------------
+
+Pending TaskList For Me:
+-------------------------
+
+1. Talispoint QA Score correction. - Done
+2. NA cases based on casedisposition. - Done
+6. Tracker Update - Talispoint - Done
+
+Tomorrow on 15-05-2024
+4. Verint SA  OR  SensAI - BSC Provider - Star OR team
+
+- Verint QA KT - Done
+- KT on how Verint SA works from Romar, Jean. - DONE
+- Bill Cook, Bill Huffman to connect with simcom to discuss if they can automate Verint SA - reports (manually exported as excel files OR loaded in PowerBI for visualization)
+- To Look into verint speech analytics data (excel file shared by romar/jean)
+- Verint Speech analytics
+- it doesnt give predictions like yes/no/na for any parameters, but it gives count of calls where particular rules/keywords are found/matched.
+- for each keyword/rule they take 20 calls OR if those keywords are found in 18/20 calls then they add that keyword in rule.
+- they have location information about keyword but its based on word count for example "[start:300] to check NEAR claim status" which means "to check XXXXX claim status" should come within first 300 words. However our SensAI application give time based location with many possible scenarios than Verint SA
+- Verint SA only give option like first N words, last N words, OR, OR , NOT IN, NEAR rules. While our SensAI also gives what Verint Provides along with additional scenarios such as "in between time range","from till", "Before/after", which provides more coverage to even rare occurring patterns with <1% chances.
+-  
+
+
+
+12. SensAI - AQEP Page Integration for BSC Provider  
+10. Durgendu Lal meeting for CRM mapping - Talispoint
+
+12. While specifying NA, appropriate weightage score should get added on AQEP Page UI.
+
+3. NLP - Test run should be corrected - to frequently test data 
+not on priority , but should be done, currently Test environment is already there.
+
+on 16-05-2024
+7. Replicate BSC Chat changes for Talispoint (filters, audited/not audited, sampling)
+Confirm with Bay/Jocah on requirement - Lalkrishna
+Check with Anush, Prem if already done, or anything pending.
+
+11. Report Generation.
+
+on 17-05-2024
+
+5. Entity Extraction Accuracy Improvement
+
+8. FQDN for talispoint
+
+---------------------------
+
+2. PIP Monthly feedback to ChORan OR on ESS portal - DONE
+
+4. SensAI - Micro fixes, UI changes - TBD with PRem on Monday
+- UI for InfoParameter
+- UI for extractedInfo in callmeta OR AQEP page
+
+5. Employee Data Management - Done
+
+6. Talispoint Bug Fixing - QA Score, Prediction Logic.
+Prediction Logic - Identified shortcomings of mathematical logic.
+
+Understood. Here's a revised generic PIP monthly feedback focusing on the need for growth in new OR challenging tasks:
+
+-----------------------------------------------------------------------------------
+
+
+1. Need employee data for Bsc Provider as current BSC Members employee data is not useful. - 
+2. Dev server access to Meghana - 
+3. RDP issue BSC , Labcorp server. SR is raised but no progress. - DONE
+4. Laptop issues- ChORan 
+5. Talispoint - Speech team ASR retuning - DONE
+
+--------------------------------------------------------------------
+
+Start Kiya Speech -- did not know anything
+DL - on linux --> 
+1-2 week to understOR only 
+Theoretical - 
+in parallel to other work
+interviews - 1 hour 
+
+Heart - Model retuning from scratch - speech team
+aditya - 7-8 months
+Sabita - on OR off
+Gaurav - 3-4 weeks 
+
+Avinash - expect to lead
+Arijit, Priyanka - Gaurav is slow, he should know 
+hORs on - chahiye - session arranged 
+
+------------------------------------------------
+
+1. Discuss with Avinash on Talispoint ASR retuning
+- This requirement has come from QA, while auditing transcription is not making much sense.
+- Whole Speech Team is occupied (As Per Priyanka)
+- Priyanka, Arijit - going next week
+- Aditya,Sabita has responsibilities of daily maintenance 
+- Gaurav also is occupied with many things but can take 1-2 hours.
+- NLP Team, App Team can contribute partially in ground truth creation
+Vinayak - working on changes in Talispoint AQEP rules
+ChORan - already has PIP
+Meghana - Automated keyword generation, BSC US member calls, BSC US memeber transcirption
+SORhya - Labcorp changes, Employee data management
+Gaurav - Speech, Humana AIU, Humana PPI, Success Profiling
+Sabita - Speech
+
+- One common complain in ground truth for team is , people makes mistakes, doesnt do properly, only chORan is good at ground truth. (This needs to be fixed)
+- As per priyanka, arijit --> if one person creates ground truth for whole day 8 hours, one can create ground truth of 50 minutes. Total ground truth to be created is 40-50 hours. Initially can target for 15-20 hours.
+
+With current bORwidth it can take 1.5 - 2 months in retuning engine.
+
+2. Discuss with Bay if Ops team can create ground truth. can assign dedicated resouces for ground truth creation. (How many ?) --> Need to send mail marking roxy, mica
+- Need to send mail with metadata, split audios for transcription correction.
+- Need to estimate timelines
+
+3. Hire dedicated person for ground truth, as number of projects most likely will increase, for each project client specific data needs to be trained on base model even though it may give good accuracy initially, it still might be insignificant. Accuracy calculation with limited 20 calls might not represent actual population OR correct numbers. Ground truth is also essential for NLP also. Dependency with Ops team for ground truth OR validation reports has to be removed or reduced. Let them take their own time, but our work can continue smoothly with one resource for GT.
+- Need to help him understOR specific requirements of ground truth. 
+- Need to give him sufficient time to get qualitative ground truth.
+if for multiple project ground truth is required at once, he should prioritize, divide time OR work accordingly, however he should be given proper time with estimation. (Its tedius, long running task, requires attention OR focus)
+
+4. ActiTime 
+- Create tasks for team
+- Update for Self from 1.5 months
+
+5. NLP Multivalued logic - TBD with Avinash
+
+6. Employee Data Management - Structure to store changes
+
+7. SensAI - Decoupling 
+
+8. Automated Keyword Generation 
+
+9. CI-CD, Security, SOC2, Hitrust
+
+10. Jenkins, Kubernetes. (Should hire devops)
+
+11. BSC provider MTM form to be reviewd - SORhya
+- if any doubts reach out to mica
+- plan OR start creating rules on sens-ai
+- CRM database information to be obtained from Bay/Mica/roxy ops team
+- CRM Database : Facets
+- Plan R&D on Facets connector
+- add as datasource
+- same for dynamics365
+
+12. SensAI Documentation 
+- Abstract
+- Acknowledgement
+- Table of contents
+- Document version, author
+- Business Problem
+- Purpose
+- Scope
+- Overview
+- Features
+- Evolution & Journey
+- Tech Stack , reasoning
+- Comparison with competitor market products 
+- Architecture
+- Concept
+- Module wise 
+architecture
+purpose
+working
+syntax
+examples
+scenarios
+- Future & scope for improvements
+- Contributors
+- Conclusion
+
+
+
+
+
+-------------
+
+
+2. BSC Provider Verint SA  OR  SensAI --> 2. 
+
+3. Employee Data Management --> 
+logic to store changes
+
+4. IVR - Changes on App. --> 3. 
+
+5. Keyword generation --> 5. 
+
+6. MultiValued Logic --> Talispoint 1.
+
+7. BSC Provider : AQEP Doubts - SORhya --> 4.
+
+8. Humana PPI : - Reduced Classes value addition --> 5. 
+
+9. SensAI : AQEP Generalization & Separation 
+
+---------------
+
+1. Fix MultiValued Logic - Today EOD
+2. Verint  OR  SensAI Logic - 2 weeks eta
+3. IVR changes --> ASAP 
+4. BSC Provider AQEP Doubts 
+5. Automated Keyword Generation - Done
+6. Humana PPI : Conclusion for class reduction - No Update
+7. Employee Data Management - DOne
+8. AQEP separation
+
+
+--------------------------------------------------------------
+
+1. BSC Provider : MTM Deployement - WIP, TBD with Prem, SORhya
+
+2. BSC Provider : Verint SA  OR  SensAI - WIP, TBD with Prem
+
+3. BSC Provider : CRM - Facets R&D - TBD with Avinash
+
+4. Talispoint : IVR Based rules changes - TBD with Vinayak - DONE 
+No Answer case : DONE
+Transferred to voice mail : DONE
+IVR call : DONE
+Disconnected : DONE
+ASR retuning - Transcription issue, corpus cleaning
+Historical data re-run -
+
+5. SensAI : Automated Keyword generation - TBD with Meghana - DONE
+LDA, LSA , BERT Topic Modelling - 
+
+6. SensAI : Employee Data Management - TBD with Pavan - NOT DONE
+
+7. Birch AI : STT - TBD with Avinash
+NER 
+Group Names
+Provider Names
+
+
+8. SensAI : CRM - Entity Extraction - TBD with Avinash
+
+
+
+--------------------------
+
+Talispoint :
+------------
+1. Check with Jocah, Vinayak for any pending aqep items - Vinayak - DONE
+
+2. Timelines for historical calls processing - Vinayak
+
+3. Talispoint CRM SQL Bug fixing - Lalkrishna - 2 hours - DONE not resovled yet,
+checked with ritesh
+
+5. Apria New Requirement, NLP Innovation - SORhya - 0.5 
+review recoding OR discuss - NOT DONE
+
+6. BSC Provider MTM, Verint SA - Prem, App team - 0.5 - DONE
+Show feature to avinash - DOne
+discuss with ops team for sampling logic - NOt done  -- Today.
+
+7. Humana PPI - Closure - 0.5 - DONE
+they want to see partial solution
+they will merge two files
+Gaurav to run prediction on merged file OR add additional predicted columns on the same file. 
+
+8. Send mail to chama, jett asking if it can be fasttrack a little bit.
+
+9. 
+
+----------------------------
+
+1. Project Status Update - Lalkrishna, Done
+2. Talispoint Issue - Vinayak
+SSMS login issue 
+SensAI not able to connect for AQEP parameters
+Historical data processing timelines
+TBD with Avinash, Sabita
+
+3. Apria Requirement - Gaurav, SORhya, Meghana  - DONE
+- Shared requirements 
+4. BSC Provider MTM - SORhya
+MTM tracker updation OR sharing with Jett - DONE
+5. BSC Provider Verint SA - SORhya, DONE
+6. Humana PPI - Gaurav, DONE 
+taken update 
+7. Humana AIU - ChORan, Gaurav, DONE
+
+---------------------------------------------------------------------
+
+1. Apria - Output
+2. BSC Provider Verint
+Functionality deployment
+3. BSC Provider MTM 
+AWS instance setup
+4. Talispoint
+- Scoring Logic Correction
+- PDM OR PP calls segregation based on agent name
+
+--------------------------
+
+
+-----------------------
+
+BSC MTM Queries 
+Where we have MTM attribute as YES, we should give output from AQEP parameters 
+if AQEP rule output is YES --> MTM output is NO OR 
+if AQEP rule output is NO --> MTM output is YES 
+
+This logic doesnt apply for MTM attribute 'NO' that means 
+if AQEP rule output can be YES or NO it, those parameters should not be considered for scoring 
+
+No extra columns on verint export report--> from list just need to tag as MTM measure (on SensAI)
+
+MTM scoring will be based on count of total "Yes" divided by total number of parameters.
+
+No need to go live so soon, but some parameters can still be in progress but need to be DEMO ready for client
+
+Keywords for MTM parameters should still be gathered OR shared
+
+---------------------------------------------------------------------------
+
+2. Talispoint PP, PDM hard coding - 1 - WIP
+6. BSC Provider Verint, MTM Update - Prem, SORhya - 0.5 - DONE
+ ActiTime - 
+
+7. Next few months strategy OR mgt -1
+8. Documentation, project mgt -1
+9. Self learning - ML, DL - 1
+
+8 hours - Properly to work (time to time full dedication)
+
+
+10. Budget for home - estimate in diary - 2
+11. Investment, loan etc. - 2
+12. Ear Infection problem - 1
+13. Leg Skin problem - 1
+14. Full Body Health Check Up (Me, Dad) - 1
+15. House on Rent - 3
+17. House Plan - 2 - 
+18. House Chores (vastu lavvi, ghar na kam) - 2 - LITTLE BIT
+
+

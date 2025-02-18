@@ -1,0 +1,139 @@
+AQEP Projects Standardization:
+----------------------------------
+
+Standard Template for AQEP Forms:
+	- number of tiers
+	- scoring tiers
+	- 
+
+AQEP Form understanding - from ops team - 1 week
+
+Non-Assumption approach for AQEP
+
+AQEP Internal review - doubts/ - 1 week
+
+AQEP Form reflection after internal review - 1 week
+
+server procurement - AWS, app instance - timelines 
+user creation, roles, permissions
+lob - hunt group extention details
+datasource - speech 
+ETL - 1 day
+AQEP timelines - 3 weeks (no dependency on transcription till speech gets ready)
+Parameter Wise - target  -->  
+NLP-Run will depend on data ingestion.
+
+ETL + Datasource Testing on AWS server
+
+Server procurement should be initiated from first day.
+
+latest 90 days audit data from ops team - send contact-ids to Bill if he can give audio/metadata
+
+Daily volume data based on AHT take 80% training, 20 % testing standard for any project.
+generate keywords from daily volume 80% data, test against 20% daily volume data
+
+Usually when do they share volume information ??
+
+Performance testing for SensAI to be done for 5000 calls.
+	some parameters are bound to be slow such as CRM validations
+	some parameters are fast such as AHT
+	some parameters are medium such as normal AQEP rule with 3-4 keyword groups.
+
+----------------------------
+
+ANy project
+
+First 3-4 days AQEP sessions for 2 hours to understand each parameters
+(Internal review meeting)
+What if additional developement required ?
+	is it show stopper ? --> need to develop on priority
+	if it can be managed --> plan
+Within first week need to share timelines
+Within first week need to start creating users, roles, permissions ()
+Server procurement should be done from first day
+Based on daily volume data (based on aht)--> take 80% for training, 20% for testing
+take 80% training data
+	run statistics
+
+	create keyword groups 
+
+from first day itself --> get 1 day volume ground truth for aqep 
+	share those contact ids with bill for audio/metadata 
+	discuss with bill if based on contact id , it can be downloaded or not.
+
+ETL on AWS needs to be tested
+SensAI performance to be tested for one day volume data (~5000)
+
+
+----------------------------------------------------------------------------------
+
+Project processes standardization:
+	- Standard process for AQEP/NLP projects.
+		- From first day of project that is first interaction with Ops team to understand AQEP form with all its parameters.
+		- Things to be initiated from day one.
+			- Continuous 3 day sessions for 2 hours approx to understand AQEP/NLP rules for any client, scoring mechanism, feasibility, internal review.
+
+			- After internal review, timelines for project to be discussed and shared with stakeholders.
+
+			- Initiate server procurement for new client (standard configuration based on daily/monthly data volume plus SensAI requirements)
+
+				Raise ticket to TSG on GSD portal (which can take 2 weeks)
+			
+			- Create temporory app instance somewhere 
+			
+			- Initiate users/roles/group creation request (a mail to seek this information should be sent)
+			
+			- creation of users, roles, groups
+			
+			- Based on bandwidth, AQEP rules configuration on App to be started on temporory app instance.
+			
+			- Initiate based on daily volume (~400-500hours, ~5000) and aht , seek ground truth from Ops team in template shared by App team for one day data.
+
+		- Based on groundtruth, contact_ids, lob, date --> seek audio calls, metadata from Bill (Connect with Bill to check feasbility) --> 2,3 days
+
+		- Take 80% data from daily volume for training, 20% for testing.
+			run statistics, clustering to create keyword groups. --> 2,3 days
+		- Take 20% of test data for testing. --> 2,3 days
+
+		- performance metrices generations 
+			precision, recall, f1 score		
+
+			iteration-1 --> more stable number 
+			iteration-2 --> minor retuning, addition of few more keywords
+			iteration-3 -->
+
+		- Once daily processing data is avaible start, ETL , NLP run, Scheduler 
+		
+		- Once in two weeks --> new sample report to be generated and shared to Ops team
+		
+		- Once Measures are stable, monthly one report to be shared to Ops team for validation.
+
+--------------------------------------------------------------------
+
+General guidelines:
+--------------------
+
+1. Communicate everything over mail. 
+
+2. Regular follow up mail should be sent weekly or if waiting reply from thier end till agreed upon date , next day one mail should be sent asking for the information.
+
+3. Mark manager in all communication with stake holders.
+
+4. After every meeting , minutes of meeting (MoM) should be sent to all stake holder, marking manager in cc. 
+
+5. if no response from follow up, set up a meeting within next day. 
+
+6. Practice Feedback, Review, Code review, demo of work:
+	- 
+
+	
+
+
+
+"{\"Transferred to Voicemail\": [true, true, \"MATCHED AND CORRECT\", \"Transferred to Voicemail\", \"('Transferred to Voicemail',)\"]}"
+
+"{\"On Hold For More Than 3 Minutes\": [true, false, \"MATCHED BUT NOT CORRECT\", \"On Hold For More Than 3 Minutes\", \"('Transferred to Voicemail',)\"]}"
+
+case disposition 
+
+	

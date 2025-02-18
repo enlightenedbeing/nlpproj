@@ -1,0 +1,1828 @@
+NLP Service Performance Improvement :
+--------------------------------------
+
+For call data only trancription matters --> large text.
+
+1000 calls
+100 measures
+300 keyword clusters
+30000 keywords 
+5000 words in transcription --> all combinations of words --> poweset of 5000
+----------------------------------
+Sigma 5000Cn where n is maximum nGram in keywords
+2^5000
+
+Should all combinations be generated at once ? --> Memory issue. 
+
+getNGramList --> 1,3,4 --> generate only those --> sigma nPr --> 5000 P 1
+
+At the end its just keywords and transcription --> rest is just abstraction
+
+For Measures ?
+	1 measure --> 1 .. N keyword clusters
+
+	keywords need to check parts of trancription -->  
+
+Fetch all relavant data at once: --> big in memory objects
+
+store transcription in efficient way where context is not lost
+
+trancription contains --> segments --> words
+
+words in order --
+words may repeat
+
+keywords --> contains words 
+
+thank -->  
+you 
+
+Hi Thank you for calling humana my name is Oracle How can i help you 
+Hi Oracle I am Barry calling you to check the status of the claim
+sure let me first verify few details is that fine 
+sure
+are you calling from providers or facility 
+provider
+what is your proviers npi
+six two three
+what is the address of the provider
+date of service
+
+hi
+thank
+you 
+for
+calling
+humana
+my
+name
+is 
+Oracle
+how 
+can 
+i 
+help
+you
+
+hi thank
+thank you
+you for
+for calling
+calling humana
+humana my
+my name
+name is
+is Oracle
+Oracle how
+how can
+can i
+i help
+help you
+
+hi thank you
+thank you for 
+you for calling
+for calling humana
+
+5 --> 123, 234,345
+6 --> 123,234,345,456
+
+--------
+Keyword 
+
+nGram Permutations :
+----------------------
+5000 words in call
+
+5000 - (nGram-1) = 5000 - (2-1) = 4999 --> nGram = 2
+5000 - (nGram-1) = 5000 - (3-1) = 4998 --> nGram = 3
+5000 - (nGram-1) = 5000 - (4-1) = 4997 --> nGram = 4
+.
+.
+.
+-------------
+ Transcription Map Size = nGramCount (Total Unique words in call + 1) - Sigma (nGram)
+-------------------------------
+transcription Map size can grow upto 30k entries vs 30k keywords --> 
+
+transcriptionNGramMap
+MultiLevel Dictionary --> 
+{
+	1 : { 
+		1 : {
+			thank: 3,
+			you: 2
+
+		},
+		2 : {
+			thank you : 2,
+			for calling : 3
+		}, 
+		3 : {
+		
+		}
+	},
+
+	2 : {
+
+	}
+	3 : {
+
+	}
+}
+
+1000 segments 
+
+each segment has words --> 
+
+call --> segment --> ngram_list from 1 to word_count in segment 
+
+1 {
+	1:{
+		thanks : 2
+	}
+}
+
+thanks --> 1,5,9, 13 --> 4
+
+
+word --> ngram, location, frequency
+ngram --> depends on ngram of keywords --> can be fixed from user
+location --> segment --> word --> multiple lists
+frequency --> global, local to segment 
+
+time based logic --> 
+
+call analysis
+-------------
+total segments --> more segment --> more important call
+total words --> more words --> more important call
+global frequency --> more --> more insights, patterns
+words per segments --> more --> good
+average words per segments --> good for pattern
+total duration --> longer --> more important
+words per seconds --> time based rules
+words can repeat in segments in call --> more repetation --> more good --> more context
+frequency in segment --> more value to context
+
+Context : Greeting --> in beginning, more frequency, --> better
+context : address --> in middle , more frequency --> better
+
+thank --> (segment_number, word_number, time_instance, local_freq, global_freq, nGram)
+	  --> (1,1,1,1,5,1)
+you   --> (1,2,1,2,17,1)
+for   --> (1,3,2,1,11,1)
+
+thank you = (2,3,2,3,22,2)
+thank you for = (3,6,4,4,33,3) 
+thank you for calling  = ()
+
+-----------------------
+
+Filter dictionary 
+----------------------
+
+Transcription is constant, not changing.
+
+different representation of transcription for NLP
+
+transcriptionMap --> segments --> nGrams --> keywords --> frequency
+
+
+hi | thank you | thank you for calling | got a call for | 
+
+stop words
+lemmantization
+remove special characters if any
+
+
+hi | thank | thank call | get call | 
+
+thank@(1,1,4.3,5.7) --> 1
+thank_you@(1,3,4.3,5.7) --> 1
+you_1
+thank_3
+thank_7
+
+word, nGram, seg_num, word_start_ind, word_end_ind = word_start_ind + nGram, seg_start_time, seg_end_time, freq_in_seg
+
+Aggregation is Subjective --> depends on application or requirement of the client
+so lowest level information should be kept --> aggregations should be performed on demand
+total objects or keys --> total words in call
+
+which field should become key ??
+	nGram is numeric hence faster --> 
+	word is string hence bit slower
+	seg_num is numeric but large in number --> slower
+
+nGram --> best choice
+
+seg_num --> nGram --> word --> whole object
+
+stMap size = Total segments in call
+maxNGramPerSeg -->
+
+only first N seg
+from N to N + n seg
+last N seg
+
+
+per measure keywords --> 10
+2000 times filtering 
+What if we can avoid filtering ??
+just read that many segs in stMap simple
+
+location = +10
+
+location > 0
+	for i in range(1,location+1)
+elif location < 0
+	seg_count = len(transcriptionMap.keys())
+	start = seg_count - location + 1
+	end = seg_count + 1
+	for i in range(seg_count,seg_count+1)
+else
+	for i in range(1,seg_count+1):
+
+	Location correct
+	timing correct
+	user correct 
+	then measurekeywrodRel correct
+
+	combination of 
+		
+		seg_agent
+		seg_customer
+		seg_both
+
+location filtering --> done
+timing filtering --> 
+keyword matching --> 
+user matching -->
+inclusion matching --> 
+
+Location Logic added --> little bit slow
+
+Time based logic to be added --> 
+
+Permanent Way to Store TranscriptionMap
+transcription vectors
+
+LOt of processing happens before actual NLP starts 
+
+Fetch required calls 
+Fetch LOB
+
+Based on LOB load calls
+Based on LOB load measures
+
+Each call belong to one LOB
+Each measure belong to one LOB
+each keyword belong to one LOB
+
+LOB wise replication should be done. 
+
+NLP should be correct --> Most Imp
+NLP should be moduler --> Efficient Maintainance
+Multiple strategies can be employed --> 
+NLP should be generic --> Same classes, methods should be able to handle multiple things, changes.
+
+NLP Core Should be SOLID 
+
+modular code for everything
+
+--------------------------------------------------------------------------
+
+NLP Planner 
+-----------
+
+if they select one LOB extract calls for that lob only
+if they specify dates, extract calls of those dates only
+if they specify past 30 days, 60 days, 90 days 
+	extract calls from today to last those many days
+
+if calls are of one lob, nlp rules should also be related to those lobs. 
+if multiple lobs are selected, those lob nlp rules should also be loaded and shown in UI
+
+people can select those measures , but it will be applied only for those calls with same lob.
+
+they want to apply cross lob rules ? --> should create copy of those rules with that lob. 
+separate of concern should be done based on lob
+
+select group --> all rules under same group should be run.
+
+rule can have dependency with other rules --> those rules should be run before this one. 
+
+
+Running any NLP rule should go through same flow. --> should be independent.
+
+NLP rule types --> 
+AHT
+Call drivers 
+call quality parameters
+word cloud, 
+time based
+location based
+Single Independent
+Multiple Dependent
+
+Fuzzy Logic is one strategy
+there could be many --> each has its own requirement
+
+Its kind of system design
+
+Any full scale application has to handle large data, many users, 
+
+generalize as well as specialize
+both are two opposite directions
+
+both can't be achieved at once.
+
+either make everything specific
+or generalize everything
+
+---------------------------
+Time based logic :
+------------------
+
+keyword and timing 
+
+keyword 1 should come between 2-4 and keyword 2 should not come within 5 seconds
+
+on average 2 segments per second
+
+k2 not present in seg 3-7 --> True
+k1 present in seg 8-12 --> True
+k2 not present in seg 13-18 --> True
+
+(C1 AND C2) OR C3 --> 
+C1 OR (C2 AND C3)
+
+Rule Parser
+
+measures --> keywords --> k1,k2,k3 each has specific req.
+
+ConditionTrueLabel --> 
+
+lobs --> calls 
+lobs --> measures --> keywords --> 
+
+calls --> LOBs --> Measures  --> one to one mapping 
+
+What things i need to run NLP
+-----------------------------
+calls --> where to get calls from ? mostly transcription -->
+
+variations in calls 
+	single call, multiple calls, n calls, all calls, from to date calls, specific lob calls, 
+	past n days calls, 
+
+	combinations of all above. --> from to, lob, count, 
+
+Call filter APIs in service --> 
+	filter by date, filter by lob, filter by count, filter by contact id, filter by code, 
+
+Measure Filter APIs in service -->
+	filter by lob, filter by type, filter by group, 
+------------------------------------------------------
+
+i covered keyword based multi label rules with location information.
+yet to cover non keyword based rules 
+time based rules.
+call drivers --> Multi label relative to one another
+	they can add, update, delete, add level call drivers.
+	call driver prediction as binary model or relative to one another 
+
+NLP indeed is a sorting problem if expanded --> if single label is requested --> its a searching problem
+if multiple labels can be returned then its sorting problem
+In that context call driver prediction and Call quality parameters can be generalized.
+
+NLP Business Requirement Doubts:
+--------------------------------
+Should there be separate module for Call driver prediction or we can merge processing with Measures?
+LOB wise separations of calls vs rules mapping. (recommended)
+if for any lob call any nlp rule is allowed to apply then LOB looses it meaning.
+LOB wise rules can be separate so we introduced lob in calls as well as respective rules.
+
+AHT --> what can be done about it ?
+static, no input is needed from the user. just pure timing based.
+	hold followed,
+	hold requested category, rules output is timings,flags
+
+timing based rules --> keywords but computed based on time instead of location
+	conversion can be used, or time logic --> output is same 
+
+	word cloud --> analyze 30k calls create model, use model to predict for each call
+	output is different, tf-idf
+
+combinations --> location and time based, location or time based
+
+Single independent measure -> easy, 
+single dependent measure --> depends on other factors or measures or rules
+
+if dependent --> have to find relationship
+
+store relationship among measures --> way to define in UI has to be provided
+
+store relationship among keywords --> 
+
+Relationship type --> AND, OR, NOT, 
+Order is also important
+
+----------------------------------------------------------------------------------------------------
+All this tells me that i am creating a rule parser or compiler. System programming. 
+CFG --> Context Free Grammer --> TM --> Turing Machines
+
+
+Connect with team to know about time based logic.
+see if it can be used directly
+word --> check segment_start_time, end_time --> check rule time configuration.
+if it falls within segment check same segment
+if it falls outside segment --> check previous or next segment
+
+
+---------------------------
+
+Time based logic
+---------------------
+
+Time Before, 
+Time After
+
+First N seconds
+Last N Seconds
+All duration 
+
+speech rate and segment_start_time --> calculate when that exact word was spoken
+
+words/seg_duration = average words per seg duration
+
+10/5 = 2 words per seconds 
+
+Greetings --> keyword one --> 5 seconds --> before, after
+
+keyword found --> start time of seg + words per second
+uttarance time --> 4-9 --> 7 
+
+between 7-12 seconds there should be no keywords from list
+
+k1 should be present + no k2 keywords in gap + k3 keywords
+
+
+Time Based Logic :
+------------------
+1. Somehow have to link words with time.
+	- Which word was spoken at which second --> one to one mapping. 
+	- Thank - 0
+
+words per segment -> seg_len -> seg_duration 
+
+seg_len/seg_duration = words per seconds per segment = WPS
+
+series Tn = seg_start_time + WPS*(n-1) 
+
+T1 = 0 + 2.1(1-1) = 0 + 2.1(0) = round(0) = 0
+T2 = 0 + 2.1(2-1) = 0 + 2.1(1) = round(2.1) = 2
+
+K1 --> Keyword User, location or time or both, inclusion/exclusion 
+
+Context, Presence, Relativeness
+
+--------------------------
+
+Keyword based 
+
+Keyword + Time 
+
+3 Scenarios
+
+1 Only Location --> first 10 segment, last 10 segment, from 5-15 segments
+2. Only Time --> first 10 seconds, last 10 seconds, from 5 to 15 seconds
+3 Location And Time --> first 10 segements, time 4-9 seconds
+
+from time of utterance to next or previous N seconds
+
+-------------
+
+thank 5 seconds --> calling should not come in next 7 seconds
+
+thank --> 2
+calling --> 10
+
+
+Make NLP code modular 
+----------------------
+How ?
+	Raw Data --> convert into NLP compatible data --> Generic
+	Use NLP compatible data --> 
+	store NLP compatible data in DB or cache.
+	preprocessing --> stop words removal, lemmantization
+	select NLP strategy 
+
+	per nlp rule --> select strategy
+
+	each strategy has different settings --> how to cater to different settings
+
+	strategy --> Input, function, output
+
+	Input --> Input Type
+	Output --> Output Type
+	Function --> Function Type
+
+	different combinations possible
+
+	too generic 
+
+some fixed, static points needed 
+
+
+Foresight --> you see things which are not even yet born
+You act with foresight or vision --> 
+
+
+works well for location based rules 
+what about time based rules ??
+{Segment{nGram{word{vector}}}}
+
+Need to store time also 
+
+what is most essential for rules --> keyword, user, location, time, ngram, frequency_within_seg
+should be stored in sorted order of location, time,  
+
+we can store it in db after first processing, or cache, or recalculate every time
+
+best way to store object ?
+in pickle file ?
+in Jsonfield in MySQL ??
+or separate table in DB ??
+
+-------------------------------------------------------------------
+NLP prepare data --> fetch call id, transcription, measures, measure keyword rel, keywords, order them
+
+create a object which hold all this data.
+
+At the end what matters ?? --> match keywords in transcription 
+
+keywords, transcription
+context ?? --> user, location, time
+
+
+Rule --> configuration --> parse rule --> 
+
+transcription --> location wise, time wise user wise
+
+transcription = collection of sequential segments
+segment = collection of sequential words
+
+duration of segment --> seconds, fractions 
+duration of call
+
+2.78 - 2.2 --> 1
+
+2.2 + 1.72 (1-1) = 2.2 
+
+2.79 - 9.17 
+-----------
+6.38 
+
+SPW = 27/6.38 = 0.24 
+
+2nd word time = 
+
+2.79 + wps (n-1) = 2.79 + 4.23 = 7.02 ~ 7
+
+Hi 	  thank you  for 	calling humana my
+2.79, 3.03, 3.27, 3.51, 3.79, 3.99, 4.23
+
+2.79 + 0.24 (5-1) = 3.79
+
+
+last word 27 time location 
+	2.79 + 0.24 (27-1) = 9.03
+
+9.68 - 10.55
+-------------
+duration = 0.87 
+wordcount = 0
+
+
+11.80 - 14.96
+---------------
+duration = 3.16
+wordcount = 8
+
+DPW = SPW = 3.16/8 = 0.40
+
+time for nth word 
+
+	5th word time = 11.80 + 0.40 (5-1) = 11.80 + 0.40 (4) = 13.4
+	8th word = 11.80 + 0.40 (7) = 14.
+
+-------------------
+
+timeMap, locationMap, transcriptionMap with both
+
+segment_time
+
+1_2.2_2.79 : {
+	2.2 {}
+}
+
+
+hi --> word,trxn,seg_no,word_start_loc,word_end_loc, word_start_time,word_end_time, seg_start_time,seg_end_time,frequency_within_seg
+thank
+hi thank
+thank you
+you for
+you for calling
+
+---------------------------
+
+HI THANK YOU FOR CALLING 
+
+1 gram --> {HI, thank, yo, for, calling} --> n
+2 gram --> hi thank, thank you , you for, for calling,
+3 gram --> hi thank you, thank you for, you for calling
+
+----------------------------------------------------------------------------------------------------------
+
+DPNG = Duration/N where N = seg_len , nG = nGram , N != nG
+DPNG = 0, where N = seg_len , nG = nGram , N = nG
+
+i ranges from 1 to N-nG
+Nth ngram word time = seg_start_time + DPNG * (i-1)
+
+Segments are ordered, time is also ordered, ngram is also ordered, 
+it should be tuple as key --> object as value
+object as key --> object as value
+
+-----------------------------------------------------------------
+1_1_1_agent_
+
+seg_time_ngram_speakerTag_word -> TranscriptionMapData
+
+Can flattening transcriptionMap work for searching and arithmatic operations with rules ??
+
+	1_1_1_agent_* , 
+	generate next key from selected keys --> how ? --> 5 seconds after keywords --> 1_6_1_agent_* , 
+
+	nD Array, nD cube, nd Warehouse , vector 
+
+------------------------------------------------------------------------------------------------------------------------
+Global space, custom vector, create vector from keywords --> 
+
+(keywords k1, location, time range, user, present/not present) AND/OR/NOT (keywords k2, location, time range, user, present/not present) 
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+Inter Rule/Keyword Dependency :
+-------------------------------
+
+InterEntityRel
+id, name, display_name, entity_type, association_type, source_node, destination_node, group, lob, tenant
+
+MeasureGroup
+id, name, display name, lob, tenant 
+
+---------------------------------------
+
+Memoization
+
+Tail Recursion --> try karvu , bijo koi option nathi, separate table ma store karvi relationship. query vadhse, joins vadhse. pan chalse.
+
+Iterative vadhare efficient karan k memory limit overflow kyarey na thay
+
+Rule can belong to one group at a time 
+
+What if I allow rule to be part of multiple groups 
+
+Rule1 --> group 1, 3, 5
+Rule 2 --> 2, 4	
+
+rule 5 --> group 6,7 
+
+group 6 has rule 1,2,5 --> BFS traversal evaluation
+group 7 has rule 1, 4,5 --> BFS
+
+Per group --> BFS evaluation 
+
+5 has dependency with rule 2,4
+
+2 has dependency with rule 1 
+
+so in stack 5,2,1 --> evaluate rule 1 , come back to 2, and then 5
+
+rule 2 AND rule 4 = True AND True --> true --> label 
+transfer = YES AND transfer type = transfer to --> transfer to PPI Dept
+
+C1 AND C2 
+L1 AND L2 --> new Label ?? or should decide from available ? 
+
+L1 AND L2 AND L3 --> 
+
+K1 --> C1 --> L1
+K2 --> C2 --> L2
+K3 --> C3 --> L3 
+
+K1 AND K2 OR K3 ---> 
+
+Condition True Label --> Lt
+Condition False Label --> Lf
+
+D:\\WorkSpace\\HGS\\Data\\HumanaPcc_TestData\\2021-12-20\\!Metadata.json
+D:\\WorkSpace\\HGS\\Data\\HumanaPcc_TestData\\Metadata\\2021-12-20\\!Metadata.json
+
+D:\WorkSpace\HGS\Data\April_data_Meta_data\April_data_Meta_data_1\April_post_Meta_data.json
+D:\WorkSpace\HGS\Data\April_data_Meta_data\April_data_Meta_data_1\April_post_data.json
+
+-----------------------------------------------
+
+Speech Engine --> how real time
+
+--------------------------------
+
+https://stackoverflow.com/questions/49822552/python-asyncio-typeerror-object-dict-cant-be-used-in-await-expression
+
+https://stackoverflow.com/questions/33357233/when-to-use-and-when-not-to-use-python-3-5-await/33399896#33399896
+
+
+Loader while running long task pending --> PoC
+
+condition on keyword matched --> return true label 
+no label defined for false condition --> Should there be one ?? 
+
+K1 --> false And
+
+Parser instead of saving to database.
+
+
+store only single line equation --> formula measure
+
+1. efficient to store string formula
+2. Anyhow computation will be required to generate flow.
+3. Parse formula, fetch details.
+4. Process
+5. Conclude results
+
+------------------------------------------------------------
+
+total_records = 
+
+total_batches = total_records / batch_size = 
+
+getTotalBatches =
+
+def getTotalBatches()
+def getBulkUploadStatus(batch_number,total_batches)
+	return batch_number/total_batches*100
+
+Total  ____ records to be processed with batch size of __ which will take total batches
+
+processing batch __
+Percentage completion = 
+------------------------------------------------------------------------
+
+Condition vs Label relationship 
+-------------------------------
+
+C1 on K1 --> L1
+C2 on K2 --> L2 
+C3 on K3 --> L3
+
+
+Rule Example :
+
+M1 EQ 'L1' AND M3 EQ = 'L3' OR M5 EQ 'L5' 
+
+Rule categorical , binary, numeric 
+------------------------------------
+
+Binary --> true, false
+categorical --> A, B, C
+
+
+how to determine label for categorical rules ??
+
+check for K1 --> L1
+check for K2 --> L2
+check for K3 --> L3
+
+---------------------------------------------------
+
+
+Either keywords are related or independent --> related by rule so there exist one relation among them.
+
+If they are related, what is the type of relationship ? --> relative to each other.
+
+what are we trying to estimate here ??
+	how close they are 
+	how far they are
+	presence of them
+	score should also we relative.
+	it only makes sense through mathematical scoring equation which can be made buckets of.
+
+Through speaker_tag, time, location, ngram, threshold, --> these things define context, boundaries, settings for a rule.
+
+Speaker_tag --> 1, 0
+location --> 1 to N, relative also 1 to N
+time --> 0 to t, relative also 0 to t
+ngram --> 1 to nG, 
+keyword --> present, absent, partially present --> threshold.
+-------------------------------------------------------------
+
+NLP is rule is function of above parameters.
+
+A * speaker_tag + B * location + C * time + D * nGram + E * keyword = Total score for K1
+.................................................................... = Total score for K2
+.................................................................... = Total score for K3
+
+whichever score is maximum or minimum --> should be returned as output.
+40% chance that K1 is satisfied.
+35%
+25%
+
+so 
+
+score has range
+
+within range categories can be defiend.
+
+how to determine range ?? --> equal range ? based on number of categories ?
+kind of spectrum -->
+
+-----------
+Implement confusion matrix
+--------------------------------
+to better assess accuracy
+
+initially our model have all constants weights as same for making it unbiased.
+
+that is A = B = C = D = E = 1
+
+might have to add weight in MeasureKeywordRel 
+
+scores will change based on weight hence final outcome.
+
+-------------------------------------------------------
+
+location within range --> full score
+outside range --> less score relative to how far it is from range
+
+time within range --> full score
+outside range --> less score relative to how far it is from range
+
+keyword score --> fuzzy score value
+
+------------------------------------------------------
+total score for k1,c1,l1 
+total score for k2,c2,l2 
+;.......................
+
+sort in decending order -->> return first as output
+
+k1 anywhere in call --> but once k1 is detected --> k2 should be / should not be in range from k1. 
+
+distance 
+
+-------------
+
+Decide correct label for the rule 
+---------------------------------
+
+absolute vs relative
+
+there should be at least one absolute point in location or time. --> not necessary
+
+K1 --> anywhere 
+K2 --> relative to K1 
+K3 --> relation to K3
+
+relative to which rule ?? or rules ?? --> 
+	
+K1 absolute/relative
+K2 absolute/relative
+K3 absolute/relative
+
+
+first thing --> absolute or relative
+if relative --> relative to which Keyword or rule ?
+relative to multiple rules 
+
+K1 ---> K2
+K1 ---> K3
+
+K3 ---> K2 
+
+directional relationship, bidirectional, hybrid,
+
+things are getting too complex --> keep getting into new dimensions
+
+keyword, location, time, ngram, speaker_tag, absolute/relative, relative to which keywords , relation direction
+
+if single direction --> calculate its dependency 
+if birectional --> calculate the other and also store 
+
+what is "relative to" here ??
+	location and time 
+
+
+k1 --> 1,1,5.8
+k2 --> 2,3,23
+
+dist --> within range / outside range 
+
+threshold --> range, single value
+
+manhattern distance
+
+<=, >=, 
+
+diff < = 5 --> 
+diff !<= 5 
+3 <= diff <= 5
+diff > 5 
+diff >= 7 and diff <= 2  
+
+=
+!=
+<
+>
+<=
+>=
+
+dist between 2 to 5 --> True --> label_score (more)
+dist not between 2 to 5 --> False --> label_score (less)
+
+Absolute or relation location,time
+
+if absolute 
+	K1 --> independent --> absolute location, time presence, speaker, --> score
+
+if relative
+	k2 --> dependent --> relative location, time from other keyword, --> score
+
+similarly k3 --> independent --> score
+
+score vs correctness ?? --> scoring mechanism should be accurate for correctness.
+
+K1 score is max --> return K1 label as output.
+K3 score is less
+K2 score is least
+
+--------------
+
+Shuold there be an option called as partially true ?? --> for binary rules with percentage.
+
+for multi class or categorical rules --> percentage match out of keywords --> for example K1,k2 satisfied,k3 didnt --> so 2/3*100 = 67% matching.
+
+Introducing bias ---> weight for tweaking rules -->
+
+
+one with max scores works well for independent labels --> mutually exclusive
+
+-----------------
+
+multiple keywords returning same label
+
+K1 --> L1
+K2 --> L1 
+
+K1 AND K2 --> L1
+
+K1 --> L1
+K2 --> L1
+K3 --> L1
+
+score can be different , label can be same.
+
+binary rules --> multiple keywords 
+
+Rules can be independent dependent
+keywords can be independent dependent
+
+Rules are collection of keywords
+
+Certain pattern in keywords define rule
+
+variations 
+
+WYSIWYG
+
+----------------------------------------------------------------------------
+
+How complex a rule can get ?
+What are different scenarios ??
+list down all possible scnarios.
+solve each of them.
+What all things can be generalized ?
+what can be specialized?
+
+Rule is as good as writing essay on blank paper. --> system doesnt assume anything
+
+Its as good as creating parsing langauge with rules.
+
+creating sub langauge layer. 
+
+How many ways i can define rule --> open ended question, seems like no limit.
+how many cases we can cover with current architecture.
+is current architecture efficient and scalable ??
+
+how many things has to defined by user.
+
+User is free. can do whatever one wants.
+
+How all scenarios fits to current architecture ?
+
+How to evaluate model.
+How to simplify.
+how to 
+
+should find atomic structure in rules which can be repeated. 
+rules are abstractions. hence no strict borders. users are non tech people. 
+
+define possible scenarios in UI.
+
+What are we missing in current new architecture.
+
+Reinventing a wheel. --> redefining machine learning without machine learning with mathematical model.
+
+y = mx + c --> linear,
+
+Rule engine should predict the correct label given settings.
+
+------------
+Where is the confusion ?
+	different combinations and how to compute label correctly.
+
+	all combinations should make sense logically.
+
+What is logic in rule ??
+
+---------------------------
+
+Only Application is running -->
+
+CIT-MCD data --> 21 call drivers 5000 calls. (18 days data) --> 8.1 GB 
+
+NlpPlanner --> 
+
+500
+
+NlpManagerService --> need to convert into batch processing --> batchwise processing, because CPU , RAM uasge is very High for small data.
+
+
+-----------------
+
+manage.py runserver creates 4 python process --> only one is being utlized.
+
+More I/O for storing transcription into callmeta table, one by one db save operation. (Need to Optimize)
+
+with only one python process running it reaches upto 6 GB RAM consumption, 15% CPU usage. 
+
+How django can use multiple threads --> (call-wise) Batch processing  if possible in NLP.
+
+
+https://www.quora.com/How-is-concurrency-achieved-in-a-Python-web-framework-like-Django-when-creating-a-REST-API-e-g-connecting-1000-concurrent-users-to-read-data-from-a-database-Do-we-have-to-write-threads-to-achieve-that
+
+https://stackoverflow.com/questions/18420699/multithreading-for-python-django
+
+https://stackoverflow.com/questions/6893968/how-to-get-the-return-value-from-a-thread
+
+
+---------------------------------------
+
+https://people.duke.edu/~ccc14/sta-663-2016/19B_Threads_Processses_Concurrency.html
+
+https://stackoverflow.com/questions/4222176/why-is-iterating-through-a-large-django-queryset-consuming-massive-amounts-of-me
+
+
+https://superfastpython.com/processpoolexecutor-in-python/
+
+-----------------------
+
+LocMemCache --> good performance
+
+
+
+
+1. Accuracy of App,
+2. Already audited calls vs Application, How many calls ? 50 calls.
+3. Integration with CRM
+4. UI should be made simpler --> Freetext --> comment box for each measure 
+	why mismatch --> 2 parts --> justification
+
+1. Create All NLP rules on App --> Meghna, Vinayak 
+
+Kishorbhai Solanki
+9998371977
+
+
+
+-----------------------------------------------------------------------------------------
+
+
+
+k --> matched / unmatched
+s --> matched / unmatched --> Agent na hovo joiye to customer j hoy, viceversa customer na hovo joiye to agent j hoy. 
+l --> matched / unmatched --> location ma ultu thay. --> location hovu joiye enu logic chhe. pan aa location na hovu joiye enu logic nathi.
+
+etle location nakhiye e match thay matlab ae location mate true thayu. 
+
+Keyword particular agent k location par na hova joiye 
+
+negation logic ma haju baki chhe.
+
+
+AND, OR logic is present in code,
+NOT logic needs to implemented.
+
+keyword aa location par na joiye --> nathi --> True
+keyword aa locaiton par joiye --> Chhe --> True
+keyword aa locaiton par na joiye --> Chhe --> False
+keyword aa location par joiye --> Nathi --> False
+
+speakerTag agent joiye --> chhe --> True
+speakerTag agent na joiye --> nathi --> True
+speakerTag customer joiye --> chhe --> True
+speakerTag customer na joiye --> nathi --> True
+speakerTag agent na joiye = speakerTag customer joiye
+speakerTag customer na joiye = speakerTag agent joiye
+
+within 5-10 seconds
+0 ------5---v----10-------15-------20------25-----30------35-------40-------45------ N (450)
+							| 15 ----------------------- ------------------------- 99999  | 
+							 								       |-30 ------------99999 |
+							 								       |--- 420 ----- 450 ----|
+
+not within 5-10 seconds 
+
+0 -------5---x----10-------15-------20------25-----30------35-------40-------45------ N
+
+Last N seconds
+
+within 5-10 seconds or not within 5-10 seconds 
+
+means anywhere 
+
+first 10 last 10 seconds
+
+if to_be_included = false 
+--> return reverse
+
+to_be_included = True --> return 
+
+
+<RT,K77,-5,5> --> True --> to_be_included = False --> False
+<RT,K77,-5,5> --> False --> to_be_included = False --> True
+<RT,K77,-5,5> --> True --> to_be_included = True --> True
+<RT,K77,[True,True, False] --> False, False --> True
+[True,True, True] --> True, False --> False
+[True,True, True] --> False, True --> False
+[True,True, False] --> False, False --> True
+-5,5> --> False --> to_be_included = True --> False
+
+Last N seconds ? --> <T,None,0,INF>
+
+Time always > 0
+
+absolute Time --> first N seconds, between x to y seconds, last N seconds
+
+first\before N seconds  --> 0, 10
+between --> x, y
+last N seconds --> -10,INF 
+after N seconds --> 10, INF
+
+from x seconds till last y seconds -->
+within first 10 seconds but not last 10 seconds --> 
+
+
+Relative Time --> 
+	before -->  -5, 0 --> higher limit = 0, lower_limit < 0
+	after --> 0,5 --> higher limit > 0, lower_limit = 0
+	before or after --> -5, 5, lower_limit < 0 and higher_limit > 0
+
+	current_keyword_time, found_keyword_time
+
+	current_keyword_time < found_keyword_time
+		diff < 0 
+		meaning current keyword is coming before the found keyword
+		
+		case 1:
+		filter range --> <RT,KX,0, 5> --> positive --> meaning current keyword is expected to be present after the found keyword 
+		diff < 0 --> not in positive range --> locationMatched = False
+
+		case 2:
+		filter range --> <RT,KX,-5, 0> --> negative --> meaning current keyword is expected to be present before the found keyword 
+		diff < 0  and in limits --> in negative range --> locationMatched = True
+
+	current_keyword_time > found_keyword_time
+		diff > 0 
+		meaning current keyword is coming after the found keyword
+
+		case 1:
+		filter range --> <RT,KX,-5, 0> --> negative --> meaning current keyword is expected to be present before the found keyword 
+		diff > 0 --> not in negative range --> locationMatched = False
+
+		case 2:
+		filter range --> <RT,KX,0, 5> --> positive --> meaning current keyword is expected to be present after the found keyword 
+		diff > 0 and in limits --> in positive range --> locationMatched = True
+
+
+
+
+
+-----------------------------------------------------------------
+
+Need to find way to populate ground truth for each run ???
+
+if we are overwriting --> it makes sense that we set up a ground truth only once.
+
+Separate Table for GroundTruth ??
+composite_contact_id, callmeta_id, nlp_rule_id, actual_value, matched_keywords,comments
+
+while saving NlpAnalysisData --> Fetch GroundTruth from GroundTruth Table and append value 
+
+PoC on CRM data Validation :-->
+
+Task 1 --> NLP docker vs NLP Application matching or not.
+Task 2 --> Then Run on List that Beya has shared.
+
+---------------------------
+
+if measure_formula is not None
+
+regex = M***
+
+event_log --> json_field --> accuracy_data
+{
+	average_acc : 85.0
+	measure_acc: {
+		'(1,code,display_name (code))' : 83.0
+		'3' : 89.45
+		'' : 64.38
+		...
+	}
+	last_acc_comp_time : 2023-02-13 17:41:39
+}
+
+
+
+
+Sabita, Sandhya, Meghana, Vinayak, Chandan, Gaurav
+
+
+(((K1 OR K2) OR K3) OR K4) OR K5
+
+M90 :
+-------
+((((K111 OR (K112 AND K113)) OR ( (( K114 AND K142) OR K143) OR (K144 AND K145))) OR K146) OR K147) OR  ((((K148 OR (K149 AND K150)) OR ((K149 AND K151) AND K152)) OR ((K153 AND K154) AND K157)) OR ((K155 AND K156) AND K158))
+
+M91 :
+-----
+(K115 OR ((K116 OR (K117 AND K120)) OR (K121 AND K122))) OR K123
+
+M92 : 
+------
+((K130 OR (K131 AND K132)) OR (((K133 AND K134 ) OR K135) OR (K136  AND K137))) OR ((K138 OR (K139 AND K140)) OR K141)
+
+(K130 OR (K131 AND K132)) OR ((((K133 AND K134 ) OR K135) OR (K136  AND K137)) OR ((K138 OR (K139 AND K140)) OR K141))
+
+M88:
+-----
+
+
+(((((K95 AND K97) OR K96) OR K98) AND K99) OR K100) OR (K101 AND K102)
+
+M89:
+-----
+
+((K103 OR K104) OR ((K105 AND K106) OR (K107 AND K108))) OR (K109 AND K110)
+
+M94:
+----
+
+((K162 OR (K163 AND K164)) OR (K165 AND K166)) OR K167
+
+M95:
+-----
+
+(K168 AND K169) OR ((K170 AND K171) AND K169)
+
+Offer_Phone_post_keyword_C (K90)	agent	True	<RT,K89>	CALL QUALITY PARAMETER	YES	3
+
+For each keyword 4 things are evaluated
+
+keywordMatched 
+speakerTagMatched
+locationMatched
+partiallyMatched
+inclusionTypeMatched
+fullyMatched
+keywordFormulaMatched
+measureFormulaMatched
+label
+score
+
+-------------------------------------
+
+TraceRule :
+-----------
+TraceRuleMap --> K1 : {fullyMatched,Label,Score}
+
+eventLogCode_timestamp.csv
+
+
+Root Cause for caching and getting int output from cache
+
+better way to trace rule --> via caching 
+
+Test Files
+
+Dockerization of App
+
+keywordMatched --> True
+speakerTagMatched --> True
+location --> 0, 150 --> False 
+locationMatched --> False , --> True
+partiallyMatched --> True
+inclusionType --> False
+fullyMatched --> False
+
+
+location --> False --> 
+
+keywordMatched --> True --> True --> True
+speakerTagMatched --> True --> True --> true 
+locationMatched --> False --> False --> True
+
+
+2 vage bapore --> 
+
+['composite_contact_id','callmeta_code','measure_code','measure_display_name','keyword_code','keywordMatched','inclusionTypeMatched','speakerTagMatched','locationMatched','partiallyMatched','fullyMatched','reason_for_failure','label','keyword_ngram','keyword_length','score']
+
+
+
+((((K131 AND K132) OR K130) OR ((K133 AND K134) OR K135)) OR (K136  AND K137)) OR ((K138 OR (K139 AND K140)) OR K141)
+
+((((K131 AND K132) OR K130) OR (K135 OR (K133 AND K134))) OR (K136  AND K137)) OR ((K138 OR (K139 AND K140)) OR K141)
+
+(K130 OR (K131 AND K132)) OR ((((K133 AND K134 ) OR K135) OR (K136  AND K137)) OR ((K138 OR (K139 AND K140)) OR K141))
+
+(K130 OR (K131 AND K132)) OR ((((K133 AND K134 ) OR K135) OR (K136  AND K137)) OR ((K138 OR (K139 AND K140)) OR K141))
+
+-------------------------------
+
+update f_nlp_analysis fna set fna.actual_value
+
+K168
+are you calling directly from|calling from provider's office|calling directly for the|calling directly from facility|calling on behalf of|third party administrator|third party admin|directly from the facility|facility providers office|directly calling from|from the office or facility|direct from provider|calling from the facility|calling directly from|facility or providers office|i am calling from|calling on behalf|directly from the office|are you calling from|calling as a provider|behalf of the facility|providers office facility|directly from the provider|behalf of the provider|calling from doctors office|facility doctors office|providers office or third party|facility or provider you're calling from|calling as a third party|you are calling from the provider|you're calling directly from|office facility or third party
+
+K169
+payment integrity|humana
+
+K170
+my name is
+
+K171
+im calling from
+
+K172
+payment integrity|humana
+
+---------------------
+
+Last 150 seconds <T,None,-150,99999>
+After 150 seconds <T,None,150,99999>
+----------------------------------------------------------------
+--------------- -------------------------  --------------------
+Label 1				Label 2                 Label 3  
+ 
+keywordMatched or not --> No
+speakerTagMatched or not --> No 
+locationMatched or not --> No
+
+PartiallyMatched --> KeywordMatched AND SpeakerTagMatched AND LocationMatched
+				 --> No
+InclusionType --> XNOR --> Both are same it will return TRUE
+
+PartiallyMatched, Inclusion Type --> Result
+TRUE, TRUE --> TRUE
+FALSE, FALSE --> TRUE
+TRUE, FALSE --> FALSE
+FALSE, TRUE --> FALSE
+
+LABEL1 OR YES
+K178 OR K179 
+TRUE OR FALSE --> TRUE --> return K178's Label
+
+(K178 AND K250) OR K179 
+
+False Or False --> False
+
+K250
+Keywordmatched --> TRUE
+
+//YES
+K178 AND K250 --> TRUE
+
+Left to right precedence
+K178,100 OR K250,100
+LabelA OR LabelB OR LabelC
+
+K1 OR K2 OR K3 .....
+K178 --> Keywords --> 
+
+formula --> 
+
+NO, YES
+
+Transfer Case --> K1 true misroutes,K2 handled,transfered,K3 handled,not transfered.
+
+--> Left to right 
+K2;K3;K1
+TRue, TRue, True
+score1, score2, score3 
+
+keywordMatched --> TRUE
+speakerTagMatched --> TRUE
+locationMatched --> FALSE
+partiallyMatched --> FALSE
+inclusionType --> FALSE
+inclusionTypeMatched --> FALSE XNOR FALSE --> TRUE
+fullyMatched < F
+
+---------------
+
+Closure Of Rules --> Need to check and optimize --> dont do it until defined.
+
+Optimize LocationFormula, Keyword Formula to include NOT (Negative) Logic
+
+K1 AND NOT K2
+
+0 - 150 ---> 150 - 99999 ??
+
+<T,None,0,25> 		--> First 25 seconds
+<T,None,5,15> 		--> Between 5 to 15 seconds
+<T,None,5,99999> 	--> After 5 seconds till last
+<T,None,-5,99999> 	--> Last 5 seconds
+<T,KX,-5,0> 		--> location of current keyword Before 5 seconds of KX
+<T,KX,0,5> 		--> location of current keyword after 5 seconds of KX
+
+
+Closure of location or rule --> 
+
+Closure of A Rule: (Rule Coverage)
+-----------------------------------
+
+A rule is defined for particular scenarios, but what about other scenarios ??
+those should be defined for deterministic behaviour. 
+
+
+|--------------------------------------------------------------------------|
+
+	    YES  									NO
+|------ K1 --------|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+	NO 					YES								NO
+xxxxxxxxxxxx|----------- K2 -----------|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+				NO 								YES 				  NO
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|----------- K3 --------------|xxxxxxxxxx
+
+					NO 										YES
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|------- K4 -----------|
+
+------------------------------------------------------------------------------
+
+aggregated rule
+
+|---------|---YES---|-------------|-YES-|------------|-----YES-----|---------|
+
+		
+K1 --> T T --> T 
+K1 --> F F --> T
+K1 --> F T --> F
+K1 --> T F --> F
+----------------
+
+
+jgjgjkjhkjhkkjhkjhkjkjkjh
+
+
+if keyword is defined for particular interval, what label should be returned for remaining interval ?? 
+
+system can understand what is defined, it is not intelligent enough to assume whats not defined as similar to humans. 
+
+There can be preprogrammed behaviors or assumptions based on experience or knowledge , which can be used but again it has to allow custom behavior to be defined and that should override the assumptions or predefined behavior of rules.
+
+lets say k1 has been defined for two intervals where it returns label A, there should be default label for remaining intervals which is label B.
+
+pip3 install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz --user
+
+
+https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.5.0/en_core_web_lg-3.5.0-py3-none-any.whl
+
+
+
+First N seconds --> Done <T,None,0,10>
+Between X and Y seconds --> Done <T,None,10,20>
+Last N seconds --> Done  <T,None,-10,99999>
+After N seconds --> Done <T,None,10,99999>
+
+
+1. From X Till Last N Seconds -->  Not Done <T,None,10,99999-10>
+2. Within first X seconds but not within last Y seconds --> Done <T,None,0,10> AND !<T,None,-10,99999>
+
+3. There is label for keyword matched with criteria --> but there is no label for if criteria not matched
+
+4. Frequency filter in keywords --> number of times keyword appears in text
+
+calldata, chat data --> transcriptionMap --> 
+5. abstractive text --> textMap
+
+6. NLP rules which manual in nature
+
+7. NLP rules which are externally computed
+
+8. simplification of keyword/measure formulas
+
+9. Measure with measure formula and its own keywords/labels
+
+10. Closure of Rule (Rule Coverage)
+
+11. NLP Data extraction from text --> reference number
+
+-------------------------------------------------------------------------------------
+keywords --> filters and configurations enhancement, granularity 
+
+Whats most granuler level for a rule
+
+rule --> combination of rules
+	--> rules combinations of keywords
+	--> keywords --> filters 
+
+keyword filters --> speaker_tag, location, presence/absence, frequency, positive_label, negative_label,neutral_label
+	need to introduce below additional fields at keyword filters
+	weightage
+
+
+location --> AND , OR --> need to introduce NOT 
+
+IN First 10 seconds : <T,None,0,10>
+NOT IN First 10 seconds : NOT <T,None,0,10>
+BETWEEN 10 to 30 seconds : <T,None,10,30>
+NOT BETWEEN 10 to 30 seconds : NOT <T,None,10,30>
+AFTER 10 seconds : <T,None,10,INF>
+NOT AFTER 10 seconds : NOT <T,None,10,INF>
+IN LAST 10 seconds : <T,None,0,-10>
+NOT IN LAST 10 seconds : NOT <T,None,0,-10>
+
+FROM 15 TILL LAST 10 seconds : <T,None,15,-10>
+
+NOT IN FROM 15 TILL LAST 10 seconds : NOT <T,None,15,-10>
+
+WITHIN FIRST 15 SECONDS AND NOT WITHIN LAST 10 seconds : <T,None,0,15> AND NOT <T,None,-10,INF>
+
+
+5 seconds BEFORE KX : <RT,KX-5,0>
+5 seconds AFTER KX : <RT,0,KX,0,5>
+5 seconds BEFORE/AFTER KX : <RT,KX,-5,+5>
+
+------------------------------------------------------------------------------------
+
+((K103 OR (K105 AND K106)) OR (K104 OR(K107 AND K108))) OR (K109 AND K110)
+
+[[['RT', 'K2', -20, -10], 'AND', ['NOT', ['RT', 'K5', 15, 35]]], 'OR', ['RT', 'K6', 10, 20]]
+
+[[['NOT', ['RT', 'K2', -20, ['INF', '-', 10]]], 'AND', ['RT', 'K5', 15, 35]], 'OR', ['RT', 'K6', 10, 20]]
+
+kjhkjhlkjkjkhkjhkj
+----------------------------------------------------------------------------------------
+
+|------------------|xxxxxxxxx <T,None,20,40> xxxxxxxxxxxxx|-----------------------------|
+|NOT <T,None,20,40>|                                      |------NOT <T,None,20,40>-----|
+
+-----------------------------------------------------
+
+condition c1 --> if true --> true_label
+				 else    --> false_label
+
+k1, c1 --> coverage --> location --> YES, NA
+k2, c2 --> coverage --> location --> YES, NO
+k3, c3 --> coverage --> location -->  
+
+c1 --> keyword, speakerTag, location, frequency --> partialMatch , inclusionType --> full match
+
+this can also be done to bring closure at very granular level, but it is unnecessary, meaningless
+keyword matched --> yes/no
+speaker tag matched --> yes/ no
+location matched --> yes/no
+inclusion type matched --> yes/no
+
+these conditions collectively define part of rule --> part depends on number of keywords associated 
+
+one rule has 5 keywords --> 5 parts --> each parts has condition --> for those parts yes/no/na can be defined
+
+in which conditions some parts are not applicable ??
+
+AND : NO >> NA >> YES
+OR : YES >> NA >> NO
+
+
+k1 and k2 --> YES and YES --> yes
+k1 and k2 --> NA and YES --> NA
+k1 and k2 --> NA and NA --> NA
+k1 and k2 --> NO and NA --> NO
+k1 and k2 --> NO and NO --> NO
+
+k1 and k2 --> YES and YES --> yes
+k1 and k2 --> NA and YES --> NA
+k1 and k2 --> NA and NA --> NA
+k1 and k2 --> NO and NA --> NO
+k1 and k2 --> NO and NO --> NO
+
+----------------------------------------------------------------
+
+parts either are indepedent or dependent 
+
+they need to be assessed independently
+
+part 1 output --> determines part 2,3 output
+
+label1 >> label2 >> label3
+
+some rules are place-holders, not to be computed
+
+manual, auto
+
+k1,c1,p1 --> i1 --> l1,l2
+k1,c1,p2 --> i2 --> l1,
+
+for all intervals behaviour should be defined or assumed
+
+k1, i1 --> l1/l2
+k1, i2 --> l3/l4
+k1, i3 --> l5/l6
+
+how many labels per keywords ? --> 
+number of intervals >= number of labels
+
+closure of rules can be defined on different filters or parameters
+
+2^n combinations --> labels to be defined for full rule closure --> not feasible
+	
+	label_vector --> 
+	2^n is total search space for rule --> 
+	out of 2^n only some cases are defined 
+	whichever are defined rest to be given common label
+
+keywordMatched --> l1/l2
+speakerTag --> l3/l4/l5
+location --> l6 -- l16
+inclusion type --> l17/l18
+
+2*10*3*2 = 120
+
+why ? closure of rule --> to obtain deterministic behaviour from rule, removing ambiguity 
+
+all possbilities and variations that have to be accounted to make decision --> impractical, to much computation, too much time consuming
+
+have to reduce search space and define limits. merge regions of space to common label
+
+
+-----------------------
+
+BSC Chat Code understanding
+
+Connected with Pavan, SHeeba --> 
+
+-----------------------------------------
+
+----------------------------------------------------------
+
+Bsc Chat analytics project : 
+-----------------------------
+	1. understanding all NLP rules and data for configuring on app. we got access to code yesterday.
+
+Talispoint project : 
+--------------------
+	1. understanding quality audit form
+
+AWS app setup for BSc member calls
+-----------------------------------
+	1. done R&D on requirements , resources for app setup.
+	2. waiting on EC2 instance setup.
+	3. Also created timeline for all tasks for the setup.
+
+Weightage Score generalization:
+-------------------------------
+	1. Rule weightage varies from client to client , some are at tier1, some have at tier2,tier3 measures, also based on predicted labels --> weigheted score changes
+
+Rule Closure Implementation and testing:
+---------------------------------------
+	1. implementation, testing done,
+
+Sheeba --> formula validation on UI, scheduler,
+
+-----------------------------------------------
+
+https://dl-cdn.alpinelinux.org/alpine/v3.18/main/x86_64/APKINDEX.tar.gz
+https://dl-cdn.alpinelinux.org/alpine/v3.18/main
+https://dl-cdn.alpinelinux.org/alpine/v3.18/community/x86_64/APKINDEX.tar.gz
+https://dl-cdn.alpinelinux.org/alpine/v3.18/community
+
+
+What should i do right now to utilize my work time
+
+i can learn something
+look at other tasks from tasklists
+bug fixing
+ActiTime Timesheet
+
+EXPERT 100%
+EFFECTIVE 80%
+NOVICE 70%
+YES 50%
+NO 30%
+LABEL2 20%
+DEFAULT_LABEL 40%
+
+------------------------
+
+
+rule_satisfied_label
+rule_not_satisfied_label
+
+MKL1 -> k1 --> c1, Loc1 --> l1
+MKL2 -> k1 --> c1, loc2 --> l2
+MKL3 --> k1 --> c1, loc3 --> l3
+
+(C1 OR C2 OR C3)
+
+MKL1 OR MKL2
+
+HIGHEST        
+TIER 1, TIER 2, TIER 3 
+
+Enter tenant Config
+Field name , field value
+
+5-6
+
+measureKeyword --> rule_satisfied_label, rule_not_satisfied_label
+
+Rule Satisfied Label | Rule Not Satisfied Label
+EXPERT 				 | 	EFFECTIVE
+
+scoring tier : 1 >= measure tier : 3 --> ignore
+scoring tier : 3 >= measure tier :  --> process 
+
+Measure --> 
+
+rule_label
+
+label data --> importance depends on weightages
+correctness factor is subject to logical association and weightage
+
+K178 AND K179
+EXPERT AND EFFECTIVE --> EFFECTIVE
+EXPERT AND EXPERT --> EXPERT 
+EXPERT AND NOVICE --> NOVICE
+
+-------------------------------------------------------------------------
+
+NlpManagerService
+	1. Refactoring, Simplification
+	2. Modularization of code based on measure_type, analysis type
+	3. how hybrid version will get integrated 
+		all pieces must be independent and like puzzle piece which should get fitted as and when needed. (Assembled way of coding with different components)
+
+RuleBased Measure Flow
+	maximum_weightage
+	label, weightage
+	keywordMatching
+	locationMatching
+	InclusionTypeMatching
+	keywordFormulaComputation
+	measureFormulaComputation
+
+Manual Measure Flow
+	maximum_weightage
+	labels will be there --> weightages in label is optional
+	keywords are not required --> keyword formula also not required
+	measureFormulaComputation --> measure formula might be present if hierarchy
+
+	if top measure is manual --> all sub mesures should be manual
+	if measure and sub-measures == Manual --> this measure is manual
+	if any sub-measure is rule-based --> rule based
+
+
+one more switch --> as it is vs clean text for nlp --> at measure level ? or analysis level ?
+
+
+https://stackoverflow.com/questions/46863932/parallel-processing-with-processpoolexecutor
+
+https://en.m.wikipedia.org/wiki/Many-valued_logic
+
+-------------------------
+

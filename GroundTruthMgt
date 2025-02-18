@@ -1,0 +1,37 @@
+* Ground Truth Management
+-------------------------
+
+Objective : Management of Ground Truth for all sorts models/data.
+
+call data :
+	call transcription 
+		AQEP rules -->  
+
+		call1 , M2 --> actual value
+		call2, M2 --> actual value
+		chat1, M2 --> actual value
+
+		string, int, float, json --> in what form ground truth can come.
+
+		call drivers --> list of drivers ---> predicted value --> [CD1, CD2], actual value --> [CD1,CD5,CD6]
+
+		text summarization --> call1 --> A call had information about abcd , slfdjsl
+		actual value --> a paragraph --> call contained this issue and this resolution
+
+		aht --> Dead air duration --> 250 , actual value 240 
+
+		data extraction 
+			call1 --> {phone number : 92834729, date of birth : 16-11-2023},
+					  {phone number : 92834729, date of birth : 16-11-2023, provider's npi : 12314}
+create ground truth
+update
+delete 
+search
+retrieve
+bulk upload
+
+
+1. Create Module Design (gather ideas, )
+2. Wireframes 
+3. Timelines --> 21 st November
+4. tasks from timelines

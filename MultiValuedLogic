@@ -1,0 +1,112 @@
+SensAI NLP : Multi-Valued Logic:
+--------------------------------
+
+M1, M2 can have any number of ordinal labels.
+
+M1 AND M2 :
+-----------
+
+N Valued truth table for AND, OR should be built
+
+if M1 has m labels and M2 has n labels then
+
+	m*n total scenarios, combinations are possible.
+
+	requirement for this logic is all combinations must be covered for completeness of the function.
+
+	Second requirement is that, all combinations/scenarios must be mapped to any of the output labels of resultant measure in near equal distribution to avoid any biasness of rule.
+
+	if there are 3*2 = 6 combinations and output labels for measure are 2
+	then 3 combinations should produce output as label1 and remaining as label2.
+	This is required as part of implementing/ensuring deterministic nature. Deterministic nature is essential for NLP rules to provide traceability of perticular prediction and also enrich trust of the model.
+
+	at a time only one scenario will occur, will result into one numeric value.
+
+	that value should be mapped to appropriate bucket 
+	how many distinct values possible 
+
+	Why sum of ranks was considered for Multivalued logic?
+		M1, M2 both are independent measures and may or may have independent labels.
+		rankings are standardized same across any measures, so logic works on ranking
+		AND/OR logic gate comparison between ranks yield rank
+
+		summing up rank creates a value that is fusion of both, both are taken into account and calculation is not biased towards any rank. 
+
+		Ranking of labels however fulfills the same purpose, but 
+
+-------------------------------------------------------------------------------
+
+
+
+
+Conventional Logic is binary : True/False, 1/0, High Voltage/Low Voltage
+
+AQEP form on sens-ai is generic, 
+
+Different clients can have different labels for their AQEP parameters
+
+YES/NO
+PASS/FAIL
+EXPERT/NOVICE
+
+It need not be binary for any AQEP parameters also.
+
+YES/NO/NA
+PASS/FAIL/NA
+EXPERT/INTERMEDIATE/NOVICE
+HIGH/MEDIUM/LOW
+STRONGLY AGREE/ AGREE/ NEUTRAL/DISAGREE/STROGNLY DISAGREE
+
+L1, L2, L3, L4
+
+In general , any arbiratary number of labels.
+
+Logic gates normally works in binary, but separate logics needs to be defined for non binary (available , rare,less common)
+
+Binary logic confirms completeness criteria of function and is deterministic in nature.
+
+While Multi Valued logic does not gurantee completeness and non deterministic in nature.
+
+Decoder :
+---------
+8x3 --> 8 input mapped to 3 output
+
+4x2 --> 4 input to 2 output
+
+etc.
+
+----------------------------
+
+M1 --> 3 labels 3 ranks - 1 to 3
+M2 --> 5 labels 5 ranks - 1 to 5
+
+
+3*5 = 15 
+
+output label has 3 labels , 3 ranks --> 
+	1
+	2
+	3
+
+Output measure can have maximum of labels which are possible from multiplication of its sub measures labels
+
+that is if 3 child measures 
+	m1 has 4 labels, 
+	m2 has 5 labels, 
+	m3 has 3 labels 
+	and M4 is parent measure, then M4 can have at max 4*5*3 distinct labels covering all possible scenario. Why ? The reason is , mathematically a function can be defined from domain to codomain where for every domain member element there can exist at max one image in codomain not more than that, to ensure one to one correspondance 
+
+2.7182818284590452353602874713527 --> 0.090030
+7.389056098930650227230427460575  --> 0.244728
+20.085536923187667740928529654582 --> 
+
+30.192874850577363203519244586509 --> 0.66524
+
+1 --> 1/6 --> 0.167
+2 --> 2/6 --> 0.33
+3 --> 3/6 --> 0.5
+
+1 input --> 1 output
+
+---------------
+

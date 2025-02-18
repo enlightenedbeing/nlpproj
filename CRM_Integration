@@ -1,0 +1,514 @@
+CRM Data Integration:
+--------------------
+
+Aim : Extract information from Call --> either from Callmeta or from NLP
+
+	match that information with CRM data
+
+
+What information can be extracted from NLP currently ??
+	whether some discussion has happened related to particular topic, keywords
+	yes/no
+	if yes --> if some information can be extracted or not ?
+		how to extract that information ?? --> R&D
+
+
+
+
+Reference ID extracted from NLP for each call, and same reference number will be there in CRM db,
+
+fetch records
+
+M2000
+Call_Documentation_Not_Transpired_But_Documented_MedicalRecords
+
+	K3000
+	Medical Records, med records, 
+
+	Rule Definition : 
+		If K3000, Speaker = Agent, To Be Included = False, Location = Anywhere --> Label = YES
+
+
+M2001
+Call_Documentation_Transpired_But_Not_Documented_MedicalRecords
+
+	K3000
+	Medical Records, med records, 	
+
+	Rule Definition : 
+		If K3000, Speaker = Agent, To Be Included = True, Location = Anywhere --> Label = YES
+
+
+Part1 --> M2000 --> Yes, M2001 --> No
+
+Part 2
+CRM check --> MedicalRecords --> Yes
+
+
+M3000 + Part 2 --> Yes AND Yes --> Yes --> Call_Documentation_Not_Transpired_But_Documented_MedicalRecords 
+
+M3001 + Part 2 --> No AND Yes --> No --> Call_Documentation_Transpired_But_Not_Documented_MedicalRecords
+
+M3002 + Part 2 --> Yes AND Yes --> Yes --> Call_Documentation_Transpired_And_Documented_MedicalRecords 
+
+M3003 + Part 2 --> No AND Yes --> No --> Call_Documentation_Not_Transpired_But_Not_Documented_MedicalRecords
+
+-----------------------------------------------
+
+transpired_documented  --> Phone Number --> 
+
+transpired_not_documented --> Phone Number
+
+not_transpired_documented --> Phone Number
+
+NLP rule to be checked as Binary output --> Yes/No
+	from keyword based rules --> check for prsense of keyword in trancription
+		part1 --> prediction from NLP
+		part2 --> if such keywords are found, check with CRM --> 
+				3 things to check against --> Call Documentation, CRM database, Patient Records
+
+
+--------------------------------
+
+CRM Data Integration : (dont deep dive, focus on what is expecetd, MVP first)
+----------------------
+1. Take back up of existing chitti_demo
+2. Push Bug fix change --> (Slowness issue to be addressed later)
+3. Create Wireframe for CRM Data Integration
+4. start working on changes related to CRM in NLP Manager services
+5. Make Changes in NlpAnalysis Data
+6. Testing
+
+------------------------------------
+
+	Measures --> Add flag for measure --> 
+				validate with CRM
+
+		if validateWithCRM == True
+			toBeValidatedData = ["phone_number"]
+
+			enter details to be validated = name, number, address
+				select CRM data source --> datasource Drop down 
+					list tables --> 
+					list columns -->
+					Map columns against which measure is to be matched
+	
+	Post NLP 
+		check NLP Bool Flag == True AND validateWithCRM == True
+			
+			CRMManagerService.get_crm_data(reference_number)
+			matched_keywords --> phone_number, member_name, address, 
+			check for column_name containing matched keyword 
+			check values of that column from SQL query. 
+			result = select * from table where reference_number = reference_number, field
+			if result is not None or "" 
+				matchCount = 0
+				for data in toBeValidatedColumns:
+					if data in nlp_extracted_data.keys():
+						matchCount+=1
+				if matchCount == len(toBeValidatedColumns)
+					nlp_result.validation_status = "MATCHED"
+					nlp_result.validated_data = Json{phone: 20934820,address: 20398204}
+				elif matchCount >0 and <= len(toBeValidatedColumns):
+					nlp_result.validation_status = "PARTIALLY MATCHED"
+					nlp_result.validated_data = Json{phone: 20934820,address: 20398204}
+				else 
+					nlp_result.validation_status = "NOT MATCHED"
+					nlp_result.validated_data = {}
+			nlp_extracted_data = members name, six one five four three --> 61543
+
+
+NLP_extracted_data
+id,callmeta_id, data {}
+
+CRM data 
+id, reference_number, query_date, call_date, call_documentation_id, patient_id
+
+Call Documentation Table
+id, date, customer_id, reference_number, composite_contact_id, customer_phone_number, customer_address, customer_query, resolution, members_id, place_of_service,
+
+Patient Details
+id, first name, last name, age, gender, date of birth, date of admission, case_id, healthcare_plan_id, balance, eligibility, reference_number, status.
+
+NLP Extracted Data:
+-------------------
+
+{
+"reference_number":"2000123456789",
+"patient_name": "Mark Twain",
+"date_of_birth": "25-10-1994",
+"place_of_service": "Start Healthcare Pvt Ltd London",
+"claim_status": "Active",
+"case_number": "CS26594",
+"fax_number":"9876543210",
+"tax_id": "135792468",
+"phone_number": "9825023468" 
+}
+
+["123 Main St New York City NY 10001","456 Oak Ave Los Angeles CA 90210","789 Maple Dr Chicago IL 60611","321 Elm St Houston TX 77002","555 Pine St San Francisco CA 94108","777 Cherry Ln Miami FL 33131","888 Cedar St Seattle WA 98101","999 Birch Rd Boston MA 02108","1111 Willow Dr Dallas TX 75201","2222 Oakwood Ave Philadelphia PA 19104"]
+
+--------------------
+validated_data
+{}
+
+presence , nex
+
+validation_status --> MATCHED, NOT MATCHED
+validated_data --> 
+	phone_number,tax_id
+
+
+	select datasource
+		shchma --> 
+		list out all tables thorgh query
+		CRM
+			CallDocumentation --> columns 
+			PatientRecords --> 
+			..
+
+
+CallDocumentation_Incorrect_PhoneNumber
+
+
+zero one two three four five six seven eight nine 
+
+hundred thousand
+
+["phone number @ (S:131,NGST:408.77,NGET:409.20,ST:407.04,ET:409.2)", "phone number @ (S:133,NGST:414.67,NGET:415.11,ST:411.61,ET:417.51)", "phone number @ (S:138,NGST:422.50,NGET:423.01,ST:422.25,ET:426.31)"]
+
+
+Number extraction will take time 
+
+for a now go with random data but few records should match with transcription
+
+FIVE TWO THREE ZERO ZERO TWO THREE
+
+-----------------------------------------------------------
+
+phone_number --> Yes 
+
+
+1. generate NLP, CRM data first 
+2. then check 
+
+----------------------------------------
+
+Challenges:
+-----------
+1. Atleast structure of CRM database has to be known.
+2. which table, columns has to be checked
+
+
+list of tables 
+select table
+show columns
+
+1. Populate CRM Data
+2. Populate NLP Extracted Data
+3. Then Match
+
+---------------------------------------------------------
+1. Populate NLP Extracted Data --> Done
+2. Populate CRM data --> WIP
+3. Match --> WIP
+4. generate Flag
+
+--------------------------------
+
+create table call_documentation(
+id bigint PRIMARY KEY,
+reference_number bigint,
+patient_name varchar(255), 
+date_of_birth date,
+place_of_service varchar(255),
+claim_status varchar(255),
+case_number bigint,
+fax_number bigint,
+tax_id bigint,
+phone_number bigint,
+patient_id bigint,
+)
+
+insert into call_documentation values(
+
+)
+
+["reference_number*" OR "patient_name*" OR "
+date_of_birth*" OR "place_of_service*" OR "claim_status*" OR "case_number*" OR "fax_number*" OR "tax_id*" OR "phone_number*" OR "patient_id"]
+
+---------------------------------------------------------------------
+
+1. Define Measure  
+	check flag --> checkWithCRM
+	what needs to be checked with CRM --> column_name or field
+
+2. generating close to real CRM data and NLP extracted Data
+
+	NlpExtractedData  ---> randomData --> mapping with Call -->
+
+3. CRM Data generation
+
+4. Nlp rule is complete
+	post nlp rule
+	nlp_rule --> output --> Yes --> checkWithCRM = True
+		nlpdata = fetchNlpExtractedDataByCallMetaId 
+
+		field in nlpdata
+			measure.toBeValidatedFields
+			getRecordsFromCRMByReferenceID(ref_number,feild)
+
+
+
+62	82940	{"tax_id": "778307827", "fax_number": "4049899951", "case_number": "CS97252", "claim_status": "not active", "patient_name": "Sidhdharth Gautama", "phone_number": "1406898068", "date_of_birth": "05/08/1970", "place_of_service": "456 Oak Ave Los Angeles CA 90210", "reference_number": "835050639"}
+63	82942	{"fax_number": "4049899951", "claim_status": "not active", "patient_name": "Nanak", "date_of_birth": "29/10/1972", "place_of_service": "999 Birch Rd Boston MA 02108", "reference_number": "950480359"}
+64	82943	{"tax_id": "778307827", "claim_status": "not active", "patient_name": "Sidhdharth Gautama", "phone_number": "1406898068", "date_of_birth": "04/01/1965", "place_of_service": "777 Cherry Ln Miami FL 33131", "reference_number": "102223127"}
+65	82944	{"tax_id": "778307827", "patient_name": "Milarepa", "phone_number": "1406898068", "date_of_birth": "10/01/1966", "place_of_service": "123 Main St New York City NY 10001", "reference_number": "3000839299519"}
+66	82945	{"fax_number": "4049899951", "case_number": "CS97252", "date_of_birth": "27/04/1974", "place_of_service": "555 Pine St San Francisco CA 94108", "reference_number": "1000259071048"}
+67	82946	{"tax_id": "778307827", "claim_status": "not active", "patient_name": "Krishna", "phone_number": "1406898068", "date_of_birth": "26/11/1976", "place_of_service": "888 Cedar St Seattle WA 98101", "reference_number": "985284514"}
+
+-----------------------------
+
+Additional hours 
+
+---------------------------------
+
+CRM Data Integration :
+----------------------
+
+1. Per Reference Number can there be multiple records ??
+2. crm_schemas --> How many
+
+---------------------------------
+
+Summarize : 
+-----------
+
+1. NlpExtractedData.
+2. CrmDat
+3. 
+
+incorrect --> 
+transpired / not documented
+not transpired / documented
+
+7 rules --> 
+
+insert into call_documentation (reference_number,call_comments,patient_name,tax_id,case_number,fax_number,phone_number,date_of_birth,place_of_service,claim_status) values ("
+");
+
+---------------------------
+
+in nlp_rule --> what things to be defined 
+
+	if conversation is related to particular data field
+		e.g phone_number, fax_number
+
+one rule for each parameter 
+	
+	phone_number asked ? --> yes/no
+	correct phone number given/asked ?? --> yes/no
+
+1. NLP Extracted Data 
+	at least reference number is required
+	everything else can be ignored for a now
+2. CRM data created
+3. for which rule which crm data to be checked ??
+	each rule is associated with some crm_data field or fields
+	many to many relationship
+assumption : reference_number is avaialble , and mapping is also done somehow(currently hard coded)
+4. fetch respective crm data by reference_number
+	crm_data["call_comments"]
+
+	toBeValidatedData :
+	table_name1@column_name1,table_name2@column_name2,table_name3@column_name3,
+	
+	#for each nlp_extracted_data there should be a mapping to check
+	field_count = 0
+	information_validation_map = {}
+	#so first check which nlp_data is extracated or have value
+		if nlp_data has value
+			#check with its mapped crm_column
+			nlp_data --> field is present and not NULL
+			crm_data --> field is present and not NULL
+			field_count+=1
+			matched = True
+			#values at THIS MOMENT are not required to be compared. 
+			#if time permits
+			if nlp_data.field == crm_data.field
+				information_correctness[field] = True
+			else
+				information_correctness[field] = False
+	if all(information_correctness.values()):
+		validation_satus = ALL MATCHED , ALL CORRECT 
+		validated_data = {field1 --> (value1, flag1),..}
+	elif any(information_correctness.values()):
+		validation_satus = PARTIALLY MATCHED , ALL CORRECT 
+	if field_count == len(toBeValidatedData) and :
+		validation_status = ALL MATCHED , ALL CORRECT 
+		validated_data = 
+	else:
+		validation_status = NOT MATCHED
+
+True, True
+True, False
+False, True --> not applicable 
+False, False --> not applicable
+
+{"fax_number": "2905229052", "patient_name": "Sidhdharth Gautama", "phone_number": "4357343573", "date_of_birth": "05/04/1963", "reference_number": "30002493524935"}
+
+
+
+"call_documentation@call_comments"
+"{\"`call_comments`\": [false, false, \"NOT MATCHED\"]}"
+"{\"phone_number\": [true, false, \"MATCHED BUT NOT CORRECT\"]}"
+
+ACCURATE_INFORMATION_WAS_PROVIDED_Correspondence_and_G_and_A_Process_Fax number
+
+ACCURATE INFORMATION WAS PROVIDED | Correspondence and G and A Process	| Fax number
+
+
+APPROPRIATE_ACTIONS_WERE_TAKEN_OFFERED_TO_REDUCE_THE_CUSTOMERS_EFFORT_WHEN_NEEDED_Documented_inappropriate_information_Missing_logged_Information
+APPROPRIATE ACTIONS WERE TAKEN &OFFERED TO REDUCE THE CUSTOMER’S EFFORT WHEN NEEDED 	Documented inappropriate information	Missing logged Information
+
+APPROPRIATE ACTIONS WERE TAKEN & OFFERED TO REDUCE THE CUSTOMER’S EFFORT WHEN NEEDED|Documented inappropriate information|Insufficient information documented 
+
+APPROPRIATE ACTIONS WERE TAKEN & OFFERED TO REDUCE THE CUSTOMER’S EFFORT WHEN NEEDED|Documented inappropriate information|Missing logged Information 
+
+
+APPROPRIATE ACTIONS WERE TAKEN &OFFERED TO REDUCE THE CUSTOMER’S EFFORT WHEN NEEDED 	Documented inappropriate information	Missing logged Information"
+
+CUSTOMER_WAS_PRIORITIZED_OVER_BUSINESS_HUMANA_Providers_Information_Not_Fully_Authenticated_Providers_Tax_ID
+
+CUSTOMER WAS PRIORITIZED OVER BUSINESS/HUMANA|Provider"s Information Not Fully Authenticated|Provider"s Tax ID
+
+call_documentation@fax_number
+
+validation_type
+	ONLY_CRM --> crm_documentation, crm_patient_records
+	call_documentation@phone_number:patient_records@phone_number
+	,crm_call_documentation@case_number:crm_patient_records@case_number
+	CRM_AND_NLP --> NLP , CRM --> toBevalidedData (call_documentation@phone_number) 
+		
+call_documentation@case_number:patient_records@case_number,call_documentation@fax_number:patient_records@fax_number
+
+
+
+patient_records@tax_id
+
+-------------------------------
+TODO In CRM Data Integration 
+-------------------------------
+
+ONLY CRM
+NLP AND CRM
+CRM VS CRM
+
+table_name@field_name>property_name
+
+ONLY_CRM
+table_name1@field_name1:table_name2@field_name2,
+table_name1@field_name1>:table_name2@field_name2>,
+table_name1@field_name1>:table_name2@field_name2,
+table_name1@field_name1:table_name2@field_name2>,
+
+NLP_VS_CRM 
+table_name@field_name OR (table_name@field_name>property_name OR table_name@field_name>)
+
+NONE
+----
+validationType --> None --> return
+
+ONLY_CRM -->
+
+NLP_AND_CRM --> 
+	NLP --> Flag is required
+	NLP_extracted_data also required
+
+partial_function 
+
+
+
+"crm.case_number"
+
+"crm.case_number"
+
+{"fax_number": "1955619556", "patient_name": "Krishna", "phone_number": "3434934349", "reference_number": "30009175091750"}
+
+3434934349
+
+(((K185 AND K187 )OR K186) OR ((K188 AND K189) OR K190)) OR (K191 AND K192) 
+
+(K197 OR (K198 AND K199)) OR ((K202 OR (K200 AND K201)))
+(K197 OR (K198 AND K199)) OR ((K202 OR (K200 AND K201)))
+
+(K207 OR (K208 OR(K209 AND K210))) OR ((K211 AND K212)OR K213)
+
+((K214 OR (K216 AND K217)) OR (K215 OR(K218 AND K219))) OR (K220 AND K221)
+
+(((K95 AND K97 )OR K96) OR ((K98 AND K99) OR K100)) OR (K101 AND K102) 
+
+((K103 OR (K105 AND K106)) OR (K104 OR(K107 AND K108))) OR (K109 AND K110)
+
+((((K111 OR (K112 AND K113)) OR ( (( K114 AND K142) OR K143) OR (K144 AND K145))) OR K146) OR K147) OR  ((((K148 OR (K149 AND K150)) OR ((K149 AND K151) AND K152)) OR ((K153 AND K154) AND K157)) OR ((K155 AND K156) AND K158))
+
+(K115 OR (K116 OR(K117 AND K120))) OR ((K121 AND K122)OR K123)
+(K130 OR (K131 AND K132)) OR ((((K133 AND K134 ) OR K135) OR (K136  AND K137)) OR ((K138 OR (K139 AND K140)) OR K141))
+
+(K162 OR (K163 AND K164)) OR ((K167 OR (K165 AND K166)))
+
+"{\"phone_number|phone_number\": [true, true, \"MATCHED AND CORRECT\", \"(4357343573,)\", \"(4357343573,)\"], \"tax_id|tax_id\": [true, true, \"MATCHED AND CORRECT\", \"(None,)\", \"(None,)\"]}"
+
+"{\"phone_number|phone_number\": [true, true, \"MATCHED AND CORRECT\", \"(3434934349,)\", \"(3434934349,)\"], \"tax_id|tax_id\": [true, true, \"MATCHED AND CORRECT\", \"(None,)\", \"(None,)\"]}"
+
+"{\"case_number\": [true, true, \"MATCHED AND CORRECT\", \"8853688536\", \"(8853688536,)\"]}"
+
+
+---------------------------------------------------------------------------------------
+
+ONLY_NLP --> Apply NLP rule --> whatever output we get, check with NLP extracted data 
+	
+
+ONLY_CRM --> Apply NLP rule --> Whatever output we get, check only in crm database with one table of CRM to another table to CRM
+
+NLP_CRM --> apply NLP rule --> output we get, check with NLP extracted data and CRM database
+None --> no validation in NLP extracted data and CRM.
+
+table_name@field_name>property_name
+
+ONLY_CRM
+
+Field Name = Property Name
+1 way, table_name1@field_name1:table_name2@field_name2,
+2 way, table_name1@field_name1>:table_name2@field_name2>, 
+
+Field Name != Property Name ==> data is to be matched with one sub-field or property of one column from table in crm database
+table_name1@field_name1>property_name1:table_name2@field_name2,
+table_name1@field_name1:table_name2@field_name2>,
+
+NLP_VS_CRM 
+table_name@field_name OR (table_name@field_name>property_name OR table_name@field_name>)
+
+
+reference_number:30002493524935|patient_name:Sidhdharth Gautama|date_of_birth:05/04/1963|fax_number:2905229052|phone_number:4357343573
+
+--------------------------------------------------------------------------------
+
+unique feild or list of fields 
+and toBeValidatedField
+
+#table_name@field_name>property_name,
+
+
+THis is it --> syntax for unique field/s and toBeValidated fields specification on App.
+
+	{UF11|UF12: table_name1@field_name1>property_name1},
+	{UF21|UF22: table_name2@field_name2>property_name2},
+	{UF31|UF32|UF33: table_name3@field_name3>property_name3},
+	{UF4: table_name4@field_name4>property_name4}
+
+
+
+select tuo_respondentname,tuo_providername,tuo_groupname,tuo_addr_orig,tuo_state_orig,tuo_city_orig,tuo_zip_orig,tuo_phone1,tuo_acceptingwcname from [dbo].tuo_pdmsprovider where tuo_pdmsproviderid IN (select  tuo_pdmsproviderid from [dbo].tuo_incident_tuo_pdmsprovider where incidentid IN (select regardingobjectid from [dbo].phonecall where  CAST(createdon as DATE)  LIKE "2024-01-15"  and  phonenumber LIKE "978369777" ));
+
+'
+'"212298272*" OR "631751300*" OR "610402890*" OR "229233670*" OR "877471093*" OR "631858227*" OR "978458141*" OR "978343527*" OR "717258935*" OR "978774255*" OR "978369777*" OR "978568142*" OR "484526173*" OR "978521321*" OR "606789351*" OR "717943156*" OR "978470161*" OR "412672715*" OR "631772464*" OR "617918759*" OR "949499131*" OR "918968357*" OR "267695394*" OR "610728610*" OR "610595681*" OR "918865500*" OR "774202226*" OR "83735*" OR "83735*" OR "212543350*" OR "631698782*" OR "516676110*" OR "405840445*" OR "978249351*" OR "978323285*" OR "706353299*" OR "212427775*" OR "413535480*" OR "717849546*" OR "212305547*" OR "315464581*" OR "212252617*" OR "212305597*" OR "800662240*" OR "978287369*" OR "978410610*" OR "615396662*"'

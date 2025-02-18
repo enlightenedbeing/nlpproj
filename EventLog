@@ -1,0 +1,294 @@
+EventLog:
+
+id,type/mode, nlp_plan_id, etl_plan_id, start_time, end_time, duration,status, number of calls, number of measures, number of lobs, mode_of_output, 
+
+NlpAnalysis 
+------------
+event_log_id (new field) 
+
+AhtAnalysis
+------------
+event_log_id (new field)
+
+Event Type (NlpConstants --> TaskMode)
+1. MANUAL
+2. SCHEDULED
+3. BULK UPLOAD
+
+Planner
+-------
+Planner should have persist output checkbox or export output --> Export as json, csv, excel, (Gaurav has worked on Export , can connect with Him)
+
+	and if export option is selected --> export path should be defined, if path is not given, should export to default path.
+
+Same for ETL plan, 
+Same for Scheduler.
+
+if output can be exported to files, no need to create separate storage for test files.
+
+In NlpAnalysis Page
+
+fetch records by event_log_id
+	it will fetch all calls , all measures 
+	while displaying in screen --> group by callmeta_id
+
+
+Task Scheduler
+---------------
+id
+name
+Etl plan id
+nlp plan id
+frequency --> every hour, every 5 hours, daily, weekly, monthly, every alternate day.
+status --> Active/Inactive
+start_time --> 1, Nov, 2022 12:00:30 IST 
+end_time --> 30, Nov, 2022 12:00: 30 IST
+last_trigger_time --> 15,Nov, 2022 12:00:30
+next_trigger_time --> 16, Nov, 2022 12:00:30
+time_zone --> UTC
+persist result
+export result
+
+
+
+
+-----------------------------------------
+
+Runwise
+rn1 daily --> 150 --> 008 
+rn2 --> 100 --> 008
+rn ------------
+
+------------------------------------
+TODO :
+------
+
+1. NlpAnalysis for Test Files
+2. AhtAnalysis for Test Files
+3. NlpManagerService Update
+
+Boolean field to process things separately --> test/ production
+
+Separate template/view --> NLP planner, for test/ production 
+
+runwise in NlpAnalysis --> when fetched for dashboard --> which data should be fetched ??
+Answer : if stored separately then no duplicates only unique calls and measures
+
+--------------------------
+
+Sample_lob_1 --> Sample Lob 1
+Sample_callmeta_1 --> Sample CallMeta 1
+
+Description for Sample Lob 1
+Description for Sample Lob 2
+
+Sample_measure_greetings_1
+Sample_measure_fresh_repeat_2
+Sample_measure_caller_name_3
+Sample
+
+Sample_keyword_greetings_1
+Sample_keyword_name_2
+Sample_keyword_my_3
+Sample_keyword_fresh_repeat_4
+Sample_keyword_calldriver_5
+
+
+Sample_lob_1
+	split_ids --> 12345, 23456, 34567
+
+Sample_lob_2
+	split_ids --> 45678, 56892, 12567
+
+	<T,None,0,20> --> within First 20 seconds linked keywords should appear in transcription
+
+----------------------------------------------------------------
+EventLog should be generic to NLP, ETL, Scheduler
+	id,type/mode, nlp_plan_id, etl_plan_id, start_time, end_time, duration,status, 
+
+	if NLP Run --> show nlp stats --> 
+	if Etl Run --> show Etl stats -->
+	if scheduler --> show scheduler stats
+
+	some things are common --> 
+
+
+
+Apartment --> 
+
+Django project --> sdfdsf
+
+------------------------------------------------------------------------------------------
+
+1. Event Log Changes in NlpManagerService
+2. Test Vs Production Changes in NlpManagerService
+3. MultiThreading in Django App. --> Concurrent.futures, multiprocessing, --> DONE
+
+------------------------------
+
+@EventLog --> decorator function
+
+Summary --> measure wise --> 
+
+NLP output Redesign.
+
+
+Architecture --> for AWS app
+On Premise --> App architecture
+
+On CMD :
+--------
+D:
+
+cd Workspace/app_env/Script
+
+activate
+
+cd Workspace/Chitti
+
+daphne -p 80 -b 0.0.0.0 Chitti.asgi:application
+
+------------------
+
+Applicaion --> login credentials
+
+	username : lalkrishna.trivedi
+	password : admin@0722
+
+EventLog
+
+when should eventlog be generated ??
+	at the beginning of task
+		but at beginning not all details are known.
+when status of task should be collected ?
+	at the end of the task only
+how to track progress of long running task ??
+
+build a event queue --> add event to queue 
+
+status --> IN QUEUE --> RUNNING --> COMPLETED
+					--> ABORTED 
+					--> PAUSED --> RESUME --> RUNNING
+
+For any eventlogging 
+	observer is needed
+	queue is needed
+
+1. E1, plan_id PL 1, 12:00:00, RUNNING	===> 20% 
+2. E2, etl_plan_id, 2, 12:05:00, IN QUEUE ==> 0%
+.
+.
+.
+.
+.
+
+
+
+thread.sleep(10)
+check_task_status()
+E1, 
+
+1. Short Solution --> Decorator --> 
+2. Long Solution --> Celery --> 
+
+
+Standa
+
+@EventLog
+Task 
+
+uuid --> 
+
+EventLogData --> id, mode/type, nlp_plan_id, start_time, status, number of calls,number of measures, number of lobs, --> STARTED
+
+add to queue 
+
+create entry in EventLog
+	
+Currently its synchronous 
+
+Coding is less --> understanding is more --> Requires 
+
+EventManagerService
+	
+	https://redis.io/docs/getting-started/installation/install-redis-on-windows/
+
+	WSL2 Installation
+	https://pureinfotech.com/install-windows-subsystem-linux-2-windows-10/
+
+	Caching with Redis
+	https://realpython.com/caching-in-django-with-redis/
+
+Dockerizing Django App with All servers, separate containers for Redis, DB, Webserver
+	
+	https://blog.logrocket.com/dockerizing-django-app/
+
+	https://blog.devgenius.io/how-to-dockerize-a-production-ready-django-application-django-nginx-uwsgi-a908d3e4d8f8
+
+	https://blog.logrocket.com/dockerizing-django-app/
+
+	
+	Docker Courses :
+	-----------------
+	https://www.youtube.com/watch?v=3c-iBn73dDE
+
+	https://www.youtube.com/watch?v=pTFZFxd4hOI
+
+	https://www.youtube.com/watch?v=W5Ov0H7E_o4
+
+
+
+https://stackoverflow.com/questions/21945052/simple-approach-to-launching-background-task-in-django
+
+
+
+1. EventLog function
+2. Dockerize Django App with Docker Compose
+3. Redis Server Configuration In Docker (For caching and message broker)
+4. Dephane Server Configuration in Docker
+5. MySQL Server Configuration in Docker
+
+
+[09:21 pm] Sheeba Balraj
+
+start_time = now + datetime.timedelta(seconds=30)
+
+                cron_expr = f'{start_time.minute} {start_time.hour} {start_time.day} {start_time.month} *'
+
+                Schedule.objects.create(func='NlpApp.NlpServices.Planner.RunNlpPlanner.runPlan', args=updated_plan.id, schedule_type=Schedule.CRON, cron=cron_expr, cluster='Chitti')
+
+[09:22 pm] Sheeba Balraj
+
+import datetime
+
+from django_q.models import Schedule
+
+import croniter
+
+ 79 --> yes, no
+ 81 --> yes, no
+ 90 --> yes, no , na
+ 429 --> yes, no, na
+
+ 2*2*3*3 --> 36
+
+ nlp_status_task_id --> 
+
+ service or function to constantly check status and update at every 5,10 seconds
+ operation is done
+
+ task1 RUNNING 30%
+ task2 RUNNING 50%
+
+
+ ------------------------
+
+1. store completed percentage to cache with task id and prefix
+2. refresh page at every 10 seconds to update progress.
+ 	view should read value from cache and display.
+3. Event LOG --> 
+
+------------------------------------------------------------------
+
+only aqep 
+

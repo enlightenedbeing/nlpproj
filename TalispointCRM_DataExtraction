@@ -1,0 +1,1699 @@
+Talispoint CRM Data Access:
+---------------------------
+Our TSG vs Hyderabad TSG needs to connect to resolve the issue.
+Hitesh tried everything , it didnt work
+	SSMS --> access,
+	With VPN or without VPN
+	they tried turning off zscalar 
+	whatever access was allowed from their end they tried
+
+	"So they are asking for working scenario for whom it is working so that they can check, compare and resolve on our end"
+
+Prem's laptop it did not work
+Only in office network it works --> working in sense it says "connection is established but failed prologin handshake"
+
+on other network --> it shows different error --> "Failed to authenticate user"
+
+tried to ping through command prompt --> able to ping
+
+Manjunath enabled some access for sheeba, so she is able to ping
+others are not able to ping the link also
+additional access is not given to anyone by manjunath
+
+TNC -ComputerName talisdev.crm.dynamics.com -Port 1433
+
+Server Name:
+talisdev.crm.dynamics.com 
+Port 1433
+Username:
+nshaikh@colibrium.onmicrosoft.com
+Password
+HGSN@deem@202!
+Random*9
+
+
+Meeting With Vipul, Hitesh, Durgendu:
+-------------------------------------
+
+NetExtender is required
+ritch crivy --> System admin , for account 
+
+----------------------------------------------------
+
+Hi Team,
+
+Please find below summary for Talispoint CRM Database access request so far.
+
+Request details:
+We require Talispoint CRM database access for the casestudy and poc for 'Validate against CRM' feature of sens-ai application that we are building for automated AQM. 
+
+Inputs shared/discussed by team:
+1. Initial discussion with USA team (Durgendu, Don) to understand CRM database where we had requested to give us the read access to CRM database and one walkthrough demo to help better understand the schema. We also had requested ER diagram of the schema to be shared by them. As per discussion, CRM database schema will be replaced with new one by 2024.
+
+2. Durgendu had shared below credentials.
+	
+	https://talisqa.crm.dynamics.com/main.aspx?appid=08093bbe-0c0d-4ef8-9b1d-0f1d226c741b&pagetype=dashboard&type=system&_canOverride=true
+
+	User Name: akumar@colibrium.onmicrosoft.com
+
+3. As per discussion with nadeem and durgendu, DB access cannot be given directly. API based access can be given. So we had requested if KT on API based access can be given. 
+
+4. KT on API based access delayed due to critical work on their end. KT is still pending.
+
+5. As per new changes in CRM, durgendu shared us DB access credentials as below.
+	
+Server name: talisdev.crm.dynamics.com
+Authentication: Azure Active Directory  - Password
+User name: nshaikh@colibrium.onmicrosoft.com
+
+6. We tried accessing db with latest credentials , but were unable to access the DB with office network and VPN.
+
+7. We reached out to Bangalore TSG team for the resolution and any whitelisting or access grantation that needs to happen. TSG team suggested they needed to see "Working scenario and server location to check further". We were not able to ping on SQL server and asked if any additional parameters needs to be set on SSMS.
+
+8. Durgendu suggested to reach out to Vipul Kachhiya who had previosuly availed access to CRM database and was successful
+
+9. We then connected with Vipul along with TSG team and durgendu , where Vipul demonstrated accessing Talispoint CRM database access using NetExtender (different vpn tool). TSG team then suggested that NetExtender tool needs to be installed and its account needs to be created to access CRM database. Discussion led us to reach out to Rich Creavy who is sys admin who can help us with NetExtender tool.
+
+10. As per follow up with Rich Creavy, to get access to NetExtender , a ticket must be raised for the premnath account and approved by Pete Santo and Vishwanath Venu Babu. NetExtender tool must be installed on users local computer. Durgendu to add new account to relavant DB. After account creation and approval, User should connect with db using SSMS and NetExtender.
+
+11. Ticket is created, 109599
+
+12. As per rich, ticket doesnt indicate prod, pre-prod, uat environment. for which Venu clarified about UAT access.
+
+
+------------------
+
+
+-----------------------------------------
+
+1. Talispoint Audio Calls 100 for Demo required. - Connect with Speech, Vinayak or Ops team
+2. Talispoint 100 calls transcription. - Speech team
+3. Updated QA form understanding. - Ops Team
+
+--------------------------------------------------------------------------
+
+New file they have shared 
+
+	1. some updated keywords and rules.
+	2. Have shared validation report --> Incorrect Prediction
+	3. On application --> keywords,measures
+
+--------------------------------------------------------------------------------------
+
+900 calls --> Audio files, no metadata, transcription for 900 calls -->
+
+* Talispoint Restart :
+---------------------
+	--> parameter 
+	--> which are based on ML
+	--> which are based on keyword, conditions, 
+	--> Mostly same new form, some rules we have to add, more keywords.
+	--> Talispoint Demo instance should be updated with latest code and migrations.
+
+------------------
+
+Talispoint AQEP Form CRM Parameters:
+------------------------------------
+
+1. Asked for the name 
+	- Respondant's name (Respondant Details Section, Provider Forward)
+2. Added correct disposition and accurate documentation
+	- Comment Section , Provider Forward
+3. Collected Email ID 
+	- Respondant's Email ID  (Respondant Details Section, Provider Forward)
+4. Group Name 
+	- Agent's Comment Section
+5. Provider Name
+	- ???
+6. Provider Address Line1
+	- Agent's Comment Section
+7. Provider Address City 
+	- Agent's Comment Section
+8. Provider Address State Code
+	- Agent's Comment Section
+9. Provider Address Zip Code
+	- Agent's Comment Section
+10. Provider Address Phone Number 
+	- Agent's Comment Section
+11. Accepting WC patients
+	- 
+
+Possible Mapping we found in tables :
+
+dbo.campaign
+dbo.contact
+dbo.incident
+
+Prepare Excel Sheet and attach, 
+
+
+CRM --> incident id of case is primary --> 1 to n, n to n
+	through incident id --> related providers 
+
+To Do:
+------
+1. TBD with Priyanka about talispoint metadata and unique call identifier - DONE
+2. TBD with Bay to know more on linking call with case/incident details - DONE
+3. Information that are available from transcription --> DONE
+4. ER diagram is not available
+5. Meta data is not shared - DONE (got it)
+6. Receive mapping of CRM table.columns from Durgendu Lal --> Done
+
+------------------------------------------------------------------------------
+
+Tatvamasi
+
+----------------------------------------------------
+Primary Key --> Unique Indetifier Field 
+-----------------------------------------------------
+
+Notes :
+-------
+1. Mapping between AQEP Parameters and Table/column is required
+
+2. Application credentials --> to check if it has access (read)
+	connection details, test connection
+
+3. Unique Column to identify and navigate is required
+	If whole schema is available its better,
+	we might not have whole schema
+	so mapping is required
+
+	3.1 Check if whole uptodate schema is available or not.
+	3.2 If Mapping of table/columns is available
+	3.3 Unique field/column is mandatory for accurate results. without it it cannot give or work properly and produce erroneous results.
+	3.4 NLP should be able to extract unique field from transcription,
+		or metadata field to locate entry in CRM
+	3.5 If Unique Field exists in CRM and NLP metadata also has unique field information
+		3.5.1 go to mapped table/column with unique field as filter criteria.
+			3.5.1.1 Despite assumption, it might return multiple rows.
+					All or any one entry to be checked and validated
+			3.5.1.2 Might return 0 rows. 
+					CRM Validation --> NA			
+		3.5.2 read value from CRM table/column and also read value from NLP extracted data.
+		3.5.3 match --> percentage or binary 
+			Exact Match --> CRM validatation --> TRUE
+			Partial Match --> CRM Validation --> TRUE (60%)
+			No Match --> CRM validation --> FALSE (0%)
+	3.6 Unique field unavailable --> CRM Validation --> NA
+
+4. If CRM database access is not given, but API is shared ??
+	What information we need from CRM ??
+		1. if possible schema --> might be big, overkill
+		2. If not , mapping --> required table/column
+		3. API most likely will return JSON object as output
+		4. match that json object
+
+5. What if information is complex and cant be validated with single columns, requires join and multi column conditions ??
+	whether agent collected case details correctly or not ?/
+		1. name in patient table
+		2. address in hospital table
+		3. prescription in diagnosis table
+		4. 
+6. Unique field also is combination of multiple columns.
+
+---------------------
+NLP Data Extraction :
+---------------------
+
+
+1. Reference Number
+2. Call Back Number or Phone Number
+3. Member ID
+4. Date Of Birth
+5. Address
+	line1
+	city
+	state
+	zip_code
+6. Place of Service
+7. Claim Status
+8. Fax Number
+9. tax id
+10. call comments
+
+------------------------------------------------
+
+MVP :  
+-----
+
+1. Make list of things/tools we have.
+	Talispoint Transcription --> 933 calls
+	Talispoint Metadata ? --> Metadata is not matching with any calls
+		--> Mostly we dont have --> dummy data to be populated
+		--> need to check with Priyanka, Arijit
+	Talispoint AQEP form 
+	Talispoint AQEP parameter mapping with CRM tables/columns
+	Access to Talispoint CRM tables/columns
+2. Make list of things/tools we need and we dont have.
+	Unique field between NLP extracted and CRM tables 
+		Check 30 calls --> find pattern --> map
+		20 calls --> Only available with Phone Number
+		Have call with Bay or Ops team -->
+3. Divide tasks into smaller steps, go step by step.
+	1. Create Talispoint AQEP measures on App
+	2. Provide mapping of tables columns in measures
+	3. Run NLP extraction on talispoint transcriptions
+		Test NLP extraction code for talispoint
+		Modify NLP Extraction code to fit in Application
+			how many parameters we can do and check
+			how many we cant ?
+	4.  First extract unique field.
+	5. Using Unique field and credentials and table/column mapping 
+		fetch CRM data.
+	6. also extract NLP data 
+	7. Compare NLP data and CRM data.
+	8. generate validated status and validated data.
+
+4. complete setup.
+5. test. --> For testing proper talispoint data is needed.
+
+-----------------------------------------------------
+
+Talispoint Transcription :
+--------------------------
+
+Transcription Quality is poor, doenst make much sense
+calls are short (30-50 segments)
+Most calls have IVR initially
+No unique field is found in calls except for respondants phone number --> that can become key for CRM data mapping.
+if no unique field can be extracted from transcription, might need to check against call_id
+
+
+-----------------------------------------
+
+Observed Mapping Of Talispoint Schema:
+--------------------------------------
+
+1. tuo_phonenumber --> tuo_provideraddress, tuo_providerid
+2. tuo_provideraddress --> tuo_provider
+3. tuo_incident_tuo_pdmsprovider
+4. tuo_incident --> ticket number
+
+----------------------------
+
+Understand process --> for Provider forward 
+
+2-3 scenarios live if possible --> CRM validation process
+
+Talispoint Audio calls Path on Dev server: 
+
+/home/hgs-ubuntu/Storage_disk/Production _Data/Speech/New Account Calls/Talispoint;35_20230418_142933/All_Calls_Tailspoint
+
+Link from which audio files were downloaded:
+--------------------------------------------
+Inside Sagility Network/VPN: https://10.208.12.11/
+Outside Sagility Network/VPN/client environment: https://sftpmi.c-cubeservices.com/
+Username: sftp-HESPractice
+Password: Welcome@123
+
+login failed --> not allowed to login from this location
+
+----------------------------------------
+
+Progress:
+---------
+
+1. Table/column mapping identified.
+2. NLP data extraction code integration with App.
+3. Possible generalization for NLP data extraction.
+
+Challenges:
+-----------
+
+1. Phone number alone is not sufficient to locate record, (presence or absence of extracted data can be checked however can not pin point to exact row/entry in table.)
+
+2. Table mapping is also not directly connected with Verient system. Verient Id of call is not registered or found in talispoint CRM tables. 
+
+3. Unique field vary from client to client. difficult to generalize.
+
+4. N to N relationship exists between dbo.incident and tuo_pdmsprovider
+	incident id as per discussion is key unique field to navigate between records.
+	connection of audio/transcription id with incident id is not available at the moment.
+
+5. incident and provider table --> can give link to provider table. provider table has address, city, zipcode etc.
+
+6. Talispoint Transcription is shared which is production data and , talispoint CRM accesss is given which is Dev environment. So one to one mapping and validation is not possible at the moment.
+
+---------------------------------------
+
+Current status : Given high variability and limited control on parameters, difficult to automate. Unless some simple straight forward AQEP parameters with simple table/column mapping is avaialble.
+
+-----------------------
+
+1. Check calls on dev server. - Done
+2. Check for unique field from calls. - DONE
+3. Check 20 calls for NLP data extraction. - DONE
+4. Check for sample phone number check in talispoint dev CRM through SQL queries. 
+5. Follow up with App team - DONE
+6. Humana PPI Meeting with BI team. - Done
+7. BSC new instance setup with credentials, App dockerization - Sabita 
+8. Connect with DL to discuss on Mapping of verient call details to CRM. - Done
+
+
+1-12-2023:
+----------
+1. look at more 30 calls for transcription quality --> DONE
+2. Generalize NLP Data Extraction Code. 
+	- Design should be ready by today EOD.
+		- Models
+		- Services
+		- Wireframes
+	- Discuss with Prem, Avinash
+	- Tasklist -> preferred changes from Gaurav, Vinayak
+3. CRM Access generalization - Possible solution , alternatives, design flows.
+---------------------------------------------------------------------------------
+MVP:
+----
+1. unique_field_extraction --> 
+	either from metadata or from transcription
+	1.1 From metadata:
+	------------------
+		More definitive way of getting unique field - better
+		for talispoint its --> phone number and date
+		available
+		list of fields separated by | --> data_date | dnis
+		len(list)>1 --> combine with AND condition in query
+
+	1.2 From Transcription:
+	-----------------------
+		Extracted_info : {k:v}
+		we may get or may not get unique field
+		if we get
+			further crm validation is possible
+		else
+			skip
+
+---------------------
+
+how to specify unique field --> tenant settings ??
+	multiple unique fields ??
+		for each case ???
+
+-------------------------------------------------------
+
+call --> number, or combination as unique field. 
+chat --> number/id, or combination as unique field
+document --> id or combination as unique field
+
+-------------------------------
+
+what should not be our concern ??
+	1. CRM tables/columns --> should be given or from API
+	2. 
+
+Holistic view of modules and features. --> for new base
+currently limited by space for everthing specific.
+
+what is CRM database --> collection of tables.
+	what i need --> credentials and access (read)
+	test connection --> 
+
+AQEP 1--> parameter --> CRM table/colunm mapping
+AQEP 2--> parameter --> CRM table/colunm mapping
+...
+AQEP N--> parameter --> CRM table/colunm mapping
+
+data might need to be verified from different different tables.
+	each table require unique field to indentify records 
+		each parameter represents one table/column atleast
+
+parameter can have multiple fields to be validated 
+	each field have equivalent mapping,unique field, found value from transcription, actual value from CRM, expectation of field.
+
+field1:	nlp field vs crm field with unique field,match_type --> true, false
+field2: ....................................................--> true, false
+...
+fieldn: ....................................................--> true, false
+
+field1 AND field2 OR field3 ---> True, False
+COUNT of matched fields > threshold_for_partial_match --> partial matched
+COUNT of matched fields > threshold_for_full_match --> full matched
+else not matched
+
+how many things needs to be defined to make it generalized ??
+	nlp field
+	equivalent crm field
+	unique field
+	expected match type
+	feild formula
+	thresholds for matching
+	lets hope no need to define labels for matching
+
+So with all that AQEP measure or rule has these many things
+	name, desc, threshold, group, keywords linking with speaker tag, location, labels, weightages, keyword formula, measure formula, crm mapping details like nlp field , equivalent crm field, unique field, expected match type, field formula,thresholds for matching, labels for matching
+
+----------------------------------------------------------------------------------------
+Action Items :
+--------------
+
+1. create talispoint 3 measures on app - created 1, PARTIALLY DONE
+	specify mapping in crm , 
+	need to add support for giving unique field per table () - DONE
+2. NLP information Extraction Code --> 
+	1. define parameters to be extracted (Currently hard coded without UI)
+	2. logic for nlp information extraction
+	3. CRM mapping logic updation
+	4. load talispoint data on app (new transcription of 100 calls with metadata)
+	5. MSSQL connector with Azure active directory login support in django for app.
+		(Later to be added as datasource type) - Prem was looking into it earlier
+	6. run NLP to predict AQEP and CRM validation.
+	7. UI changes for more CRM parameters related to unique field, and information extraction.
+
+1. Able to connect to CRM with credentials or not?
+	
+	DATABASES = {
+    "default": {
+        "ENGINE": "mssql",
+        "NAME": "db_name",
+        "USER": "foo",
+        "PASSWORD": "password",
+        "HOST": "foo.windows.net",
+        "PORT": "1433",
+        "OPTIONS": {
+            "driver": "ODBC Driver 17 for SQL Server",
+            "extra_params": "Authentication=ActiveDirectoryMsi",
+        	},
+    	},
+	}
+
+2. Unique field extraction from metadata :
+
+---------------
+NOTE : way to store parts of schema needs to be R&D. because some mappings are not direct.
+
+Status:
+-------
+1. able to create measures, - DONE
+2. able to exercise unique field through query - DONE
+3. able to store unique field and toBeValidated data in measures. - DONE
+	Challenge : How to store 3rd or 4th level relationship ?? - DONE
+4. Next nlp data extraction logic update. - DONE except for location GPE.
+5. CRM logic update 
+mssql connector trial --> test connection
+
+A|B in Table P --> C
+C in Table Q --> D
+D in Table R --> E
+E in Table X --> F
+
+UniqueField : A | B, Table : P, Field : G --> {A|B:P@G}
+
+
+How starting unique field leads to other tables unique fields that relationship needs to be defined and followed
+
+step1:
+Incident --> Incident_Provider --> Provider
+date|phonenumber as filter in Incident --> primary_key_field as output1
+
+step2:
+output1 as filter in Incident_Provider --> output2
+
+step3: 
+output2 as filter in Provider --> required field or fields
+
+how to specify the n-level relationships ?
+	
+Table1 >> Table2 >> Table3
+query should be generated like below.	
+select t3select1, t3select2 
+from Table3
+where t3filter in (select t2select1 
+			 from Table2
+			 where t2filter in (select t1select1
+			 					from Table1
+			 					where t1filter)) 
+
+t1filter == Unique Field or Fields
+t2filter1 == t1select1
+t3filter1 == t2select1
+t3select1,t3select2, ...
+
+generate query once store query as string in db
+next time onwards use that query and skip query generation.
+
+Way to store mapping as json field in DB. 
+{	
+	"select": ["t1select1","t1select2","t1select3"],
+    "property": null,
+    "table": "Provider",
+    "filter": "providerid",
+    "subquery": {
+        "select": ["t2select1"],
+        "property": null,
+        "table": "Incident_Provider",
+        "filter": "incidentid",
+        "subquery": {
+            "select": ["t3select1"],
+            "property": null,
+            "table": "Incident",
+            "filter": "data_date || phonenumber",
+            "subquery": null}}
+}
+
+Example for Provider City verification.
+{
+	"select":["tuo_city_orig"],
+	"property":null,
+	"table":"[dbo].tuo_pdmsprovider",
+	"filter":"tuo_pdmsproviderid",
+	"subquery":{
+		"select":["tuo_pdmsproviderid"],
+		"property":null,
+		"table":"tuo_incident_tuo_pdmsprovider",
+		"filter":"incidentid",
+		"subquery":{
+			"select":["incidentid"],
+			"property":null,
+			"table":"[dbo].incident",
+			"filter":"tuo_data_dt:('FROM METADATA','nlp_data_date') && tuo_phonenumber:('FROM METADATA','nlp_phonenumber')",
+			"subquery":null}}
+}
+
+* NLP Information Extraction Logic Generalization:
+--------------------------------------------------
+
+TranscriptionMap
+	getFullsegmentTranscriptionFromMap
+	nGram = max(ngram)
+	index at which parameter appears
+	extract windowed transcription from it
+	windowed transcription.
+	parameter_str_list = []
+	for i in range(len(windwoed transc))
+		segment = windows.iloc[i]
+		if len(vairation_list)>0:
+			if any(variation in seg for variation in variation_list):
+				for token in segment.split():
+					if token in number_list.keys():
+						parameter_str_list.append(number_list[token])
+			else:
+				continue
+	parameter_str = map(str,parameter_str_list)
+	parameter_val = parameter_datatype("".join(parameter_str[parameter_length]))
+	return parameter_val
+
+
+* CRM Logic updation from DB, NLP extracted data point of view:
+---------------------------------------------------------------
+1. test_connection - MSSQL connector in django with Azure Active directory authentication
+2. parse --> CRM mapping and generate query. (Recuresive function)
+	execute query to get results
+3. compare NLP information extraction vs CRM
+4. return matched, partially matched, not matched output and validation status. 
+
+
+-----------------------------------------------------------------------
+
+json_data = {
+    "mapped_with_field": "city name"
+    "select": ["tuo_city_orig"],
+    "property": null,
+    "table": "[dbo].tuo_pdmsprovider",
+    "filter": "tuo_pdmsproviderid",
+    "subquery": {
+        "mapped_with_field": null
+        "select": ["tuo_pdmsproviderid"],
+        "property": null,
+        "table": "[dbo].tuo_incident_tuo_pdmsprovider",
+        "filter": "incidentid",
+        "subquery": {
+            "mapped_with_field": null
+            "select": ["incidentid"],
+            "property": null,
+            "table": "[dbo].incident",
+            "filter": "tuo_data_dt:('FROM METADATA','nlp_data_date') && tuo_phonenumber:('FROM METADATA','nlp_phonenumber')",
+            "subquery": null
+        }
+    }
+}
+
+
+json_data = {
+	"name":
+    "mapped_with_field": { ... }
+    "select": ["tuo_city_orig"],
+    "property": null,
+    "table": "[dbo].tuo_pdmsprovider",
+    "filter": "tuo_pdmsproviderid",
+    "subquery": {
+    	"name":
+        "mapped_with_field": null
+        "select": ["tuo_pdmsproviderid"],
+        "property": null,
+        "table": "[dbo].tuo_incident_tuo_pdmsprovider",
+        "filter": "incidentid",
+        "subquery": {
+        	"name":
+            "mapped_with_field": null
+            "select": ["incidentid"],
+            "property": null,
+            "table": "[dbo].incident",
+            "filter": "tuo_data_dt:('FROM METADATA','nlp_data_date') && tuo_phonenumber:('FROM METADATA','nlp_phonenumber')",
+            "subquery": null
+        }
+    }
+}
+
+
+[{
+	"name": "phone number"
+	"mapped_with_field": "phone number"
+	"mapping_query": {
+	    "select": ["tuo_city_orig"],
+    	"property": null,
+    	"table": "[dbo].tuo_pdmsprovider",
+    	"filter": "tuo_pdmsproviderid",
+    	"subquery": {
+        	"select": ["tuo_pdmsproviderid"],
+        	"property": null,
+        	"table": "[dbo].tuo_incident_tuo_pdmsprovider",
+        	"filter": "incidentid",
+        	"subquery": {
+            	"select": ["incidentid"],
+            	"property": null,
+            	"table": "[dbo].incident",
+            	"filter": "tuo_data_dt:('FROM METADATA','nlp_data_date') && tuo_phonenumber:('FROM METADATA','nlp_phonenumber')",
+            	"subquery": null
+        	}
+    	}
+	}
+}]
+
+[{
+	"name": "provider_city",
+	"mapped_with_field": "provider_city",
+	"mapping_query": {
+	    "select": ["tuo_city_orig"],
+    	"property": null,
+    	"table": "[dbo].tuo_pdmsprovider",
+    	"filter": "tuo_pdmsproviderid",
+    	"subquery": {
+        	"select": ["tuo_pdmsproviderid"],
+        	"property": null,
+        	"table": "[dbo].tuo_incident_tuo_pdmsprovider",
+        	"filter": "incidentid",
+        	"subquery": {
+            	"select": ["incidentid"],
+            	"property": null,
+            	"table": "[dbo].incident",
+            	"filter": "tuo_data_dt:('FROM METADATA','nlp_data_date') && tuo_phonenumber:('FROM METADATA','nlp_phonenumber')",
+            	"subquery": null
+        	}
+    	}
+	}
+}]
+
+------------------------------------------------
+
+1. test mssql connection --> DONE , working fine and as expected
+2. Create info parameters to be extracted from transcription for talispoint 
+	no ui, so currently from back end or hard-coded - DONE
+3. Specify mapping for all talispoint parameters
+	Mapping to be provided in measures. --> already have one.
+	Need to create other measures
+	Need to load few talispoint calls --> manually reviewed ones. can replace existing humana calls.
+	3.1 load few talispoint calls --> transcription --> metadata not there. -> DONE
+	3.2 create measures whichever possible --> need to test all measures - DONE FOR ONE 
+	3.3 mapping for each measures --> from query -> DONE FOR ONE
+		test queries are correctly generated and gives output -> NOT DONE
+
+4. test information extraction function
+	check if output is generated and proper --> accuracy to be tested, number of parameters we can extract. - DONE
+5. test fetching crm data function --> DONE
+6. test one measure with nlp-run. --> DONE
+7. test different scenarios. --> errors and bugs
+
+Should i write proper test case for CRM --> not on priority , but good to have. 
+	currently delivery is important. primary testing is sufficient. it can be manual also.
+
+Future plan, proper test case for NLP service, ETL, Scheduler, measure, Planner,
+	and CRM data validation 
+
+
+----------------------------------------------------------
+Future generalization and support for different platforms:
+----------------------------------------------------------
+Sophistication of feature
+
+1. CRM generalization --> credentials can change --> should come from data source
+2. Based on engine --> query format can change --> need to add support for other format query generation
+3. CRM mapping can be incorrect with respect to 
+	table names, 
+	column names,
+	format may be missing, 
+	delimiters, 
+	could be incorrect json format (automatically validated by Django at UI).
+4. Appropriate message for failing and not getting result. 
+	data not there.
+	connection not there. invalid credentials. error message
+	NLP extracted data not present --> hence failed.
+	metadata not available or incorrect name of metadata field.
+	despite unique_field --> CRM returns multiple records
+		what to do when multiple records ?
+
+1. push code , update talispoint instance.
+2. load data from local to talispoint
+	callmeta with modified date, dnis, transcription for talispoint
+3. create measures with proper mapping.
+	including quotes, query understanding
+4. run NLP
+	check report. 
+	accuracy 
+
+
+Test with remaining talispoint measures , improve NLP extraction code to get more accurate information
+
+Whole schema is not required to be known.
+
+Mapping or equivalent query to be shared by client. (To and Fro discussion with client to understand client CRM database, learn about parameters and mapping)
+
+unique field for identifying records in CRM
+
+if mapping is correct --> query will be correctly generated --> data will be correct if present
+
+if CRM data and NLP data correct and matching --> measure will be matched and positive output will be generated.
+
+
+---------------------------------------
+
+[{
+	"name": "phone number"
+	"mapped_with_field": "phone number"
+	"mapping_query": {
+	    "select": ["tuo_city_orig"],
+    	"property": null,
+    	"table": "[dbo].tuo_pdmsprovider",
+    	"filter": "tuo_pdmsproviderid",
+    	"subquery": {
+        	"select": ["tuo_pdmsproviderid"],
+        	"property": null,
+        	"table": "[dbo].tuo_incident_tuo_pdmsprovider",
+        	"filter": "incidentid",
+        	"subquery": {
+            	"select": ["incidentid"],
+            	"property": null,
+            	"table": "[dbo].incident",
+            	"filter": "tuo_data_dt:('FROM METADATA','nlp_data_date',[:]) && tuo_phonenumber:('FROM METADATA','nlp_phonenumber',[-9:])",
+            	"subquery": null
+        	}
+    	}
+	}
+}]
+
+1. CRM mapping validation as separate sub-feature.
+	1.1 Should be a valid json.
+	1.2 Must have name,mapped_with_field,mapping_query
+	1.3 mapping_query 
+		select --> should be list of strings (based on SQL engine, it should have single/double tilde quotes in name if required)
+		table --> single string may have special characters as tilde, quotes, dot(.),
+		filter --> can be single simple string or can have 
+				crm_column names with its value either coming from metadata or transcription separated by ':' there can be multiple conditions connected via AND ('&&') or OR ('||').
+				here also based on SQL engine appropriate quotes,tilde should be included within name
+
+-------------------------------------------------------
+
+Challenges with NLP data extraction and CRM validation:
+-------------------------------------------------------
+In conversation agent asks for address, customer replies with address details such as building no, street, road, society, landmark, city, state, country, zipcode. However, while documenting on CRM agent only fills out abbreviation or short forms for City, state, country or other location information. How to resolve and match that ??
+
+	1. Need to have library for all addresses and map abbreviations or short codes with appropriate full city, landmark, state,country name.
+
+	2. R&D on library to make address fetching and mapping robust on CRM part.
+
+	3. Address is more versatile -> combination of numbers and text and short forms.
+		No standard format for address
+
+
+		Mark L. Villamor
+
+
+Resolve Abbreviations in Address:
+-----------------------------------------------------------
+
+try:
+    Abbr_data =  pd.read_excel(configfile.addr_abbr)
+    Abbr_data = Abbr_data.applymap(str)
+    Abbr_data = Abbr_data.apply(lambda x: x.astype(str).str.lower())
+    Abbr_data_dict = Abbr_data.set_index('Abbr').Word.to_dict()
+    with open(configfile.abbr_pickel_addr, 'wb') as handle:
+        pickle.dump(Abbr_data_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
+except:
+    with open(configfile.abbr_pickel_addr, 'rb') as handle:
+        Abbr_data_dict = pickle.load(handle)     
+ 
+def address_abbr_replace(input_address):
+    try:
+        output_address = ' '.join([Abbr_data_dict.get(word,word) for word in input_address.lower().split()])    
+        return output_address
+    except Exception as  e:
+        print("address_abbr_replace", e)
+
+
+talispoint app --> prod server
+
+10 calls --> which are specific for crm testing
+		 --> transcription also, metadata. --> 
+measures --> crm mapping 
+		 --> appropriate name, keywords, conditions , labels as per AQEP form to be created.
+run nlp --> 
+		
+CRM access credentials, Microsoft SSMS 
+MISSOURI --> MSR
+
+Separation of components of address into categories. 
+	extract address,
+	usual pattern --> 1. building no, 
+					  2. street name,
+					  3. society name,
+					  4. city
+					  5. state
+					  6. country
+					  7. zip code
+					  
+Links for Address extraction :
+--------------------------------					  
+https://khadkechetan.medium.com/address-extraction-and-parser-with-nlp-4d3db7b9535d
+https://medium.com/@acrosson/extracting-names-emails-and-phone-numbers-5d576354baa
+
+
+page =1 --> 1-10
+page 2 --> 11-20
+
+page x --> 1 + (x-1)Pagesize 
+
+Case Disposition :
+------------------
+
+	1. Talispoint measures creation on App. - Vinayak
+	2. Case Disposition addition on App. - Vinayak
+	3. CRM enhancement for call drivers and validating predicted label against CRM. - Lal
+		Prediction of measure taken into consideration for CRM validation.
+			If for a call driver value , rule satisfied label 
+			If any measure value is predicted , then predicted value should be checked against CRM 
+				acceptingWC --> yes 
+					check 'YES' in CRM
+			Case Disposition 
+				Call Back Generic --> check 'Call Back Generic' in CRM 
+	4. Prod CRM connection.
+	5. App Task List 2.0
+	6. Discuss with Avinash on Talispoint Data, Performance Metrices.
+	8. One on One meeting 
+
+	-------------------------------------------------
+
+	Predicted Label 
+		YES , Expert
+		NO , Effective
+		NA , Novice
+
+		label, score 
+
+From NLP rule prediction.
+From NLP extracted data.
+Based on score ??
+
+
+Basically what to check in crm ??
+Name, Label, Value, Score
+list of Names, Labels, Values, Scores
+AHT details in CRM ?
+any details 
+Abbreviations or shortnames for entities. 
+
+Measures which are based on AHT measures.
+	Predictions ?
+		Keywords
+	Hold, Deadair, call start time --> get value.
+	Configurable AHT rules.
+
+	Talispoint :
+	------------
+	Computational Measures
+		Appropriate Pace
+			rate of speech --> words per seconds * 60
+			threshold range --> minimum, maximum 
+				if rate of speech value within range --> PASS
+				else FAIL
+
+	Professionalism
+		Long period of silence (More than 20 seconds, )
+
+	Hold Procedure --> AQEP 
+		YES,NO,NA
+
+
+-------------------------------------------------------------------------
+
+AHT rules as part of AQEP Scoring ??
+	configurable AHT rules ??
+	what things should be configured ?? threshold ??
+	repetative hold, deadair, number of hold thresholds.
+
+Each rule has atleast binary output - Satisfied, Not Satisfied, Not Applicable 
+	rule has predicted label.
+	rule can be based on keywords
+	rule can be based on AHT
+	rule can be based on some computation.
+	rule can be manual - straight forward.
+
+	Hybrid rule - combination of above
+		has keywords
+		has dependency on AHT 
+		has some computation
+		has some manual computation.
+		has ML rule. 
+
+Call Drivers as separate module ??
+
+update AHT code
+	implement speech rate 
+		agent, customer both - DONE
+
+Add AHT measures as part of AQEP Scoring :
+	big change may be -> patch work ?
+	aht should also submerge with keyword based modules.
+
+MeasureType 
+
+	check for negative rules such as dead air
+	
+	AHT_HOLD, 120, 2,
+		OPS_TYPE - less than 
+			non_voice_time < threshold --> rule satisfied label --> 
+			else rule not satisfied label
+	AHT_DEADAIR , 30, 2
+		OPS_TYPE -greater than
+			non_voice_time > threshold --> rule satisfied label - YES
+			else
+	AHT_DEADAIR
+	AHT_NON_VOICE_TIME 
+
+
+--------------------------------------------------------
+
+Measure Type
+	AHT 
+
+	call answered within time --> 0-4 --> 5
+								  5-10 --> 3
+								  10-15 --> 0
+
+threshold 
+	120
+maximum weightage
+	5
+yes -> 5
+no -> 3
+na -> 0
+
+------------------------------------------------------------------
+
+AHT as part of AQEP :
+----------------------
+
+Solution 1: 
+	Measure Type add another type 'AHT'
+	threshold, OpsType, Maximum weightage
+	link aht conditions or range for values
+		for example , hold duration -> 0 - threshold --> full score
+					  hold duration > threshold but less than 2*threshold --> partial
+					  else --> zero 
+					  it can be custom
+	requires changes in UI
+		need to add table similar to link keyword for aht conditions, label
+
+Solution 2:
+	AHT should no longer be optional in nlp planner
+	auto calculate aht store in aht_analysis table with additional label, score
+	define measure type as 'aht'
+	select from drop down aht rules
+		give threshold, less/greater than, maximum weightage, label/weightages.
+	while running nlp --> read from aht_analysis value
+					   --> check with threshold, maximum, opstype
+					   assign label, score
+
+Solution 3:
+	numeric rules such as aht
+	select from drop down aht rule
+	if numeric
+		give range of values --> range 1 --> label1, weightage1 
+							 --> range 2 --> label2, weightage2
+
+	What to do about measure formula ? 
+	keyword formula ?? 
+		at the end label/weightage/rank is 
+
+Solution 4: 
+	Hard coding for certain parameters for talispoint 
+		To be generalized for sens-ai 2.0 
+
+	MVP - display order
+
+	One Learning : Since service based company, customization, flexible is important feature.
+
+1. MeasureType -> AHT
+	8 new categories for AHT rules.
+
+2. label/weightage,maximum weightage
+
+3. lower_limit, higher_limit --> ll <= value < hl --> rule_satisfied_label else rule_not_satisfied_label
+	criteria --> criteria1 --> type --> keyword based , numeric
+		if type = keyword based 
+			Just like how it is right now
+		else
+			Give option to define, ll, hl, precendence
+
+4. go to aht manager service
+	- Better to make independent function for portability and customization
+	- computeAHTRule
+		- computed numeric value.
+		- fetch criteria for rule.
+			check computed value against criteria
+				assign label,weightage
+		- Output in NlpFilterResult.
+			- Store output in f_nlp_analysis
+			- add one more column --> aht_param_value (number)
+
+what if in range , value has to be compared against output of another aht measure
+
+
+((0 <= VAL) AND (VAL < M10)) OR (M12 <= VAL)
+(M11 <= VAL) AND NOT (VAL < M13)
+
+< = LT
+> = GT
+<= LTE
+>= GTE
+= EQ
+!< = NLT
+!> = NGT
+!<= NLTE
+!>= NGTE
+!= NEQ
+
+M11 + M12
+M11 - M12
+M11*M13
+M11/M12
+M11%M12
+M11^M12
+
+SUM
+MAX
+MIN
+AVG
+COUNT
+--------------
+
+parser needs to be updated 
+
+For numeric value range options
+Absolute Range:
+
+(0,30) --> true if value in 0 <= value < 30
+NOT (0,30) --> true if value not in 0 <= value < 30
+(0,30) or (90,120) --> true if value in ((0 <= value < 30) or (90 <= value < 120))
+(0,30) or not (90,120) --> true if value in ((0 <= value < 30) or not (90 <= value < 120))
+
+(-10,10) and (0,5) --> true if value is within (0,5) as it is subset of (-10,10)
+(-10,10) and not (0,5) --> true if value is within -10 <= value < 0 and 5 <= value < 10
+(-INF,0) --> -inf < value < 0
+(-INF,INF) --> -inf < value < inf
+
+Relative Range:
+this is for comparing computed value against another measure output
+
+(0,M10) --> 0 <= value < M10 (measure must be numeric in nature)
+	requires --> output of M10 before MX
+(M11,M13) --> value between value of M11,M13
+
+
+call_answered_within_time 
+	(0,4) --> True, YES,1
+	else --> False,NO,0
+	NaN --> True,NA,1
+
+Custom equations :
+This is for how to calculate value for given measure
+This is very complex as so many statistical, mathematical operations can be performed on numerical data. 
+
+M11 + M12
+M11 - M12
+M11*M13
+M11/M12
+M11%M12
+M11^M12
+
+
+----------------------------
+
+create one measure for hold with necessary hard coded values as in future architecture will change and this may be not be required.
+
+measure type -> AHT_HOLD
+	threshold, weightage, label/weightage, display order
+
+------------
+
+computeAHT --> store output somewhere (aht_analysis_table)
+	but writing for every call is costly db operation
+	so better store in cache with master_id and aht_analysis_data.
+
+	first check if aht_analysis_data exists in database
+		if fetch and use for subsequent computation
+	else
+		compute put it in cache
+		use for subsequent computations
+
+at last while writing to db, write to db 
+for next run 
+
+
+
+hold
+deadair
+non voice time
+
+filter aht measures
+	computeAHT --> append value for aht measures.
+
+
+pulmonary - 1080
+chest xray - 850
+complete hemogram - 650
+-------------------------------
+vitamin b12
+vitamin D 
+
+Full Body package -
+	pro health - 4999 
+
+	vitamin b12,d -> pro health comprehenssive - 12000
+
+range1
+range2
+
+MR1 AND MR2
+MR1 OR MR2
+MR1;MR2
+
+--------------------------
+
+Measure formula in AHT --> needs to be updated in future
+
+AQEP page to be modified little bit to show non CRM based measures.
+	based on validation status - success/failed, NA, 
+	if status - None --> do not show as part of CRM, show separately.
+	what about scoring based on CRM ?? 
+		
+
+KT to Vinayak for CRM based rules/AQEP parameters. - Lal -> 1
+Talispoint data has not come yet. --> lal, Bill
+End to end pipeline for daily processing needs to be checked. --> Lal, Prem
+Speech team should dump data in separate table in mysql. - Sabita, speech team.
+ETL & NLP should be tested along with scheduler - Sheeba, Pavan
+Need to check with BI team for Talispoint Views from App data. --> Lal, Prem
+
+--------------------------------------------------------------------------
+
+1. Check Talispoint AQEP parameters (CRM based)
+2. Check CRM mapping
+3. load specific day data in app (metadata, transcription)
+4. Entity Extractd Data (d_info_parameter)
+	d_callmeta - extracted_info
+4. CRM connection from app.
+5. Run NLP planner for sample transcription shared by Priyanka
+
+
+
+INSERT INTO demo_talispoint_asr.d_callmeta (code, description, created_by, created_on, last_modified_by, last_modified_on, is_deleted, name, display_name, contact_id, session_id, audio_module, channel, master_id, transcription_summary, audio_file_name, start_time, end_time, call_length, duration, wrapup_time, ani, dnis, direction, pbx_login_id, personal_id, personal_name, site_id, switch_call_id, extention, cd1, cd6, speech_rate, segment_count, caller_info, data_date, extracted_info, transcription, transcriptionMapPath, event_log_uuid, date_id_id, emp_id_id, event_log_id_id, lob_id_id, tenant_id_id) VALUES('', '', '', '', '', '', 0, '', '', 0, 0, 0, 0, '', '', '', '', '', 0, 0, 0, '', '', 0, '', 0, '', 0, '', 0, '', '', 0, 0, '', '', ?, ?, '', '', 0, 0, 0, 0, 0);
+
+Demo_Talispoint_ASR
+
+
+1. Setup a meeting with CRM team - why there is no data on daily basis ?
+	check with DL's team and ops team - currently only one day data on prod - 1 day
+
+2. Give format to speech team to ingest call via ETL. - today DONE
+	create user - speech_user
+	password - not able to grant priviledges
+	schema - demo_talispoint_asr
+	table - d_callmeta
+	important columns
+		created_by
+		created_on
+		last_modified_by
+		last_modified_on
+		is deleted
+		master_id
+		metadata columns 
+		data_date
+		date_id
+		lob_id_id
+		tenant_id_id
+
+
+3. ETL & NLP pipeline testing - dummy data - Sheeba, Pavan - today
+	scheduler -> 
+		manually we can run if scheduler not there.
+
+4. AQEP rules setup on application. - Vinayak - today
+
+5. PowerBI integration with SensAI ? - BI team to initiate discussion
+
+
+6. case-disposition against crm - through changes in crm mapping field. - 1 day Lal
+
+7. Updated timelines to Bay on Talispoint, BSC Chat - today Lal- Prem DONE
+
+8. FQDN setup for talispoint - 2-3 weeks
+	app will be accessible through IP till that.
+
+
+
+
+
+callback in the next|please be billing callback|contact again the following|contact again the|calling back within|have a callback next |will be calling back at|call back number|just try to callback |callback again|call you back
+
+
+975660000
+
+Callback Generic
+
+
+
+1. Push updated code to talispoint prod
+
+2. Check vinayaks code for entity extraction, make changes and push code.
+
+3. ETL/NLP/Scheduler status - DONE
+
+4. STT to DB status - DONE
+
+5. 
+
+
+Entity Extraction :
+-------------------
+https://pypi.org/project/pycountry/
+
+https://www.linkedin.com/pulse/address-cleansing-fuzzy-matching-levenshtein-distance-akhil#:~:text=pyap%3A%20This%20package%20uses%20a,Canada%2C%20and%20the%20United%20Kingdom.
+
+https://pypi.org/project/geopy/
+
+Need to think about other countries addresses ?? 
+	is there a python library which covers all countries ??/
+	resolve abbriviation(country/state codes to fullname and vice versa)
+	fuzzywuzzy match should be done (threshold - 80-90) 
+
+
+Approach
+	combine transcription as str
+	text2int
+	pyap
+	preprocessing
+	fetchComponent
+	convertToOrFromShortCodes()
+		pycountry
+	return output
+	match address against crm or (this should be fuzzy matching)
+
+	geopy is optional addtional if demand comes for it whether an address is real or not.
+
+-----------------------------------
+
+there is chance of false negative cases in CRM data validation which should be minimized. False positive cases are acceptable as it wont affect agent much.
+
+so to do that , following scenarios are possible with respect to CRM Database.
+
+	1) Abbreviations are used in CRM database.
+
+		Sol : 
+			read data from CRM, resolve abbreviation
+			read from extractedInfo, resolve abbreviation
+			then match.
+
+	2) Order of information can be different in transcription and in CRM
+		for example,
+			address spoken on transcription --> building no, street, city, state, pincode
+			address on crm --> building no, city, street, state, pincode.
+
+			both are same but due to order it can result into false negative.
+
+		Sol:
+			fuzzy matching with token sort ratio should be used.
+			with configurable threshold for exact or partial match.
+
+	3) information from transcription or crm can be partial.
+		Sol:
+			fuzzy matching with token sort ratio should be used.
+			with configurable threshold for exact or partial match.
+
+	4) multiple values for parameter from transcription and/or multiple values for parameter in CRM
+		Sol:
+			Any match from multiple values should be evaluated as true.
+			but here chances of false positive increases.
+	
+	5) Boolean parameters can be discussed stored differently in CRM.
+
+		YES --> 1, NO --> 0
+
+		sol : need to map these parameters with appropriate value.
+			again depends on client CRM software. 
+
+	6) for single AQEP parameter, multiple CRM fields values should be checked.
+		combination of AND, OR and appropriate query should be generated.
+
+		sol :
+		
+		Mapping json should be updated accordingly with more parameters.
+		With current Application architecture is little complex to add more here.
+			Like should there be separate rule for each parameter or from mapping it should take , and multiple checks condition will come based on parameter.
+			for example, AQEP parameter : Agent verified job title & date of birth.
+				1.1 extract job title from transcription
+					fetch job title from crm separately
+					compare with above possibilities 
+				1.2 date of birth
+					extract dob from transcription
+					fetch from crm (date format can be different)
+					compare 
+				if 1.1 and 1.2 both satisfied --> success
+
+				there can be more parameters and and/or combinations can be asked.
+
+	7) joins on crm database.
+		Joins are costly operations. Data redundancy. 
+		
+		sol :
+		 		Should be avoided as much , if other ways to obtain information are there.
+
+	8) AQEP parameters that require Complex SQL queries.
+		for example group by, having, aggregations such as max, min, sum, avg, count.
+		ranking, top N values, Sub-conditions for each tables.
+
+		sol : Currently no idea on whether it should be even be done to that level or not. is it possible to do ?
+
+		Too Complex 
+
+	In conclusion,it is as good as building our own SQL engine.
+
+
+---------------------------------------------
+
+Hi Team, 
+
+Thanks to DL we have updated the CRM table/column mappings related to Talispoint AQEP parameters which helped us with the data frequency issue based on unique feild that was aggreed upon previously.
+
+Please find updated CRM mapping sheet. Please let us know if any changes in above mapping. 
+
+We are also currently testing the end to end talispoint crm validation pipeline with available data. We will continue to enhance the functionality for better performance and accuracy.
+
+Thanks & Regards
+
+
+
+
+DL, Bay, Roxy
+you, avinash, vinayak, gwen c. ferrer, philip corvera
+
+
+Number of Tiers : 3
+Scoring tier : 1
+LOBs : 9
+Number of parameters : 178 + AHT parameters (11) + Call Drivers
+Which we cannot automate , should be created as manual. 
+
+
+en-core-web-lg @ https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.5.0/en_core_web_lg-3.5.0-py3-none-any.whl
+
+"{\"provider_address_line1\": [false, false, \"NOT MATCHED\"]}"
+
+"{\"Group Name\": [true, true, \"MATCHED AND CORRECT\", \"\", \"('Family Medicine of Baxley',)\"]}"
+
+
+SUCCESS - 
+
+FAILED - Parameter did not match in CRM 
+
+FAILED - Measure computation failed -- checking of keywords, keyword formula, predicted label, ()
+
+FAILED - Measure computation failed -- checking of keywords, keyword formula, predicted label, ()
+
+ERROR - Failed to connect to MSSQL 
+
+ERROR - Unique Field not found, rest of processing depends on it.
+
+ERROR - Our NLP which extracting information from transcription is not properly available.
+
+NA - Not to be checked against CRM or NLP measure
+
+
+
+Measure --> not marked to be checked for CRM --> NA
+
+CRM - Call drivers
+	"CallBack generic" 
+
+--------------------------------------
+
+new observation :
+--------------------
+
+dnis feild in metadata doesnt hold exact phone number ,
+	last 9 digits of dnis = first 9 digits of phonenumber
+
+
+this is very specific to client may be.
+
+--------------------------------------------
+
+Performance testing
+Partial information from metadata/transcription to be checked against CRM - Testing
+CRM querying optimization by querying database all at once and storing in cache.
+Store generated query in db
+Entity Extraction Accuracy improvement 
+
+
+Which measure types take more time:
+AHT -- does not take much time
+Manual - does not take much time
+Call drivers - does not take much time (keywords - 50)
+	individually doesnt take much time
+	collectively takes more time (more in numbers - 50 per lob,usually 210)
+Rule based AQEP -  Mostly takes time - 
+	why it takes time ?
+	is it individual components which are slow ?? 
+		each measure gets computed within split second.
+
+convert into cython or library to make this more fast.
+SensAI:
+
+querying CRM all at once for each call
+--------------------------------------
+
+cache - metadata_code_measure_code
+
+CrmData 
+	metadata_code = 
+	measure_code = 
+	validation_type = 
+	mapping_data_list = []
+	
+	CrmMappingData
+		mapping_query =
+		mapped_field_query =  
+		mapping_query_data = 
+		mapped_field_query_data = 
+
+callmeta.code_measure.code
+	crmdata_list = []
+for mapping in tobevalidateddata
+	crm_data1 = getCRMDatafromMapping(mapping_query)
+	crm_data2 = getCRMDatafromMapping(mapped-with-field)
+	crmdata_list.append(crm_data)
+
+if crm_validation_status is FAILED then AQEP scoring should also come accordingly.
+AQEP page needs to be checked
+crmvalidationtype NONE should be removed and updated on DB.
+
+query should happen at once per call
+
+----------------------------
+
+EntityExtraction:
+-------------------
+
+addr = pyap.parse()
+final_addr = 
+if addr is not none:
+	if addr['full address'] is not none:
+		if addr[region] is not none:
+			if addr['city'] is not none:
+				if addr['postal_code'] is not none:
+					final_addr.postal_code = addr[]
+				else
+					final_addr.postal_code = getZip()
+			else:
+				final_addr.
+		else
+			final_addr.region = getState()
+	else
+		final_addr.
+
+addr_line1 (building no, street, street_type, suite)
+city
+region
+postal_code
+
+if pyap_addr is not none:
+	addr_line1 = getAddrComponent(text,pyap_addr,component,comp_func)
+	city = getAddrComponent(text,pyap_addr,component,comp_func)
+	region = getAddrComponent(text,pyap_addr,component,comp_func)
+	postal_code = getAddrComponent(text,pyap_addr,component,comp_func)
+	return addr_dict
+else
+	addr_dict = getPartialAddr(text)
+	return addr_dict
+
+getAddrComponent(text,pyap_addr,component,comp_func)
+	if pyap_addr[component] is not none:
+		return pyap_addr[component]
+	else:
+		return comp_func(text)
+
+
+---------------------------------------------
+
+
+r'\b(\d+)(\s+\w+){2,}(\s+\d+)?\b'
+
+addr_line1_pos_regex = r'CD\s(?:VB|JJ|NN|NNP)(\s(?:NNP|NNS))?(\sNNP){0,3}(\sCD)?'
+
+
+1. Application slowness issue - Last RUN details on QA dashboard
+
+2. ACTUL value auto populated while NLP run along with predicted value copy predicted value into actual value - NLP
+
+3. QA Score should be correct - 
+
+4. Bug if Audio file not present.
+
+5. For some parameters predicted labels were coming as YES/NO instead of pass/fail - need to verify.
+
+------------------
+
+1. QA Score logic should be corrected. - Lal, Prem - Done
+2. NA cases - Re-run - Done
+3. Staff status to be removed for Jocah Raylon
+4. Case Disposition file shared with Vinayak
+
+
+hold_keyword1=["hold","HOLDING"]
+hold_keyword2=["HOLD ON JUST A MOMENT PLEASE","PLEASE HOLD","PLEASE CONTINUE TO HOLD","can I put a call on hold", "let me put a call on hold", "can I put on hold","can I put a call on hold" ,"can I put the call on holds for two min","HOLD"]
+hold_keyword3 = ["THANK YOU FOR CONTINUING TO HOLD","PLEASE HOLD WE WILL BE WITH YOU AS SOON AS POSSIBLE","HOLD FOR MORE THAN TWO MINUTES","please hold for more than TWO min","thanks for hold","PLEASE HOLD","hold for more than two minutes"]
+
+-----------------
+
+Call Disconnected --> NA
+Noise/Poor Audio Quality/Not able to hear --> NA
+Noise in call/place () --> NA --> Out of scope
+	
+	keywords -> cant hear you properly
+
+IVR Call --> NA
+	No Agent conversation - agent speech rate 0
+
+Call Disconnected --> 
+	call disconnected 
+	agent waited for more than 3 minutes and no response from customer
+	hello, can you hear me ?? from agent
+	disconnecting call as this call on hold for more than 3 minutes
+
+
+NA cases handled using hidden feature - but need to be used carefully
+
+------------------------------------------------------------------------------
+
+Provider Forward (Talispoint) CRM information/training should be made available for Jocah. 
+
+Check with Durgendu Lal for any person who can explain/KT on Provider Forward
+
+Predicted Score, QA score not coming on AQEP Audit 
+
+1. Update ActiTime
+2. Talispoint Change Request Tracker - Vinayak
+3. AQEP Page with call list shows incorrect scores for predicted,QA
+4. Metadata, Analysis Type Generalization
+5. Self - Learning (Improve own knowledge base, practise projects, examples, creating pipelines/generalized should support big data)
+9. Mgt - Weekly Connect (motivate team, KT, discuss issues, solutions)
+	Why we face so many issues in deploying projects, why there is delay ?
+		
+		Is it a skill gap ?
+		Is it a knowledge gap ?
+		Is it a communication gap ?
+		Is it a standardization process gap ?
+
+		TSG - Teammates themselves can connect
+		Infra issues - server slow, space issues, access, password
+		Reports issues - Ops team, accuracy 
+		Laptop Issues - 
+		Automation Issues - (how much R&D goes in automation)
+		Project deliverables issues - timelines, technical challenges, delays due to AdHoc Tasks
+		R&D Approaches/PoCs
+		Data Issues - Not Coming, Not Proper
+		Documented Process for everything that we undertake - Policies, guidelines, 
+		checklist, templates
+
+---------------------------------------------------------------------
+
+Any data science task :
+-----------------------
+1. Data
+	First to look at data, very closely, very granuler level
+	Volume
+	Variability
+	Velocity
+	Relationship of data 
+		data type
+		dependency on one another
+		frequnecy
+		frequency of change
+	Manual vs automated data
+	Structured, Semi structured, Unstructured
+	Whereever there is manual data, chances of mistakes, errors, problems.
+	Important, not important data
+	Look at 360 degree - 
+	Business use case
+	Visualize - Distribution,
+	KPIs - 
+
+2. Approaches
+	1. Pipeline 1
+	2. Pipeline 2
+	3. Pipeline 3
+
+	Code the pipeline(generalize)
+	Should be parallel processing ready, mostly. (should handle large data)
+		Should it be normal parallel processing ?? or using spark, hadoop
+		For real time processing - Kafka
+	Should be optimized with Oops, repetative codes.
+
+3. Ground Truth or way to provide ground truth should be generalized and developed.
+	
+	Continuous process, on going, auto learn.
+	Need to spend more time by each team mate
+	1 day volume data (necessary, whenever free time)
+
+4. Auto Testing with new data. 
+	scheduler should run every two weeks or month
+	generate report with new data, new ground truth.
+
+5. Monitoring solutions
+
+6. Reporting (Custom, generalized)
+
+8233939c-277e-4b87-8b7f-2e0272bd2251
+
+
+{"average_accuracy": [2.13, "bg-danger"], "measure_accuracy_dict": {"(80, 'M80', 'CALL QUALITY')": [0.0, "bg-danger"], "(84, 'M84', 'greeting_check')": [0.0, "bg-danger"], "(2, 'M2', 'Agent_greets_caller')": [8.51, "bg-danger"], "(85, 'M85', 'Rule Applicability Status Based on IVR or Disconnection')": [0.0, "bg-danger"]}, "last_accuracy_computed_time": "24/04/2024 17:07:46"}
+
